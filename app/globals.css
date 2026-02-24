@@ -1,0 +1,249 @@
+:root {
+  --bg: #f6f5f2;
+  --text: #182022;
+  --muted: #5c676b;
+  --card: #ffffff;
+  --border: #d8dddf;
+  --brand: #007f5f;
+  --brand-2: #f4a261;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at top, #ffffff 0%, var(--bg) 48%);
+  color: var(--text);
+  font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.nav {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.nav a {
+  border: 1px solid var(--border);
+  background: #fff;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+  padding: 1rem;
+}
+
+.cardButton {
+  text-align: left;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.cardButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(24, 32, 34, 0.08);
+}
+
+.cardButton:focus-visible {
+  outline: 2px solid #0e644d;
+  outline-offset: 2px;
+}
+
+.cardFeatured {
+  grid-column: 1 / -1;
+  border-color: #0e644d;
+  box-shadow: 0 14px 26px rgba(14, 100, 77, 0.12);
+}
+
+.cardDetails {
+  margin-top: 0.9rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border);
+}
+
+.metric {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.subtle {
+  color: var(--muted);
+}
+
+.panel {
+  margin-top: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: white;
+  padding: 1rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.8rem;
+}
+
+.formField {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.formField label {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.formField input,
+.formField select,
+.formField textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 0.7rem;
+  background: #fff;
+  color: var(--text);
+}
+
+.formField textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.formActions {
+  margin-top: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pageActions {
+  margin: 0 0 0.8rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.btnPrimary {
+  border: 1px solid #0e644d;
+  background: #0e644d;
+  color: #fff;
+  border-radius: 10px;
+  padding: 0.55rem 0.85rem;
+  cursor: pointer;
+}
+
+.btnSecondary {
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 0.55rem 0.85rem;
+  cursor: pointer;
+}
+
+.servicePicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.serviceOption {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--text);
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+}
+
+.serviceOption.active {
+  border-color: #0e644d;
+  background: #ecf8f4;
+  color: #0e644d;
+}
+
+.listSimple {
+  margin: 0.9rem 0 0;
+  padding-left: 1rem;
+}
+
+.detailList {
+  margin: 0.75rem 0 0;
+  padding-left: 1rem;
+}
+
+.detailItem {
+  margin-bottom: 0.75rem;
+}
+
+.tag {
+  display: inline-block;
+  border-radius: 999px;
+  background: #ecf8f4;
+  color: #0e644d;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pageActions a {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.stackForm {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.stackForm .formActions {
+  margin-top: auto;
+  padding-top: 0.8rem;
+}

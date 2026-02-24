@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum PetType {
+  DOG
+  CAT
+  BIRD
+  OTHER
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  COMPLETED
+  CANCELED
+}
+
+enum MovementType {
+  IN
+  OUT
+  ADJUSTMENT
+}
+
+enum MessageStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+enum MessageChannel {
+  SMS
+  WHATSAPP
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  role      String   @default("ADMIN")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  email     String?
+  notes     String?
+  preferredChannel MessageChannel @default(SMS)
+  pets      Pet[]
+  messages  MessageLog[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Pet {
+  id          String        @id @default(cuid())
+  name        String
+  type        PetType
+  breed       String?
+  birthDate   DateTime?
+  weightKg    Float?
+  notes       String?
+  customerId  String
+  customer    Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Service {
+  id           String         @id @default(cuid())
+  name         String
+  description  String?
+  priceCents   Int
+  durationMin  Int
+  appointments Appointment[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model Appointment {
+  id           String             @id @default(cuid())
+  petId         String
+  pet           Pet               @relation(fields: [petId], references: [id], onDelete: Cascade)
+  serviceId     String
+  service       Service           @relation(fields: [serviceId], references: [id])
+  startsAt      DateTime
+  endsAt        DateTime
+  status        AppointmentStatus @default(SCHEDULED)
+  notes         String?
+  reminderSent  Boolean           @default(false)
+  reminder24hSentAt DateTime?
+  reminder2hSentAt  DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+model Product {
+  id              String          @id @default(cuid())
+  name            String
+  sku             String          @unique
+  category        String?
+  currentStock    Int             @default(0)
+  minStock        Int             @default(0)
+  priceCents      Int
+  stockMovements  StockMovement[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+model StockMovement {
+  id          String       @id @default(cuid())
+  productId   String
+  product     Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  type        MovementType
+  quantity    Int
+  reason      String?
+  createdAt   DateTime     @default(now())
+}
+
+model Campaign {
+  id             String   @id @default(cuid())
+  title          String
+  content        String
+  startsAt       DateTime
+  endsAt         DateTime
+  isActive       Boolean  @default(true)
+  segmentPetType PetType?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model MessageLog {
+  id            String        @id @default(cuid())
+  customerId    String?
+  customer      Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  channel       MessageChannel @default(SMS)
+  toPhone       String
+  body          String
+  provider      String
+  providerRef   String?
+  status        MessageStatus @default(PENDING)
+  errorMessage  String?
+  createdAt     DateTime      @default(now())
+}
