@@ -108,6 +108,7 @@ model Product {
   name            String
   sku             String          @unique
   category        String?
+  description     String?
   currentStock    Int             @default(0)
   minStock        Int             @default(0)
   priceCents      Int

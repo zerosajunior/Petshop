@@ -33,17 +33,17 @@ main {
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
+  display: grid;
+  gap: 0.9rem;
   margin-bottom: 2rem;
 }
 
 .nav {
   display: flex;
   gap: 0.7rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
 }
 
 .nav a {
@@ -58,6 +58,95 @@ main {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.menuHero {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: #f8fafc;
+  padding: 1.1rem 1rem;
+}
+
+.menuHero h2 {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.menuHero .subtle {
+  color: #cbd5e1;
+}
+
+.menuBoard {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.menuColumn {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: white;
+  padding: 0.8rem;
+  display: grid;
+  gap: 0.55rem;
+  --menu-1: #5a7f74;
+  --menu-2: #6a8f84;
+  --menu-3: #7a9f94;
+}
+
+.menuColumn h3 {
+  margin: 0.1rem 0 0.2rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: 0.84rem;
+  letter-spacing: 0.05em;
+}
+
+.menuButton {
+  display: block;
+  border-radius: 11px;
+  color: #f8fafc;
+  padding: 0.7rem 0.8rem;
+  font-weight: 700;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+  transition: filter 0.15s ease;
+}
+
+.menuButton:hover {
+  filter: brightness(0.96);
+}
+
+.menuColumnCadastros {
+  --menu-1: #5a7f74;
+  --menu-2: #6a8f84;
+  --menu-3: #7a9f94;
+}
+
+.menuColumnMovimentacoes {
+  --menu-1: #516f86;
+  --menu-2: #608096;
+  --menu-3: #7091a7;
+}
+
+.menuColumnRelatorios {
+  --menu-1: #5e667f;
+  --menu-2: #6d7590;
+  --menu-3: #7d84a1;
+}
+
+.menuTone1 {
+  background: var(--menu-1);
+}
+
+.menuTone2 {
+  background: var(--menu-2);
+}
+
+.menuTone3 {
+  background: var(--menu-3);
 }
 
 .card {
@@ -127,6 +216,10 @@ main {
   gap: 0.35rem;
 }
 
+.formFieldFull {
+  grid-column: 1 / -1;
+}
+
 .formField label {
   font-size: 0.9rem;
   color: var(--muted);
@@ -146,6 +239,105 @@ main {
 .formField textarea {
   min-height: 100px;
   resize: vertical;
+}
+
+.productFormLayout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.productFields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  align-content: start;
+  grid-auto-rows: min-content;
+}
+
+.productPhotoField {
+  display: grid;
+  grid-template-rows: 1fr;
+  gap: 0.35rem;
+  align-content: start;
+  min-height: 100%;
+}
+
+.productPhotoField > label {
+  font-weight: 600;
+}
+
+.productPhotoPreview {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #f8fafb;
+  min-height: 320px;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.imagePreview {
+  object-fit: cover;
+}
+
+.fileInputHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.uploadButton {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #f8fafb;
+  color: var(--text);
+  padding: 0.4rem 0.7rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.uploadRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.45rem 0.55rem;
+  background: #fff;
+  min-height: 44px;
+}
+
+.photoActionRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.8rem;
+  flex-wrap: nowrap;
+}
+
+.photoFieldBlock {
+  min-width: 220px;
+  flex: 1;
+}
+
+.photoActionRow .btnPrimary {
+  margin-left: auto;
+  flex-shrink: 0;
+  margin-bottom: 1px;
+}
+
+.uploadFileName {
+  min-width: 0;
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .formActions {
@@ -207,6 +399,19 @@ main {
   padding-left: 1rem;
 }
 
+.statsGrid {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.statCard {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  padding: 0.75rem;
+}
+
 .detailList {
   margin: 0.75rem 0 0;
   padding-left: 1rem;
@@ -226,14 +431,42 @@ main {
 }
 
 @media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
   .pageActions a {
     width: 100%;
     text-align: center;
+  }
+}
+
+@media (max-width: 980px) {
+  .productFormLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .productFields {
+    order: 1;
+  }
+
+  .productPhotoField {
+    order: 2;
+  }
+
+  .productFields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .productFields {
+    grid-template-columns: 1fr;
+  }
+
+  .uploadRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .uploadFileName {
+    max-width: 100%;
   }
 }
 

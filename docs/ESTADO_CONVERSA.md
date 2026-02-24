@@ -1,32 +1,37 @@
 # Estado da Conversa (Resumo para retomada)
 
-Atualizado em: 2026-02-12
+Atualizado em: 2026-02-24
 
 ## O que você pediu e foi atendido
-- Retomar de onde parou no projeto.
-- Resolver erro no seed do Prisma.
-- Criar atalho para abrir o sistema sem terminal.
-- Implementar standby automático em background.
-- Ajustar standby para 15 minutos.
-- Corrigir erros recorrentes de servidor/cache no Next dev.
-- Tornar os cards do dashboard clicáveis e dinâmicos.
-- Mostrar detalhes reais ao clicar em cada card.
-- Simplificar navegação e depois transformar botões em ações de cadastro.
-- Criar formulários reais para inserir dados em Agenda/Estoque/Promoções.
-- Popular dados fictícios para validação.
+- Separar `Novo cadastro` de `Novo agendamento` em telas distintas.
+- Adicionar botão de acesso para `Novo cadastro`.
+- Tirar cadastro de serviço de `Novo cadastro` e mover para tela dedicada `Serviços`.
+- Transformar seleção de serviço em lista clicável predefinida no agendamento.
+- Criar tela e botão de `Serviços` para inserir serviços pelo painel.
+- Redesenhar home em estilo operacional por blocos.
+- Substituir bloco de relatórios duplicado por relatórios gerenciais reais.
+- Criar `Relatório operacional` e `Relatório financeiro` em páginas separadas.
+- Trocar campos de preço em centavos por entrada em `R$` na UI.
+- Ajustar `Novo produto` com:
+  - campo de foto e pré-visualização
+  - campo de descrição breve
+  - múltiplas iterações finas de layout conforme feedback visual
 
 ## Decisões de UX alinhadas
-- Preferência por interface mais simples.
-- Cards com detalhes no próprio painel (não em bloco separado abaixo).
-- Botões do topo devem servir para ação de cadastro, não só navegação genérica.
+- Preferência por layout objetivo, sem painéis introdutórios desnecessários.
+- Navegação rápida em linha no topo.
+- Relatórios com foco administrativo/financeiro, sem duplicar ações de movimentação.
+- Em `Novo produto`, priorizar equilíbrio visual entre área de foto e formulário.
 
 ## Ponto atual
-- Fluxo pronto para testar cadastro pelos botões do topo:
-  - `Novo agendamento`
-  - `Novo produto`
-  - `Nova campanha`
-- Launcher já com auto-recuperação para evitar comandos manuais frequentes.
+- Fluxo principal funcional e testável:
+  - `Novo cadastro` (cliente/pet)
+  - `Serviços` (lista predefinida)
+  - `Novo agendamento` (com serviços clicáveis)
+  - `Novo produto` (com descrição e foto preview)
+  - `Relatórios` (operacional e financeiro)
+- Estado salvo com checkpoint de desenvolvimento durante a conversa.
 
 ## Instrução para continuar depois
 - Abrir pelo ícone `PetShop.app`.
-- Se quiser evoluir, próximo tema recomendado: autenticação/perfis.
+- Próximo passo técnico recomendado: persistir upload de foto de produto no banco/storage.

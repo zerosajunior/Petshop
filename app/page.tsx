@@ -1,119 +1,17 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { ApiResponse, DashboardData } from "@/types/api";
 
-type CardId = "appointments" | "sms" | "stock" | "campaigns";
-
-type Card = {
-  id: CardId;
-  title: string;
+type StatItem = {
+  id: string;
+  label: string;
   value: string;
   note: string;
 };
 
-function pluralize(count: number, singular: string, plural: string) {
-  return count === 1 ? singular : plural;
-}
-
-function formatDateTime(value: string) {
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit"
-  }).format(new Date(value));
-}
-
-function renderDetails(cardId: CardId, data: DashboardData) {
-  if (cardId === "appointments") {
-    return (
-      <>
-        {data.appointmentsTodayItems.length === 0 ? (
-          <p className="subtle">Nenhum agendamento para hoje.</p>
-        ) : (
-          <ul className="detailList">
-            {data.appointmentsTodayItems.map((item) => (
-              <li className="detailItem" key={item.id}>
-                <strong>{item.petName}</strong> ({item.customerName}) - {item.serviceName}
-                <br />
-                <small className="subtle">
-                  {formatDateTime(item.startsAt)} - {item.status}
-                </small>
-              </li>
-            ))}
-          </ul>
-        )}
-      </>
-    );
-  }
-
-  if (cardId === "sms") {
-    return (
-      <>
-        {data.smsSentLast24hItems.length === 0 ? (
-          <p className="subtle">Nenhum aviso enviado nas últimas 24h.</p>
-        ) : (
-          <ul className="detailList">
-            {data.smsSentLast24hItems.map((item) => (
-              <li className="detailItem" key={item.id}>
-                <strong>{item.channel}</strong> para <strong>{item.toPhone}</strong> - {item.body}
-                <br />
-                <small className="subtle">{formatDateTime(item.createdAt)}</small>
-              </li>
-            ))}
-          </ul>
-        )}
-      </>
-    );
-  }
-
-  if (cardId === "stock") {
-    return (
-      <>
-        {data.lowStockProductsItems.length === 0 ? (
-          <p className="subtle">Nenhum produto abaixo do mínimo.</p>
-        ) : (
-          <ul className="detailList">
-            {data.lowStockProductsItems.map((item) => (
-              <li className="detailItem" key={item.id}>
-                <strong>{item.name}</strong>
-                <br />
-                <small className="subtle">
-                  Estoque: {item.currentStock} | Mínimo: {item.minStock}
-                </small>
-              </li>
-            ))}
-          </ul>
-        )}
-      </>
-    );
-  }
-
-  return (
-    <>
-      {data.activeCampaignItems.length === 0 ? (
-        <p className="subtle">Nenhuma campanha ativa no momento.</p>
-      ) : (
-        <ul className="detailList">
-          {data.activeCampaignItems.map((item) => (
-            <li className="detailItem" key={item.id}>
-              <strong>{item.title}</strong>
-              <br />
-              <small className="subtle">
-                {formatDateTime(item.startsAt)} at&eacute; {formatDateTime(item.endsAt)}
-                {item.segmentPetType ? ` | Segmento: ${item.segmentPetType}` : ""}
-              </small>
-            </li>
-          ))}
-        </ul>
-      )}
-    </>
-  );
-}
-
 export default function HomePage() {
-  const [featuredCardId, setFeaturedCardId] = useState<CardId | null>(null);
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
 
   useEffect(() => {
@@ -137,96 +35,95 @@ export default function HomePage() {
     };
   }, []);
 
-  const cards: Card[] = useMemo(() => {
+  const stats: StatItem[] = useMemo(() => {
     if (!dashboard) {
       return [
-        { id: "appointments", title: "Agendamentos hoje", value: "-", note: "Carregando..." },
-        { id: "sms", title: "Avisos enviados", value: "-", note: "Últimas 24h" },
-        { id: "stock", title: "Produtos em estoque baixo", value: "-", note: "Abaixo do mínimo" },
-        {
-          id: "campaigns",
-          title: "Campanhas ativas",
-          value: "-",
-          note: "Segmentadas por tipo de pet"
-        }
+        { id: "appointments", label: "Agendamentos hoje", value: "-", note: "Carregando..." },
+        { id: "sms", label: "Avisos enviados", value: "-", note: "Últimas 24h" },
+        { id: "stock", label: "Estoque baixo", value: "-", note: "Abaixo do mínimo" },
+        { id: "campaigns", label: "Campanhas ativas", value: "-", note: "Ativas agora" }
       ];
     }
 
     return [
       {
         id: "appointments",
-        title: "Agendamentos hoje",
+        label: "Agendamentos hoje",
         value: String(dashboard.appointmentsToday),
-        note: `${dashboard.pendingConfirmations} ${pluralize(
-          dashboard.pendingConfirmations,
-          "confirmação pendente",
-          "confirmações pendentes"
-        )}`
+        note: `${dashboard.pendingConfirmations} confirmações pendentes`
       },
       {
         id: "sms",
-        title: "Avisos enviados",
+        label: "Avisos enviados",
         value: String(dashboard.smsSentLast24h),
         note: "Últimas 24h"
       },
       {
         id: "stock",
-        title: "Produtos em estoque baixo",
+        label: "Estoque baixo",
         value: String(dashboard.lowStockProducts),
         note: "Abaixo do mínimo"
       },
       {
         id: "campaigns",
-        title: "Campanhas ativas",
+        label: "Campanhas ativas",
         value: String(dashboard.activeCampaigns),
         note: "Ativas agora"
       }
     ];
   }, [dashboard]);
 
-  const orderedCards = useMemo(() => {
-    if (!featuredCardId) {
-      return cards;
-    }
-
-    const selected = cards.find((card) => card.id === featuredCardId);
-    const others = cards.filter((card) => card.id !== featuredCardId);
-    return selected ? [selected, ...others] : cards;
-  }, [cards, featuredCardId]);
-
   return (
     <section>
-      <div className="grid">
-        {orderedCards.map((card) => (
-          <article
-            className={`card ${featuredCardId === card.id ? "cardFeatured" : ""}`}
-            key={card.id}
-          >
-            <button
-              className="cardButton"
-              onClick={() =>
-                setFeaturedCardId((current) => (current === card.id ? null : card.id))
-              }
-              type="button"
-            >
-              <p className="subtle">{card.title}</p>
-              <div className="metric">{card.value}</div>
-              <small className="subtle">{card.note}</small>
-            </button>
-            {featuredCardId === card.id && dashboard ? (
-              <div className="cardDetails">{renderDetails(card.id, dashboard)}</div>
-            ) : null}
-          </article>
-        ))}
+      <div className="menuBoard">
+        <article className="menuColumn menuColumnCadastros">
+          <h3>Cadastros</h3>
+          <Link className="menuButton menuTone1" href="/cadastro">
+            Cliente e pet
+          </Link>
+          <Link className="menuButton menuTone2" href="/servicos">
+            Serviços
+          </Link>
+          <Link className="menuButton menuTone3" href="/estoque">
+            Produtos
+          </Link>
+        </article>
+
+        <article className="menuColumn menuColumnMovimentacoes">
+          <h3>Movimentações</h3>
+          <Link className="menuButton menuTone1" href="/agenda">
+            Agendamentos
+          </Link>
+          <Link className="menuButton menuTone2" href="/promocoes">
+            Campanhas
+          </Link>
+          <Link className="menuButton menuTone3" href="/estoque">
+            Entrada estoque
+          </Link>
+        </article>
+
+        <article className="menuColumn menuColumnRelatorios">
+          <h3>Relatórios</h3>
+          <Link className="menuButton menuTone1" href="/relatorios/operacional">
+            Operacional do dia
+          </Link>
+          <Link className="menuButton menuTone2" href="/relatorios/financeiro">
+            Financeiro mensal
+          </Link>
+        </article>
       </div>
 
       <article className="panel">
-        <h2>Próximos passos técnicos</h2>
-        <p>
-          Estrutura inicial pronta com API e banco modelados. Clique em um painel para ver os
-          detalhes reais no próprio painel.
-        </p>
-        <span className="tag">MVP em andamento</span>
+        <h3>Indicadores rápidos</h3>
+        <div className="statsGrid">
+          {stats.map((stat) => (
+            <article className="statCard" key={stat.id}>
+              <p className="subtle">{stat.label}</p>
+              <div className="metric">{stat.value}</div>
+              <small className="subtle">{stat.note}</small>
+            </article>
+          ))}
+        </div>
       </article>
     </section>
   );

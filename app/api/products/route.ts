@@ -7,6 +7,7 @@ const productSchema = z.object({
   name: z.string().min(2),
   sku: z.string().min(2),
   category: z.string().optional(),
+  description: z.string().optional(),
   currentStock: z.number().int().nonnegative().default(0),
   minStock: z.number().int().nonnegative().default(0),
   priceCents: z.number().int().positive()

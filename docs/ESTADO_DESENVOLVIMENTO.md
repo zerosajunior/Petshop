@@ -1,14 +1,14 @@
 # Estado do Desenvolvimento - PetShop SaaS
 
-Atualizado em: 2026-02-12
+Atualizado em: 2026-02-24
 
 ## Status geral
 - Projeto Next.js + Prisma funcionando localmente.
 - Dashboard com métricas dinâmicas do banco.
-- Cards do dashboard clicáveis, com expansão e detalhes no próprio card.
+- Home redesenhada em modelo operacional por blocos (`Cadastros`, `Movimentações`, `Relatórios`).
 - Seed com dados fictícios de demonstração.
-- Ações rápidas no topo para cadastro: `Novo agendamento`, `Novo produto`, `Nova campanha`.
-- Formulários funcionais nas páginas `Agenda`, `Estoque` e `Promoções` (POST nas APIs).
+- Ações rápidas no topo reorganizadas em linha única.
+- Formulários funcionais nas páginas `Agenda`, `Cadastro`, `Serviços`, `Estoque` e `Promoções`.
 
 ## Funcionalidades implementadas
 - APIs base:
@@ -20,13 +20,26 @@ Atualizado em: 2026-02-12
   - `GET/POST /api/messages`
   - `GET/POST /api/services` (adicionada)
   - `GET /api/dashboard` (métricas + listas detalhadas)
+  - `GET /api/reports` (indicadores operacionais e financeiros)
 - Dashboard:
-  - Agendamentos hoje
-  - Confirmações pendentes
-  - SMS enviados (24h)
-  - Produtos com estoque baixo
-  - Campanhas ativas
-  - Clique no card expande e mostra itens reais
+  - Blocos de acesso rápido por domínio
+  - Indicadores rápidos consolidados
+- Relatórios:
+  - Página hub: `/relatorios`
+  - Página operacional: `/relatorios/operacional`
+  - Página financeira: `/relatorios/financeiro`
+- Agenda:
+  - `Novo agendamento` separado de `Novo cadastro`
+  - Serviço escolhido por lista clicável predefinida
+- Cadastro:
+  - Tela dedicada para cliente e pet
+- Serviços:
+  - Tela dedicada para cadastro e listagem de serviços predefinidos
+- Estoque (novo produto):
+  - Preço em reais (`R$`) com conversão interna para centavos
+  - Campo de descrição breve persistido em banco (`Product.description`)
+  - Campo de foto com seletor customizado e pré-visualização
+  - Layout com foto à esquerda e formulário à direita
 - Seed:
   - Clientes, pets, serviços, agendamentos, produtos, campanhas, mensagens
   - Execução idempotente para dados de demo
@@ -46,9 +59,10 @@ Atualizado em: 2026-02-12
 - `package.json` dev script: `NEXT_DISABLE_WEBPACK_CACHE=1 next dev`
 - Corrigido seed que falhava por `upsert` com campo não-único.
 - Tipagem de rotas no header ajustada para typed routes.
+- Banco local sincronizado com novo campo `description` em `Product` via `prisma db push`.
 
 ## Próximos passos sugeridos
-1. Autenticação e perfis (`admin`, `atendente`, `tosador`).
-2. Melhorias de UX dos formulários (validação, máscaras, mensagens).
-3. Scheduler de lembretes automáticos (24h/2h).
-4. Integração SMS real (Twilio/Zenvia).
+1. Persistência real da imagem de produto (upload + URL no banco).
+2. Separar módulo de movimentação de estoque (entrada/saída/ajuste) do cadastro de produto.
+3. Autenticação e perfis (`admin`, `atendente`, `tosador`).
+4. Integração SMS real (Twilio/Zenvia) e automação de lembretes em scheduler.

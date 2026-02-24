@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 type NavLink = {
-  href: "/" | "/agenda" | "/cadastro" | "/servicos" | "/estoque" | "/promocoes";
+  href: "/" | "/agenda" | "/cadastro" | "/servicos" | "/estoque" | "/promocoes" | "/relatorios";
   label: string;
 };
 
@@ -11,6 +11,7 @@ const links: NavLink[] = [
   { href: "/cadastro", label: "Novo cadastro" },
   { href: "/servicos", label: "Serviços" },
   { href: "/estoque", label: "Novo produto" },
+  { href: "/relatorios", label: "Relatórios" },
   { href: "/promocoes", label: "Nova campanha" }
 ];
 
