@@ -104,7 +104,7 @@ export default function AgendaPage() {
       <article className="panel">
         <div className="pageActions">
           <Link className="btnPrimary" href="/cadastro">
-            Novo cadastro
+            Cadastro
           </Link>
           <Link className="btnSecondary" href="/servicos">
             Serviços

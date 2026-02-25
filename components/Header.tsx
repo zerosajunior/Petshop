@@ -7,12 +7,12 @@ type NavLink = {
 
 const links: NavLink[] = [
   { href: "/", label: "Painel inicial" },
-  { href: "/agenda", label: "Novo agendamento" },
-  { href: "/cadastro", label: "Novo cadastro" },
+  { href: "/agenda", label: "Agendamento" },
+  { href: "/cadastro", label: "Cadastro" },
   { href: "/servicos", label: "Serviços" },
-  { href: "/estoque", label: "Novo produto" },
+  { href: "/estoque", label: "Produto" },
   { href: "/relatorios", label: "Relatórios" },
-  { href: "/promocoes", label: "Nova campanha" }
+  { href: "/promocoes", label: "Campanha" }
 ];
 
 export function Header() {
