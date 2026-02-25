@@ -35,3 +35,4 @@ Atualizado em: 2026-02-24
 ## Instrução para continuar depois
 - Abrir pelo ícone `PetShop.app`.
 - Próximo passo técnico recomendado: persistir upload de foto de produto no banco/storage.
+- Histórico detalhado desta e das próximas sessões: `docs/HISTORICO_CHAT.md`.
