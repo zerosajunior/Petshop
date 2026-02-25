@@ -31,6 +31,7 @@ export default function AgendaPage() {
   const [startsAt, setStartsAt] = useState("");
   const [endsAt, setEndsAt] = useState("");
   const [notes, setNotes] = useState("");
+  const [showNewForm, setShowNewForm] = useState(false);
 
   const refresh = useCallback(async function refreshData() {
     const [petsRes, servicesRes, appointmentsRes] = await Promise.all([
@@ -89,8 +90,8 @@ export default function AgendaPage() {
 
   return (
     <section>
-      <h2>Novo agendamento</h2>
-      <p className="subtle">Cadastre agendamentos diretamente nesta tela.</p>
+      <h2>Agendamentos</h2>
+      <p className="subtle">Acompanhe os próximos horários e crie um novo quando necessário.</p>
 
       {!canSchedule ? (
         <article className="panel">
@@ -103,96 +104,111 @@ export default function AgendaPage() {
 
       <article className="panel">
         <div className="pageActions">
-          <Link className="btnPrimary" href="/cadastro">
+          <button
+            className="btnPrimary actionBtnSameHeight actionBtnSameSize"
+            onClick={() => setShowNewForm((prev) => !prev)}
+            type="button"
+          >
+            {showNewForm ? "Fechar novo agendamento" : "Novo agendamento"}
+          </button>
+          <Link className="btnPrimary actionBtnSameHeight actionBtnSameSize" href="/cadastro">
             Cadastro
           </Link>
-          <Link className="btnSecondary" href="/servicos">
+          <Link className="btnSecondary actionBtnSameHeight actionBtnSameSize" href="/servicos">
             Serviços
           </Link>
-          <Link className="btnSecondary" href="/">
+          <Link className="btnSecondary actionBtnSameHeight actionBtnSameSize" href="/">
             Voltar ao painel
           </Link>
         </div>
 
-        <form onSubmit={onSubmit}>
-          <div className="formGrid">
-            <div className="formField">
-              <label htmlFor="petId">Pet</label>
-              <select id="petId" onChange={(e) => setPetId(e.target.value)} required value={petId}>
-                <option value="">Selecione</option>
-                {pets.map((pet) => (
-                  <option key={pet.id} value={pet.id}>
-                    {pet.name} ({pet.customer.name})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="formField">
-              <label>Serviço (lista predefinida)</label>
-              <div className="servicePicker">
-                {services.map((service) => (
-                  <button
-                    key={service.id}
-                    className={`serviceOption ${serviceId === service.id ? "active" : ""}`}
-                    onClick={() => setServiceId(service.id)}
-                    type="button"
-                  >
-                    {service.name} ({service.durationMin} min)
-                  </button>
-                ))}
+        {showNewForm ? (
+          <form onSubmit={onSubmit}>
+            <div className="formGrid">
+              <div className="formField">
+                <label htmlFor="petId">Pet</label>
+                <select id="petId" onChange={(e) => setPetId(e.target.value)} required value={petId}>
+                  <option value="">Selecione</option>
+                  {pets.map((pet) => (
+                    <option key={pet.id} value={pet.id}>
+                      {pet.name} ({pet.customer.name})
+                    </option>
+                  ))}
+                </select>
               </div>
-              {services.length === 0 ? <small className="subtle">Nenhum serviço predefinido disponível.</small> : null}
+
+              <div className="formField">
+                <label>Serviço (lista predefinida)</label>
+                <div className="servicePicker">
+                  {services.map((service) => (
+                    <button
+                      key={service.id}
+                      className={`serviceOption ${serviceId === service.id ? "active" : ""}`}
+                      onClick={() => setServiceId(service.id)}
+                      type="button"
+                    >
+                      {service.name} ({service.durationMin} min)
+                    </button>
+                  ))}
+                </div>
+                {services.length === 0 ? (
+                  <small className="subtle">Nenhum serviço predefinido disponível.</small>
+                ) : null}
+              </div>
+
+              <div className="formField">
+                <label htmlFor="startsAt">Início</label>
+                <input
+                  id="startsAt"
+                  onChange={(e) => setStartsAt(e.target.value)}
+                  required
+                  type="datetime-local"
+                  value={startsAt}
+                />
+              </div>
+
+              <div className="formField">
+                <label htmlFor="endsAt">Fim</label>
+                <input
+                  id="endsAt"
+                  onChange={(e) => setEndsAt(e.target.value)}
+                  required
+                  type="datetime-local"
+                  value={endsAt}
+                />
+              </div>
             </div>
 
-            <div className="formField">
-              <label htmlFor="startsAt">Início</label>
-              <input
-                id="startsAt"
-                onChange={(e) => setStartsAt(e.target.value)}
-                required
-                type="datetime-local"
-                value={startsAt}
-              />
+            <div className="formField" style={{ marginTop: "0.8rem" }}>
+              <label htmlFor="notes">Observações</label>
+              <textarea id="notes" onChange={(e) => setNotes(e.target.value)} value={notes} />
             </div>
 
-            <div className="formField">
-              <label htmlFor="endsAt">Fim</label>
-              <input
-                id="endsAt"
-                onChange={(e) => setEndsAt(e.target.value)}
-                required
-                type="datetime-local"
-                value={endsAt}
-              />
+            <div className="formActions">
+              <button className="btnPrimary" disabled={!canSchedule} type="submit">
+                Salvar agendamento
+              </button>
+              {message ? <small>{message}</small> : null}
+              {error ? <small style={{ color: "#b42318" }}>{error}</small> : null}
             </div>
-          </div>
-
-          <div className="formField" style={{ marginTop: "0.8rem" }}>
-            <label htmlFor="notes">Observações</label>
-            <textarea id="notes" onChange={(e) => setNotes(e.target.value)} value={notes} />
-          </div>
-
-          <div className="formActions">
-            <button className="btnPrimary" disabled={!canSchedule} type="submit">
-              Salvar agendamento
-            </button>
-            {message ? <small>{message}</small> : null}
-            {error ? <small style={{ color: "#b42318" }}>{error}</small> : null}
-          </div>
-        </form>
+          </form>
+        ) : null}
       </article>
 
       <article className="panel">
         <h3>Próximos agendamentos</h3>
-        <ul className="listSimple">
-          {appointments.map((appointment) => (
-            <li key={appointment.id}>
-              {appointment.pet.name} ({appointment.pet.customer.name}) - {appointment.service.name} -{" "}
-              {new Date(appointment.startsAt).toLocaleString("pt-BR")} - {appointment.status}
-            </li>
-          ))}
-        </ul>
+        {appointments.length === 0 ? (
+          <p className="subtle">Nenhum agendamento encontrado.</p>
+        ) : (
+          <ul className="listSimple">
+            {appointments.map((appointment) => (
+              <li key={appointment.id}>
+                {appointment.pet.name} ({appointment.pet.customer.name}) - {appointment.service.name} -{" "}
+                {new Date(appointment.startsAt).toLocaleString("pt-BR")} - {appointment.status}
+              </li>
+            ))}
+          </ul>
+        )}
       </article>
     </section>
   );

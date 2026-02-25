@@ -38,6 +38,18 @@ enum MessageChannel {
   WHATSAPP
 }
 
+enum MessagePurpose {
+  TRANSACTIONAL
+  MARKETING
+}
+
+enum ConsentRequestStatus {
+  PENDING
+  CONFIRMED
+  EXPIRED
+  CANCELED
+}
+
 model User {
   id        String   @id @default(cuid())
   name      String
@@ -53,9 +65,13 @@ model Customer {
   phone     String
   email     String?
   notes     String?
+  marketingConsent         Boolean         @default(false)
+  marketingConsentAt       DateTime?
+  privacyPolicyAcceptedAt  DateTime?
   preferredChannel MessageChannel @default(SMS)
   pets      Pet[]
   messages  MessageLog[]
+  consentRequests MarketingConsentRequest[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -109,12 +125,23 @@ model Product {
   sku             String          @unique
   category        String?
   description     String?
+  imageDataUrl    String?
+  images          ProductImage[]
   currentStock    Int             @default(0)
   minStock        Int             @default(0)
   priceCents      Int
   stockMovements  StockMovement[]
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
+}
+
+model ProductImage {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  dataUrl    String
+  position   Int
+  createdAt  DateTime @default(now())
 }
 
 model StockMovement {
@@ -144,6 +171,7 @@ model MessageLog {
   customerId    String?
   customer      Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
   channel       MessageChannel @default(SMS)
+  purpose       MessagePurpose @default(TRANSACTIONAL)
   toPhone       String
   body          String
   provider      String
@@ -151,4 +179,32 @@ model MessageLog {
   status        MessageStatus @default(PENDING)
   errorMessage  String?
   createdAt     DateTime      @default(now())
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  action      String
+  entity      String
+  entityId    String?
+  details     String?
+  actor       String   @default("system")
+  createdAt   DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
+
+model MarketingConsentRequest {
+  id          String               @id @default(cuid())
+  customerId  String
+  customer    Customer             @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  channel     MessageChannel       @default(WHATSAPP)
+  status      ConsentRequestStatus @default(PENDING)
+  codeHash    String
+  expiresAt   DateTime
+  confirmedAt DateTime?
+  createdAt   DateTime             @default(now())
+
+  @@index([customerId, status])
+  @@index([expiresAt])
 }

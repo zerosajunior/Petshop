@@ -23,6 +23,11 @@ export default function CadastroPage() {
   const [newPetCustomerId, setNewPetCustomerId] = useState("");
   const [newPetName, setNewPetName] = useState("");
   const [newPetType, setNewPetType] = useState<PetType>("DOG");
+  const [consentCustomerId, setConsentCustomerId] = useState("");
+  const [consentChannel, setConsentChannel] = useState<Channel>("WHATSAPP");
+  const [consentCode, setConsentCode] = useState("");
+  const [consentMessage, setConsentMessage] = useState("");
+  const [consentError, setConsentError] = useState("");
 
   const refreshCustomers = useCallback(async function refreshCustomerList() {
     const customersRes = await fetch("/api/customers", { cache: "no-store" });
@@ -34,7 +39,10 @@ export default function CadastroPage() {
     if (!newPetCustomerId && nextCustomers.length > 0) {
       setNewPetCustomerId(nextCustomers[0].id);
     }
-  }, [newPetCustomerId]);
+    if (!consentCustomerId && nextCustomers.length > 0) {
+      setConsentCustomerId(nextCustomers[0].id);
+    }
+  }, [consentCustomerId, newPetCustomerId]);
 
   useEffect(() => {
     refreshCustomers().catch(() => undefined);
@@ -66,6 +74,7 @@ export default function CadastroPage() {
     setCustomerPhone("");
     setCustomerEmail("");
     setNewPetCustomerId(payload.data.id);
+    setConsentCustomerId(payload.data.id);
     setMessage("Cliente criado com sucesso.");
     await refreshCustomers();
   }
@@ -94,6 +103,58 @@ export default function CadastroPage() {
     setNewPetName("");
     setMessage("Pet criado com sucesso.");
     await refreshCustomers();
+  }
+
+  async function onRequestConsent() {
+    setConsentMessage("");
+    setConsentError("");
+
+    const response = await fetch("/api/privacy/marketing-consent/request", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customerId: consentCustomerId,
+        channel: consentChannel
+      })
+    });
+
+    const payload: ApiResponse<{ expiresAt: string }> = await response.json();
+    if (!response.ok) {
+      setConsentError(payload.error ?? "Falha ao enviar código.");
+      return;
+    }
+
+    const expiresAt = payload.data?.expiresAt
+      ? new Date(payload.data.expiresAt).toLocaleTimeString("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit"
+        })
+      : "";
+    setConsentMessage(`Código enviado com sucesso. Expira às ${expiresAt}.`);
+  }
+
+  async function onConfirmConsent(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setConsentMessage("");
+    setConsentError("");
+
+    const response = await fetch("/api/privacy/marketing-consent/confirm", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customerId: consentCustomerId,
+        code: consentCode
+      })
+    });
+
+    const payload: ApiResponse<{ success: boolean }> = await response.json();
+    if (!response.ok) {
+      setConsentError(payload.error ?? "Falha ao confirmar consentimento.");
+      return;
+    }
+
+    setConsentCode("");
+    setConsentMessage("Consentimento de marketing confirmado.");
   }
 
   return (
@@ -150,6 +211,9 @@ export default function CadastroPage() {
                 <option value="SMS">SMS</option>
               </select>
             </div>
+            <small className="subtle">
+              O consentimento de marketing é confirmado por código enviado ao celular do cliente.
+            </small>
             <div className="formActions">
               <button className="btnPrimary" type="submit">
                 Salvar cliente
@@ -207,6 +271,71 @@ export default function CadastroPage() {
 
         {message ? <small>{message}</small> : null}
         {error ? <small style={{ color: "#b42318", display: "block" }}>{error}</small> : null}
+      </article>
+
+      <article className="panel">
+        <h3>Consentimento de marketing (LGPD)</h3>
+        <p className="subtle">
+          Envie o código ao celular do cliente e confirme apenas após ele informar o código recebido.
+        </p>
+
+        <div className="formGrid">
+          <div className="formField">
+            <label htmlFor="consentCustomerId">Cliente</label>
+            <select
+              id="consentCustomerId"
+              onChange={(e) => setConsentCustomerId(e.target.value)}
+              value={consentCustomerId}
+            >
+              <option value="">Selecione o cliente</option>
+              {customers.map((customer) => (
+                <option key={customer.id} value={customer.id}>
+                  {customer.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="formField">
+            <label htmlFor="consentChannel">Canal de envio</label>
+            <select
+              id="consentChannel"
+              onChange={(e) => setConsentChannel(e.target.value as Channel)}
+              value={consentChannel}
+            >
+              <option value="WHATSAPP">WhatsApp</option>
+              <option value="SMS">SMS</option>
+            </select>
+          </div>
+
+          <div className="formActions">
+            <button className="btnSecondary" onClick={onRequestConsent} type="button">
+              Enviar código
+            </button>
+          </div>
+        </div>
+
+        <form className="formActions" onSubmit={onConfirmConsent}>
+          <div className="formField" style={{ minWidth: "180px" }}>
+            <label htmlFor="consentCode">Código de confirmação</label>
+            <input
+              id="consentCode"
+              maxLength={6}
+              onChange={(e) => setConsentCode(e.target.value.replace(/\D/g, ""))}
+              pattern="\d{6}"
+              required
+              value={consentCode}
+            />
+          </div>
+          <button className="btnPrimary" type="submit">
+            Confirmar consentimento
+          </button>
+        </form>
+
+        {consentMessage ? <small>{consentMessage}</small> : null}
+        {consentError ? (
+          <small style={{ color: "#b42318", display: "block" }}>{consentError}</small>
+        ) : null}
       </article>
     </section>
   );

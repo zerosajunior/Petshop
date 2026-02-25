@@ -1,18 +1,29 @@
 import Link from "next/link";
 
 type NavLink = {
-  href: "/" | "/agenda" | "/cadastro" | "/servicos" | "/estoque" | "/promocoes" | "/relatorios";
+  href:
+    | "/"
+    | "/agenda"
+    | "/cadastro"
+    | "/servicos"
+    | "/estoque"
+    | "/movimentacoes-estoque"
+    | "/promocoes"
+    | "/relatorios"
+    | "/privacidade";
   label: string;
 };
 
 const links: NavLink[] = [
   { href: "/", label: "Painel inicial" },
-  { href: "/agenda", label: "Agendamento" },
-  { href: "/cadastro", label: "Cadastro" },
+  { href: "/agenda", label: "Agendamentos" },
+  { href: "/cadastro", label: "Cadastros" },
   { href: "/servicos", label: "Serviços" },
-  { href: "/estoque", label: "Produto" },
+  { href: "/estoque", label: "Produtos" },
+  { href: "/movimentacoes-estoque", label: "Estoque" },
   { href: "/relatorios", label: "Relatórios" },
-  { href: "/promocoes", label: "Campanha" }
+  { href: "/promocoes", label: "Campanhas" },
+  { href: "/privacidade", label: "Privacidade" }
 ];
 
 export function Header() {

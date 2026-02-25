@@ -20,7 +20,13 @@ export async function GET() {
     smsSentLast24h,
     smsSentLast24hItems,
     products,
-    activeCampaignItems
+    activeCampaignItems,
+    totalCustomers,
+    totalPets,
+    totalServices,
+    totalProducts,
+    totalCampaigns,
+    totalAppointments
   ] = await Promise.all([
     prisma.appointment.count({
       where: {
@@ -97,7 +103,13 @@ export async function GET() {
         startsAt: "desc"
       },
       take: 8
-    })
+    }),
+    prisma.customer.count(),
+    prisma.pet.count(),
+    prisma.service.count(),
+    prisma.product.count(),
+    prisma.campaign.count(),
+    prisma.appointment.count()
   ]);
 
   const lowStockProductsItems = products.filter(
@@ -107,6 +119,12 @@ export async function GET() {
   const activeCampaigns = activeCampaignItems.length;
 
   return ok({
+    totalCustomers,
+    totalPets,
+    totalServices,
+    totalProducts,
+    totalCampaigns,
+    totalAppointments,
     appointmentsToday,
     appointmentsTodayItems: appointmentsTodayItems.map((item) => ({
       id: item.id,

@@ -44,6 +44,12 @@ export type DashboardCampaignItem = {
 };
 
 export type DashboardData = DashboardMetrics & {
+  totalCustomers: number;
+  totalPets: number;
+  totalServices: number;
+  totalProducts: number;
+  totalCampaigns: number;
+  totalAppointments: number;
   appointmentsTodayItems: DashboardAppointmentItem[];
   smsSentLast24hItems: DashboardMessageItem[];
   lowStockProductsItems: DashboardStockItem[];

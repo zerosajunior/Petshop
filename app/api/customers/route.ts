@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/http";
 import { MessageChannel } from "@prisma/client";
 import { z } from "zod";
+import { registerAudit } from "@/lib/audit";
 
 const customerSchema = z.object({
   name: z.string().min(2),
@@ -30,7 +31,23 @@ export async function POST(request: NextRequest) {
   }
 
   const customer = await prisma.customer.create({
-    data: parsed.data
+    data: {
+      name: parsed.data.name,
+      phone: parsed.data.phone,
+      email: parsed.data.email,
+      notes: parsed.data.notes,
+      preferredChannel: parsed.data.preferredChannel,
+      marketingConsent: false,
+      marketingConsentAt: null,
+      privacyPolicyAcceptedAt: new Date()
+    }
+  });
+
+  await registerAudit({
+    action: "CUSTOMER_CREATED",
+    entity: "Customer",
+    entityId: customer.id,
+    details: "Cliente criado sem opt-in automático de marketing."
   });
 
   return ok(customer, 201);

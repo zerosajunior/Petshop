@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/http";
 import { AppointmentStatus } from "@prisma/client";
 import { z } from "zod";
+import { registerAudit } from "@/lib/audit";
 
 const appointmentSchema = z.object({
   petId: z.string().min(1),
@@ -39,6 +40,13 @@ export async function POST(request: NextRequest) {
       startsAt: new Date(parsed.data.startsAt),
       endsAt: new Date(parsed.data.endsAt)
     }
+  });
+
+  await registerAudit({
+    action: "APPOINTMENT_CREATED",
+    entity: "Appointment",
+    entityId: appointment.id,
+    details: `Agendamento criado para petId=${appointment.petId}`
   });
 
   return ok(appointment, 201);

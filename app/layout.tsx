@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import "./globals.css";
 import { Header } from "@/components/Header";
 
@@ -16,6 +17,12 @@ export default function RootLayout({
         <main>
           <Header />
           {children}
+          <footer className="appFooter">
+            <p>
+              Tratamento de dados conforme LGPD. Solicitações do titular:{" "}
+              <Link href="/privacidade">Política de Privacidade</Link>.
+            </p>
+          </footer>
         </main>
       </body>
     </html>

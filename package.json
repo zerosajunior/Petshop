@@ -10,7 +10,9 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "tsx scripts/seed.ts",
-    "reminders:run": "tsx scripts/run-reminders.ts"
+    "prisma:seed:large": "node --import tsx scripts/seed-large.ts",
+    "reminders:run": "tsx scripts/run-reminders.ts",
+    "lgpd:retention": "tsx scripts/lgpd-retention.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.3.1",

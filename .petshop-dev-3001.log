@@ -1,0 +1,8 @@
+   ▲ Next.js 15.1.6
+   - Local:        http://localhost:3001
+   - Network:      http://0.0.0.0:3001
+   - Environments: .env
+   - Experiments (use with caution):
+     · typedRoutes
+
+ ✓ Starting...

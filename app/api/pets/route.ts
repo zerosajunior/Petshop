@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/http";
 import { PetType } from "@prisma/client";
 import { z } from "zod";
+import { registerAudit } from "@/lib/audit";
 
 const petSchema = z.object({
   customerId: z.string().min(1),
@@ -31,6 +32,13 @@ export async function POST(request: NextRequest) {
 
   const pet = await prisma.pet.create({
     data: parsed.data
+  });
+
+  await registerAudit({
+    action: "PET_CREATED",
+    entity: "Pet",
+    entityId: pet.id,
+    details: `Pet criado para customerId=${pet.customerId}`
   });
 
   return ok(pet, 201);

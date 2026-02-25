@@ -3,16 +3,69 @@
 import { useEffect, useState } from "react";
 import type { ApiResponse } from "@/types/api";
 import Image from "next/image";
+import Link from "next/link";
+
+type ProductImage = {
+  id: string;
+  dataUrl: string;
+  position: number;
+};
 
 type Product = {
   id: string;
   name: string;
   sku: string;
   description?: string | null;
+  imageDataUrl?: string | null;
+  images?: ProductImage[];
   currentStock: number;
   minStock: number;
   priceCents: number;
 };
+
+function ProductPhotoCarousel({ images, name }: { images: ProductImage[]; name: string }) {
+  const [index, setIndex] = useState(0);
+  const total = images.length;
+  const current = images[index];
+
+  if (total === 0) {
+    return null;
+  }
+
+  return (
+    <span className="productGalleryInline">
+      <Image
+        alt={`Foto de ${name}`}
+        className="productInlineThumb"
+        height={34}
+        src={current.dataUrl}
+        unoptimized
+        width={34}
+      />
+      {total > 1 ? (
+        <>
+          <button
+            className="galleryNavBtn"
+            onClick={() => setIndex((prev) => (prev === 0 ? total - 1 : prev - 1))}
+            type="button"
+          >
+            ‹
+          </button>
+          <small className="subtle">
+            {index + 1}/{total}
+          </small>
+          <button
+            className="galleryNavBtn"
+            onClick={() => setIndex((prev) => (prev === total - 1 ? 0 : prev + 1))}
+            type="button"
+          >
+            ›
+          </button>
+        </>
+      ) : null}
+    </span>
+  );
+}
 
 export default function EstoquePage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -26,8 +79,8 @@ export default function EstoquePage() {
   const [currentStock, setCurrentStock] = useState(0);
   const [minStock, setMinStock] = useState(0);
   const [priceBRL, setPriceBRL] = useState(0);
-  const [photoPreview, setPhotoPreview] = useState("");
-  const [photoFileName, setPhotoFileName] = useState("");
+  const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+  const [previewIndex, setPreviewIndex] = useState(0);
 
   async function refresh() {
     const response = await fetch("/api/products", { cache: "no-store" });
@@ -44,14 +97,30 @@ export default function EstoquePage() {
     setMessage("");
     setError("");
 
+    if (!name.trim()) {
+      setError("Informe o nome do produto.");
+      return;
+    }
+
+    if (!sku.trim()) {
+      setError("Informe o código interno (SKU).");
+      return;
+    }
+
+    if (priceBRL <= 0) {
+      setError("O preço deve ser maior que zero.");
+      return;
+    }
+
     const response = await fetch("/api/products", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name,
-        sku,
-        category,
+        name: name.trim(),
+        sku: sku.trim().toUpperCase(),
+        category: category.trim() || undefined,
         description: description || undefined,
+        imageDataUrls: photoPreviews.length > 0 ? photoPreviews : undefined,
         currentStock,
         minStock,
         priceCents: Math.round(priceBRL * 100)
@@ -72,33 +141,66 @@ export default function EstoquePage() {
     setCurrentStock(0);
     setMinStock(0);
     setPriceBRL(0);
-    setPhotoPreview("");
-    setPhotoFileName("");
+    setPhotoPreviews([]);
+    setPreviewIndex(0);
     await refresh();
   }
 
   function onPhotoChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
+    const files = Array.from(event.target.files ?? []);
 
-    if (!file) {
-      setPhotoPreview("");
-      setPhotoFileName("");
+    if (files.length === 0) {
+      setPhotoPreviews([]);
+      setPreviewIndex(0);
       return;
     }
 
-    setPhotoFileName(file.name);
+    if (files.length > 8) {
+      setError("Selecione no máximo 8 fotos por produto.");
+      setPhotoPreviews([]);
+      setPreviewIndex(0);
+      return;
+    }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      setPhotoPreview(typeof reader.result === "string" ? reader.result : "");
-    };
-    reader.readAsDataURL(file);
+    const hasOversized = files.some((file) => file.size > 1_500_000);
+    if (hasOversized) {
+      setError("Uma ou mais fotos são grandes demais. Limite de 1.5 MB por foto.");
+      setPhotoPreviews([]);
+      setPreviewIndex(0);
+      return;
+    }
+
+    setError("");
+    Promise.all(
+      files.map(
+        (file) =>
+          new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+              if (typeof reader.result === "string") {
+                resolve(reader.result);
+                return;
+              }
+              reject(new Error("Imagem inválida."));
+            };
+            reader.onerror = () => reject(new Error("Falha ao ler a imagem."));
+            reader.readAsDataURL(file);
+          })
+      )
+    )
+      .then((images) => {
+        setPhotoPreviews(images);
+        setPreviewIndex(0);
+      })
+      .catch(() => {
+        setError("Não foi possível ler as fotos selecionadas.");
+      });
   }
 
   return (
     <section>
-      <h2>Novo produto</h2>
-      <p className="subtle">Cadastre produtos de estoque por aqui.</p>
+      <h2>Produtos</h2>
+      <p className="subtle">Cadastre produtos e mantenha o catálogo de estoque.</p>
 
       <article className="panel">
         <form onSubmit={onSubmit}>
@@ -106,18 +208,43 @@ export default function EstoquePage() {
             <div className="productPhotoField">
               <label>Pré-visualização da foto</label>
               <div className="productPhotoPreview">
-                {photoPreview ? (
+                {photoPreviews.length > 0 ? (
                   <Image
-                    alt="Prévia do produto"
+                    alt={`Prévia do produto ${previewIndex + 1}`}
                     className="imagePreview"
                     fill
-                    src={photoPreview}
+                    src={photoPreviews[previewIndex]}
                     unoptimized
                   />
                 ) : (
                   <span className="subtle">Sem foto selecionada</span>
                 )}
               </div>
+              {photoPreviews.length > 1 ? (
+                <div className="galleryControls">
+                  <button
+                    className="btnSecondary"
+                    onClick={() =>
+                      setPreviewIndex((prev) => (prev === 0 ? photoPreviews.length - 1 : prev - 1))
+                    }
+                    type="button"
+                  >
+                    Anterior
+                  </button>
+                  <small className="subtle">
+                    {previewIndex + 1} de {photoPreviews.length}
+                  </small>
+                  <button
+                    className="btnSecondary"
+                    onClick={() =>
+                      setPreviewIndex((prev) => (prev === photoPreviews.length - 1 ? 0 : prev + 1))
+                    }
+                    type="button"
+                  >
+                    Próxima
+                  </button>
+                </div>
+              ) : null}
             </div>
 
             <div className="productFields">
@@ -179,24 +306,30 @@ export default function EstoquePage() {
               </div>
               <div className="formFieldFull photoActionRow">
                 <div className="formField photoFieldBlock">
-                  <label htmlFor="productPhoto">Foto do produto (opcional)</label>
+                  <label htmlFor="productPhoto">Fotos do produto (opcional)</label>
                   <div className="uploadRow">
                     <label className="uploadButton" htmlFor="productPhoto">
-                      Selecionar foto
+                      Selecionar fotos
                     </label>
                     <small className="subtle uploadFileName">
-                      {photoFileName || "Nenhuma foto selecionada"}
+                      {photoPreviews.length > 0
+                        ? `${photoPreviews.length} foto(s) selecionada(s)`
+                        : "Nenhuma foto selecionada"}
                     </small>
                   </div>
                   <input
                     accept="image/*"
                     className="fileInputHidden"
                     id="productPhoto"
+                    multiple
                     onChange={onPhotoChange}
                     type="file"
                   />
                 </div>
-                <button className="btnPrimary" type="submit">
+                <Link className="btnSecondary actionBtnEqual" href="/movimentacoes-estoque">
+                  Estoque
+                </Link>
+                <button className="btnPrimary actionBtnEqual" type="submit">
                   Salvar produto
                 </button>
               </div>
@@ -215,6 +348,7 @@ export default function EstoquePage() {
         <ul className="listSimple">
           {products.slice(0, 10).map((product) => (
             <li key={product.id}>
+              <ProductPhotoCarousel images={product.images ?? []} name={product.name} />
               {product.name} ({product.sku}){" "}
               {product.description ? `- ${product.description} ` : ""}- estoque {product.currentStock}/
               {product.minStock} - R${" "}
