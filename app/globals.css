@@ -1,11 +1,11 @@
 :root {
-  --bg: #f6f5f2;
-  --text: #182022;
-  --muted: #5c676b;
-  --card: #ffffff;
-  --border: #d8dddf;
-  --brand: #007f5f;
-  --brand-2: #f4a261;
+  --bg: #fdf8ef;
+  --text: #2a2a2a;
+  --muted: #667175;
+  --card: #fffdf8;
+  --border: #e4dbc9;
+  --brand: #2c8f73;
+  --brand-2: #f2b56b;
 }
 
 * {
@@ -16,9 +16,13 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: radial-gradient(circle at top, #ffffff 0%, var(--bg) 48%);
+  background:
+    radial-gradient(circle at 12% 0%, #fffdf7 0%, transparent 38%),
+    radial-gradient(circle at 88% 0%, #fff5e3 0%, transparent 36%),
+    var(--bg);
   color: var(--text);
-  font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+  font-family: "Avenir Next", "Nunito", "Segoe UI", "Trebuchet MS", sans-serif;
+  line-height: 1.45;
 }
 
 a {
@@ -47,11 +51,18 @@ main {
 }
 
 .nav a {
-  border: 1px solid var(--border);
-  background: #fff;
+  border: 1px solid #d7ccb8;
+  background: #fffaf0;
   padding: 0.55rem 0.9rem;
   border-radius: 999px;
   font-size: 0.95rem;
+  font-weight: 600;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.nav a:hover {
+  background: #fff2dc;
+  border-color: #cdbd9f;
 }
 
 .grid {
@@ -87,8 +98,8 @@ main {
 
 .menuColumn {
   border: 1px solid var(--border);
-  border-radius: 16px;
-  background: white;
+  border-radius: 20px;
+  background: #fffdf8;
   padding: 0.8rem;
   display: grid;
   gap: 0.55rem;
@@ -100,23 +111,25 @@ main {
 .menuColumn h3 {
   margin: 0.1rem 0 0.2rem;
   color: var(--muted);
-  text-transform: uppercase;
-  font-size: 0.84rem;
-  letter-spacing: 0.05em;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
 }
 
 .menuButton {
   display: block;
-  border-radius: 11px;
-  color: #f8fafc;
+  border-radius: 14px;
+  color: #f7fbff;
   padding: 0.7rem 0.8rem;
   font-weight: 700;
-  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.15);
-  transition: filter 0.15s ease;
+  box-shadow:
+    inset 0 -2px 0 rgba(0, 0, 0, 0.12),
+    0 6px 14px rgba(64, 72, 62, 0.08);
+  transition: transform 0.12s ease, filter 0.15s ease;
 }
 
 .menuButton:hover {
-  filter: brightness(0.96);
+  filter: brightness(0.98);
+  transform: translateY(-1px);
 }
 
 .menuColumnCadastros {
@@ -200,9 +213,10 @@ main {
 .panel {
   margin-top: 1rem;
   border: 1px solid var(--border);
-  border-radius: 16px;
-  background: white;
+  border-radius: 20px;
+  background: var(--card);
   padding: 1rem;
+  box-shadow: 0 10px 20px rgba(120, 104, 70, 0.06);
 }
 
 .formGrid {
@@ -230,9 +244,9 @@ main {
 .formField textarea {
   width: 100%;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 0.6rem 0.7rem;
-  background: #fff;
+  background: #fffdf8;
   color: var(--text);
 }
 
@@ -293,9 +307,9 @@ main {
 }
 
 .uploadButton {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #f8fafb;
+  border: 1px solid #d5cab7;
+  border-radius: 10px;
+  background: #fff4df;
   color: var(--text);
   padding: 0.4rem 0.7rem;
   white-space: nowrap;
@@ -356,19 +370,20 @@ main {
 }
 
 .btnPrimary {
-  border: 1px solid #0e644d;
-  background: #0e644d;
+  border: 1px solid #2a8369;
+  background: linear-gradient(180deg, #2f9477 0%, #2a8369 100%);
   color: #fff;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 0.55rem 0.85rem;
   cursor: pointer;
+  box-shadow: 0 6px 14px rgba(44, 143, 115, 0.22);
 }
 
 .btnSecondary {
   border: 1px solid var(--border);
-  background: #fff;
+  background: #fff8eb;
   color: var(--text);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 0.55rem 0.85rem;
   cursor: pointer;
 }
