@@ -101,11 +101,21 @@ export default function AgendaPage() {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [notes, setNotes] = useState("");
-  const [showNewForm, setShowNewForm] = useState(false);
   const [viewMode, setViewMode] = useState<"daily" | "weekly" | "monthly">("daily");
   const [referenceDate, setReferenceDate] = useState(() => startOfDay(new Date()));
   const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+
+  function resetAppointmentFormAndClose() {
+    setPetId("");
+    setServiceId("");
+    setAppointmentDate(toLocalDateInputValue(new Date()));
+    setStartTime("");
+    setEndTime("");
+    setNotes("");
+    setMessage("");
+    setError("");
+  }
 
   const refresh = useCallback(async function refreshData() {
     const [petsRes, servicesRes, appointmentsRes] = await Promise.all([
@@ -302,13 +312,6 @@ export default function AgendaPage() {
 
       <article className="panel">
         <div className="agendaControlRow">
-          <button
-            className="btnSecondary actionBtnSameHeight actionBtnSameSize agendaPanelBtn"
-            onClick={() => setShowNewForm((prev) => !prev)}
-            type="button"
-          >
-            {showNewForm ? "Fechar novo agendamento" : "Novo agendamento"}
-          </button>
           <input
             className="agendaSearchInput"
             onChange={(event) => setSearchInput(event.target.value)}
@@ -343,8 +346,7 @@ export default function AgendaPage() {
           </Link>
         </div>
 
-        {showNewForm ? (
-          <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit}>
             <div className="formGrid agendaScheduleGrid">
               <div className="formField">
                 <label htmlFor="petId">Pet</label>
@@ -442,11 +444,13 @@ export default function AgendaPage() {
               <button className="btnPrimary" disabled={!canSchedule} type="submit">
                 Salvar agendamento
               </button>
+              <button className="btnSecondary" onClick={resetAppointmentFormAndClose} type="button">
+                Cancelar
+              </button>
               {message ? <small>{message}</small> : null}
               {error ? <small style={{ color: "#b42318" }}>{error}</small> : null}
             </div>
           </form>
-        ) : null}
       </article>
 
       <article className="panel">
