@@ -1,68 +1,43 @@
 # Estado do Desenvolvimento - PetShop SaaS
 
-Atualizado em: 2026-02-24
+Atualizado em: 2026-02-25
 
 ## Status geral
-- Projeto Next.js + Prisma funcionando localmente.
-- Dashboard com métricas dinâmicas do banco.
-- Home redesenhada em modelo operacional por blocos (`Cadastros`, `Movimentações`, `Relatórios`).
-- Seed com dados fictícios de demonstração.
-- Ações rápidas no topo reorganizadas em linha única.
-- Formulários funcionais nas páginas `Agenda`, `Cadastro`, `Serviços`, `Estoque` e `Promoções`.
+- Projeto funcional em Next.js + Prisma.
+- Fluxo principal consolidado: `Agenda`, `Cadastro`, `Serviços`, `Produtos`, `Estoque`, `Campanhas`, `Relatórios`.
+- Layout da agenda passou por grande refino de UX.
+- Seeds para cenários de teste (`small`, `demo`, `large`) disponíveis.
 
-## Funcionalidades implementadas
-- APIs base:
-  - `GET/POST /api/customers`
-  - `GET/POST /api/pets`
-  - `GET/POST /api/appointments`
-  - `GET/POST /api/products`
-  - `GET/POST /api/campaigns`
-  - `GET/POST /api/messages`
-  - `GET/POST /api/services` (adicionada)
-  - `GET /api/dashboard` (métricas + listas detalhadas)
-  - `GET /api/reports` (indicadores operacionais e financeiros)
-- Dashboard:
-  - Blocos de acesso rápido por domínio
-  - Indicadores rápidos consolidados
-- Relatórios:
-  - Página hub: `/relatorios`
-  - Página operacional: `/relatorios/operacional`
-  - Página financeira: `/relatorios/financeiro`
+## Destaques técnicos mais recentes
 - Agenda:
-  - `Novo agendamento` separado de `Novo cadastro`
-  - Serviço escolhido por lista clicável predefinida
-- Cadastro:
-  - Tela dedicada para cliente e pet
-- Serviços:
-  - Tela dedicada para cadastro e listagem de serviços predefinidos
-- Estoque (novo produto):
-  - Preço em reais (`R$`) com conversão interna para centavos
-  - Campo de descrição breve persistido em banco (`Product.description`)
-  - Campo de foto com seletor customizado e pré-visualização
-  - Layout com foto à esquerda e formulário à direita
-- Seed:
-  - Clientes, pets, serviços, agendamentos, produtos, campanhas, mensagens
-  - Execução idempotente para dados de demo
+  - barra de ações com layout alinhado e responsivo
+  - pesquisa por pet/dono
+  - visualização de calendário em modos `Diário`, `Semanal`, `Mensal`
+  - serviço no novo agendamento em `dropdown`
+  - data, início e fim em `dropdown`
+  - fim preenchido automaticamente com base na duração do serviço
+  - validação de conflito de horário na API (sobreposição por pet)
+  - datas de agendamento limitadas para presente/futuro no formulário
+- LGPD:
+  - base de consentimento/privacidade implementada
+  - endpoints de privacidade e trilha de auditoria
+  - documentação técnica e passo a passo em `docs/`
+- Produtos:
+  - múltiplas fotos por produto (preview e navegação)
+- Padronização visual:
+  - barras de ação (`appActionBar`) aplicadas nas telas principais
 
-## Automação de execução (ícone desktop)
-- Launcher configurado para abrir sem terminal.
-- Arquivos:
-  - `scripts/start-petshop.sh`
-  - `scripts/auto-stop-petshop.sh`
-- Comportamento:
-  - sobe servidor em background
-  - abre navegador
-  - standby automático após 15 minutos sem conexões ativas
-  - auto-recuperação quando servidor trava (mata processo preso + limpa `.next` + retry)
+## Seeds disponíveis
+- `npm run prisma:seed:small` (dataset reduzido)
+- `npm run prisma:seed:demo` (5 agendamentos/dia, dias passados e futuros, produtos com 3 fotos)
+- `npm run prisma:seed:large` (dataset volumoso)
 
-## Ajustes técnicos importantes
-- `package.json` dev script: `NEXT_DISABLE_WEBPACK_CACHE=1 next dev`
-- Corrigido seed que falhava por `upsert` com campo não-único.
-- Tipagem de rotas no header ajustada para typed routes.
-- Banco local sincronizado com novo campo `description` em `Product` via `prisma db push`.
+## Estabilidade de ambiente
+- Em alguns contextos, `next dev` apresentou travamento em `Compiling / ...`.
+- Arquivos adicionados para padronizar runtime:
+  - `.nvmrc` (`20`)
+  - `engines.node` em `package.json` (`>=20 <23`)
 
-## Próximos passos sugeridos
-1. Persistência real da imagem de produto (upload + URL no banco).
-2. Separar módulo de movimentação de estoque (entrada/saída/ajuste) do cadastro de produto.
-3. Autenticação e perfis (`admin`, `atendente`, `tosador`).
-4. Integração SMS real (Twilio/Zenvia) e automação de lembretes em scheduler.
+## Próximo passo (amanhã)
+1. Continuar refinando UX da agenda conforme feedback visual em tempo real.
+2. Implementar ações rápidas no calendário (`Confirmar`, `Concluir`, `Cancelar`) se aprovado.

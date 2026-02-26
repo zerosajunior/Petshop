@@ -34,11 +34,44 @@ export async function POST(request: NextRequest) {
     return fail("Dados de agendamento inválidos");
   }
 
+  const startsAt = new Date(parsed.data.startsAt);
+  const endsAt = new Date(parsed.data.endsAt);
+
+  if (Number.isNaN(startsAt.getTime()) || Number.isNaN(endsAt.getTime())) {
+    return fail("Data/hora inválida para o agendamento.");
+  }
+
+  if (endsAt <= startsAt) {
+    return fail("O horário de fim deve ser posterior ao início.");
+  }
+
+  const conflict = await prisma.appointment.findFirst({
+    where: {
+      petId: parsed.data.petId,
+      status: {
+        not: AppointmentStatus.CANCELED
+      },
+      startsAt: {
+        lt: endsAt
+      },
+      endsAt: {
+        gt: startsAt
+      }
+    },
+    select: {
+      id: true
+    }
+  });
+
+  if (conflict) {
+    return fail("Conflito de horário: o pet já possui agendamento neste período.", 409);
+  }
+
   const appointment = await prisma.appointment.create({
     data: {
       ...parsed.data,
-      startsAt: new Date(parsed.data.startsAt),
-      endsAt: new Date(parsed.data.endsAt)
+      startsAt,
+      endsAt
     }
   });
 

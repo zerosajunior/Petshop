@@ -2,6 +2,9 @@
   "name": "petshop-saas",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20 <23"
+  },
   "scripts": {
     "dev": "NEXT_DISABLE_WEBPACK_CACHE=1 next dev -H 127.0.0.1 -p 3000",
     "build": "next build",
@@ -10,6 +13,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "tsx scripts/seed.ts",
+    "prisma:seed:demo": "node --import tsx scripts/seed-demo.ts",
+    "prisma:seed:small": "node --import tsx scripts/seed-small.ts",
     "prisma:seed:large": "node --import tsx scripts/seed-large.ts",
     "reminders:run": "tsx scripts/run-reminders.ts",
     "lgpd:retention": "tsx scripts/lgpd-retention.ts"

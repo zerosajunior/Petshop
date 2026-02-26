@@ -7,14 +7,14 @@ export default function RelatoriosPage() {
       <p className="subtle">Escolha o tipo de relatório gerencial.</p>
 
       <article className="panel">
-        <div className="pageActions" style={{ marginBottom: 0 }}>
-          <Link className="btnPrimary" href="/relatorios/operacional">
+        <div className="pageActions appActionBar" style={{ marginBottom: 0 }}>
+          <Link className="btnPrimary appActionMain" href="/relatorios/operacional">
             Operacional do dia
           </Link>
-          <Link className="btnSecondary" href="/relatorios/financeiro">
+          <Link className="btnSecondary appActionAux" href="/relatorios/financeiro">
             Financeiro mensal
           </Link>
-          <Link className="btnSecondary" href="/">
+          <Link className="btnSecondary appActionBack" href="/">
             Voltar ao painel
           </Link>
         </div>

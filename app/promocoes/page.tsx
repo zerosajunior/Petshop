@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { ApiResponse } from "@/types/api";
+import Link from "next/link";
 
 type Campaign = {
   id: string;
@@ -74,6 +75,15 @@ export default function PromocoesPage() {
       <p className="subtle">Cadastre promoções segmentadas por tipo de pet.</p>
 
       <article className="panel">
+        <div className="pageActions appActionBar">
+          <Link className="btnPrimary appActionMain" href="/agenda">
+            Ir para agendamentos
+          </Link>
+          <Link className="btnSecondary appActionBack" href="/">
+            Voltar ao painel
+          </Link>
+        </div>
+
         <form onSubmit={onSubmit}>
           <div className="formGrid">
             <div className="formField">

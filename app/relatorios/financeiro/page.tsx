@@ -43,11 +43,11 @@ export default function RelatoriosFinanceiroPage() {
       <p className="subtle">Visão de receita, ticket e valor de estoque.</p>
 
       <article className="panel">
-        <div className="pageActions">
-          <Link className="btnPrimary" href="/relatorios/operacional">
+        <div className="pageActions appActionBar">
+          <Link className="btnPrimary appActionMain" href="/relatorios/operacional">
             Ver operacional
           </Link>
-          <Link className="btnSecondary" href="/">
+          <Link className="btnSecondary appActionBack" href="/">
             Voltar ao painel
           </Link>
         </div>

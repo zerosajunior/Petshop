@@ -163,11 +163,11 @@ export default function CadastroPage() {
       <p className="subtle">Cadastre clientes e pets em uma tela dedicada.</p>
 
       <article className="panel">
-        <div className="pageActions">
-          <Link className="btnPrimary" href="/agenda">
+        <div className="pageActions appActionBar">
+          <Link className="btnPrimary appActionMain" href="/agenda">
             Ir para agendamento
           </Link>
-          <Link className="btnSecondary" href="/">
+          <Link className="btnSecondary appActionBack" href="/">
             Voltar ao painel
           </Link>
         </div>

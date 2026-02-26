@@ -110,11 +110,11 @@ export default function MovimentacoesEstoquePage() {
       <p className="subtle">Registre entradas, saídas e ajustes de quantidade.</p>
 
       <article className="panel">
-        <div className="pageActions">
-          <Link className="btnPrimary" href="/estoque">
+        <div className="pageActions appActionBar">
+          <Link className="btnPrimary appActionMain" href="/estoque">
             Produtos
           </Link>
-          <Link className="btnSecondary" href="/">
+          <Link className="btnSecondary appActionBack" href="/">
             Voltar ao painel
           </Link>
         </div>

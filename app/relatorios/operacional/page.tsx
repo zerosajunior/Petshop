@@ -35,11 +35,11 @@ export default function RelatoriosOperacionalPage() {
       <p className="subtle">Acompanhamento diário da operação do pet shop.</p>
 
       <article className="panel">
-        <div className="pageActions">
-          <Link className="btnPrimary" href="/relatorios/financeiro">
+        <div className="pageActions appActionBar">
+          <Link className="btnPrimary appActionMain" href="/relatorios/financeiro">
             Ver financeiro
           </Link>
-          <Link className="btnSecondary" href="/">
+          <Link className="btnSecondary appActionBack" href="/">
             Voltar ao painel
           </Link>
         </div>

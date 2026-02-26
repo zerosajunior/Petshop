@@ -410,6 +410,39 @@ main {
   gap: 0.6rem;
 }
 
+.appActionBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+}
+
+.appActionBar > a,
+.appActionBar > button {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.appActionBar .appActionMain {
+  min-width: 170px;
+}
+
+.appActionBar .appActionAux {
+  min-width: 150px;
+}
+
+.appActionBar .appActionBack {
+  margin-left: auto;
+  min-width: 170px;
+  background: linear-gradient(180deg, #607698 0%, #516583 100%);
+  border-color: #4a5e7a;
+  color: #fff;
+}
+
 .btnPrimary {
   border: 1px solid #2a8369;
   background: linear-gradient(180deg, #2f9477 0%, #2a8369 100%);
@@ -450,6 +483,237 @@ main {
 .actionBtnSameSize {
   width: 230px;
   max-width: 100%;
+}
+
+.agendaControlRow {
+  display: grid;
+  grid-template-columns: 190px minmax(220px, 1fr) 90px 85px 110px 100px 190px;
+  gap: 0.55rem;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid #efe4d2;
+}
+
+.agendaControlRow .actionBtnSameSize {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+}
+
+.agendaCalendarToolbar {
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 0.35rem;
+  gap: 0.75rem;
+}
+
+.agendaViewModes {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.agendaPeriodNav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.agendaModeActive {
+  border-color: #2a8369;
+  background: #eaf7f2;
+}
+
+.agendaCalendarList {
+  margin-top: 0.75rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.agendaPeriodLabel {
+  margin-top: 0.2rem;
+}
+
+.agendaPeriodInlineLabel {
+  margin-right: 0.15rem;
+}
+
+.agendaCalendarGrid {
+  margin-top: 0.7rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.agendaCalendarGridDaily {
+  grid-template-columns: 1fr;
+}
+
+.agendaCalendarGridWeekly {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.agendaCalendarGridMonthly {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.agendaCalendarDay {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  padding: 0.45rem;
+  min-height: 120px;
+  display: grid;
+  align-content: start;
+  gap: 0.4rem;
+}
+
+.agendaCalendarDayMuted {
+  background: #f8f4eb;
+  opacity: 0.78;
+}
+
+.agendaCalendarDayHeader {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.25rem;
+}
+
+.agendaCalendarAppointments {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.agendaCalendarChip {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #f7fbfa;
+  padding: 0.28rem 0.35rem;
+  font-size: 0.8rem;
+}
+
+.agendaScheduleGrid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.8rem;
+  row-gap: 0.65rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.45rem;
+}
+
+.agendaSearchRow {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.agendaSearchRow input {
+  flex: 1;
+  min-width: 220px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.5rem 0.65rem;
+  background: #fffdf8;
+}
+
+.agendaSearchRowTop {
+  margin-top: 0;
+}
+
+.agendaSearchInput {
+  width: 100%;
+  height: 42px;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+  background: #fffdf8;
+  box-sizing: border-box;
+}
+
+.agendaPanelBtn {
+  border-color: #d7ccb8;
+  background: #fff8eb;
+  color: var(--text);
+}
+
+.agendaBackBtn {
+  min-width: 0;
+  margin-left: 0;
+  width: 100%;
+  background: linear-gradient(180deg, #607698 0%, #516583 100%);
+  border-color: #4a5e7a;
+  color: #fff;
+}
+
+.agendaBusinessHoursGrid {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.agendaBusinessHourRow {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fffdf8;
+  padding: 0.18rem 0.24rem;
+  font-size: 0.76rem;
+  min-height: 22px;
+}
+
+.agendaBusinessHourLabel {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.agendaBusinessHourPet {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 900px) {
+  .agendaControlRow {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .agendaSearchInput {
+    grid-column: 1 / -1;
+  }
+
+  .agendaControlRow .actionBtnSameSize,
+  .agendaBackBtn {
+    min-width: 150px;
+  }
+
+  .agendaCalendarGridWeekly,
+  .agendaCalendarGridMonthly {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .agendaScheduleGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .agendaActionsRow {
+    grid-template-columns: 1fr;
+  }
+
+  .agendaCalendarGridWeekly,
+  .agendaCalendarGridMonthly {
+    grid-template-columns: 1fr;
+  }
+
+  .agendaScheduleGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .servicePicker {

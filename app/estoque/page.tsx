@@ -203,6 +203,15 @@ export default function EstoquePage() {
       <p className="subtle">Cadastre produtos e mantenha o catálogo de estoque.</p>
 
       <article className="panel">
+        <div className="pageActions appActionBar">
+          <Link className="btnPrimary appActionMain" href="/movimentacoes-estoque">
+            Ir para estoque
+          </Link>
+          <Link className="btnSecondary appActionBack" href="/">
+            Voltar ao painel
+          </Link>
+        </div>
+
         <form onSubmit={onSubmit}>
           <div className="productFormLayout">
             <div className="productPhotoField">
