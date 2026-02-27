@@ -487,7 +487,7 @@ main {
 
 .agendaControlRow {
   display: grid;
-  grid-template-columns: minmax(340px, 1fr) 90px 85px 110px 100px 190px;
+  grid-template-columns: minmax(320px, 1fr) 90px 85px 110px 100px 170px 190px;
   gap: 0.55rem;
   align-items: center;
   width: 100%;
@@ -595,6 +595,13 @@ main {
   font-size: 0.8rem;
 }
 
+.agendaCalendarChipMain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+}
+
 .agendaScheduleGrid {
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0.8rem;
@@ -655,8 +662,7 @@ main {
 
 .agendaBusinessHourRow {
   display: grid;
-  grid-template-columns: 54px 1fr;
-  align-items: center;
+  grid-template-columns: 1fr;
   gap: 0.35rem;
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -671,10 +677,84 @@ main {
   font-weight: 600;
 }
 
+.agendaBusinessHourMain {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
 .agendaBusinessHourPet {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.agendaStatusBadge {
+  border: 1px solid #d7ccb8;
+  border-radius: 999px;
+  padding: 0.1rem 0.42rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.agendaStatusSCHEDULED {
+  background: #fff8eb;
+  color: #7c4b0a;
+}
+
+.agendaStatusCONFIRMED {
+  background: #eaf7f2;
+  color: #1f6b55;
+}
+
+.agendaStatusCOMPLETED {
+  background: #eef6ff;
+  color: #2b4f77;
+}
+
+.agendaStatusCANCELED {
+  background: #fdeeee;
+  color: #8e2a2a;
+}
+
+.agendaQuickActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+}
+
+.agendaQuickActionBtn {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.16rem 0.4rem;
+  font-size: 0.72rem;
+  line-height: 1.2;
+  background: #fff;
+  cursor: pointer;
+}
+
+.agendaQuickActionConfirm {
+  background: #ecf8f4;
+  border-color: #b9dfd1;
+  color: #1f6b55;
+}
+
+.agendaQuickActionComplete {
+  background: #eef6ff;
+  border-color: #bed2ef;
+  color: #2b4f77;
+}
+
+.agendaQuickActionCancel {
+  background: #fdeeee;
+  border-color: #f2c4c4;
+  color: #8e2a2a;
+}
+
+.agendaQuickActionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 @media (max-width: 900px) {

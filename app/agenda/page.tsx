@@ -6,12 +6,20 @@ import Link from "next/link";
 
 type Pet = { id: string; name: string; customer: { name: string } };
 type Service = { id: string; name: string; durationMin: number };
+type AppointmentStatus = "SCHEDULED" | "CONFIRMED" | "COMPLETED" | "CANCELED";
 type Appointment = {
   id: string;
   startsAt: string;
-  status: string;
+  status: AppointmentStatus;
   pet: { name: string; customer: { name: string } };
   service: { name: string };
+};
+
+const statusLabelMap: Record<AppointmentStatus, string> = {
+  SCHEDULED: "Agendado",
+  CONFIRMED: "Confirmado",
+  COMPLETED: "Concluído",
+  CANCELED: "Cancelado"
 };
 
 function toIso(localDateTime: string) {
@@ -105,6 +113,8 @@ export default function AgendaPage() {
   const [referenceDate, setReferenceDate] = useState(() => startOfDay(new Date()));
   const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [updatingAppointmentId, setUpdatingAppointmentId] = useState("");
+  const [isSchedulingOpen, setIsSchedulingOpen] = useState(false);
 
   function resetAppointmentFormAndClose() {
     setPetId("");
@@ -115,6 +125,7 @@ export default function AgendaPage() {
     setNotes("");
     setMessage("");
     setError("");
+    setIsSchedulingOpen(false);
   }
 
   const refresh = useCallback(async function refreshData() {
@@ -195,6 +206,45 @@ export default function AgendaPage() {
     setStartTime("");
     setEndTime("");
     await refresh();
+  }
+
+  async function updateAppointmentStatus(appointmentId: string, status: AppointmentStatus) {
+    setMessage("");
+    setError("");
+    setUpdatingAppointmentId(appointmentId);
+
+    try {
+      const response = await fetch(`/api/appointments/${appointmentId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status })
+      });
+
+      const payload: ApiResponse<unknown> = await response.json();
+      if (!response.ok) {
+        setError(payload.error ?? "Não foi possível atualizar o status do agendamento.");
+        return;
+      }
+
+      setMessage(`Agendamento atualizado para ${statusLabelMap[status].toLowerCase()}.`);
+      await refresh();
+    } catch {
+      setError("Falha de conexão ao atualizar status do agendamento.");
+    } finally {
+      setUpdatingAppointmentId("");
+    }
+  }
+
+  function canConfirm(appointment: Appointment) {
+    return appointment.status === "SCHEDULED";
+  }
+
+  function canComplete(appointment: Appointment) {
+    return appointment.status === "SCHEDULED" || appointment.status === "CONFIRMED";
+  }
+
+  function canCancel(appointment: Appointment) {
+    return appointment.status === "SCHEDULED" || appointment.status === "CONFIRMED";
   }
 
   const timeOptions = Array.from({ length: 181 }, (_, index) => {
@@ -341,11 +391,27 @@ export default function AgendaPage() {
           <Link className="btnSecondary actionBtnSameHeight agendaPanelBtn" href="/servicos">
             Serviços
           </Link>
+          <button
+            className="btnSecondary actionBtnSameHeight agendaPanelBtn"
+            onClick={() => {
+              if (isSchedulingOpen) {
+                resetAppointmentFormAndClose();
+                return;
+              }
+              setMessage("");
+              setError("");
+              setIsSchedulingOpen(true);
+            }}
+            type="button"
+          >
+            {isSchedulingOpen ? "Fechar agendamento" : "Novo agendamento"}
+          </button>
           <Link className="btnPrimary actionBtnSameHeight actionBtnSameSize agendaBackBtn" href="/">
             Voltar ao painel
           </Link>
         </div>
 
+        {isSchedulingOpen ? (
         <form onSubmit={onSubmit}>
             <div className="formGrid agendaScheduleGrid">
               <div className="formField">
@@ -451,6 +517,7 @@ export default function AgendaPage() {
               {error ? <small style={{ color: "#b42318" }}>{error}</small> : null}
             </div>
           </form>
+        ) : null}
       </article>
 
       <article className="panel">
@@ -535,28 +602,107 @@ export default function AgendaPage() {
                         const startsAt = new Date(appointment.startsAt);
                         return (
                           <div className="agendaBusinessHourRow" key={appointment.id}>
-                            <span className="agendaBusinessHourLabel">
-                              {startsAt.toLocaleTimeString("pt-BR", {
-                                hour: "2-digit",
-                                minute: "2-digit"
-                              })}
-                            </span>
-                            <span className="agendaBusinessHourPet">{appointment.pet.name}</span>
+                            <div className="agendaBusinessHourMain">
+                              <span className="agendaBusinessHourLabel">
+                                {startsAt.toLocaleTimeString("pt-BR", {
+                                  hour: "2-digit",
+                                  minute: "2-digit"
+                                })}
+                              </span>
+                              <span className="agendaBusinessHourPet">{appointment.pet.name}</span>
+                              <span className={`agendaStatusBadge agendaStatus${appointment.status}`}>
+                                {statusLabelMap[appointment.status]}
+                              </span>
+                            </div>
+                            <div className="agendaQuickActions">
+                              {canConfirm(appointment) ? (
+                                <button
+                                  className="agendaQuickActionBtn agendaQuickActionConfirm"
+                                  disabled={updatingAppointmentId === appointment.id}
+                                  onClick={() => updateAppointmentStatus(appointment.id, "CONFIRMED")}
+                                  type="button"
+                                >
+                                  Confirmar
+                                </button>
+                              ) : null}
+                              {canComplete(appointment) ? (
+                                <button
+                                  className="agendaQuickActionBtn agendaQuickActionComplete"
+                                  disabled={updatingAppointmentId === appointment.id}
+                                  onClick={() => updateAppointmentStatus(appointment.id, "COMPLETED")}
+                                  type="button"
+                                >
+                                  Concluir
+                                </button>
+                              ) : null}
+                              {canCancel(appointment) ? (
+                                <button
+                                  className="agendaQuickActionBtn agendaQuickActionCancel"
+                                  disabled={updatingAppointmentId === appointment.id}
+                                  onClick={() => updateAppointmentStatus(appointment.id, "CANCELED")}
+                                  type="button"
+                                >
+                                  Cancelar
+                                </button>
+                              ) : null}
+                            </div>
                           </div>
                         );
                       })}
                     </div>
                   ) : (
                     <div className="agendaCalendarAppointments">
-                      {items.map((appointment) => (
-                        <div className="agendaCalendarChip" key={appointment.id}>
-                          {new Date(appointment.startsAt).toLocaleTimeString("pt-BR", {
-                            hour: "2-digit",
-                            minute: "2-digit"
-                          })}{" "}
-                          · {appointment.pet.name} · {appointment.service.name}
-                        </div>
-                      ))}
+                      {items.map((appointment) => {
+                        const startsAt = new Date(appointment.startsAt);
+                        return (
+                          <div className="agendaCalendarChip" key={appointment.id}>
+                            <div className="agendaCalendarChipMain">
+                              <span>
+                                {startsAt.toLocaleTimeString("pt-BR", {
+                                  hour: "2-digit",
+                                  minute: "2-digit"
+                                })}{" "}
+                                · {appointment.pet.name} · {appointment.service.name}
+                              </span>
+                              <span className={`agendaStatusBadge agendaStatus${appointment.status}`}>
+                                {statusLabelMap[appointment.status]}
+                              </span>
+                            </div>
+                            <div className="agendaQuickActions">
+                              {canConfirm(appointment) ? (
+                                <button
+                                  className="agendaQuickActionBtn agendaQuickActionConfirm"
+                                  disabled={updatingAppointmentId === appointment.id}
+                                  onClick={() => updateAppointmentStatus(appointment.id, "CONFIRMED")}
+                                  type="button"
+                                >
+                                  Confirmar
+                                </button>
+                              ) : null}
+                              {canComplete(appointment) ? (
+                                <button
+                                  className="agendaQuickActionBtn agendaQuickActionComplete"
+                                  disabled={updatingAppointmentId === appointment.id}
+                                  onClick={() => updateAppointmentStatus(appointment.id, "COMPLETED")}
+                                  type="button"
+                                >
+                                  Concluir
+                                </button>
+                              ) : null}
+                              {canCancel(appointment) ? (
+                                <button
+                                  className="agendaQuickActionBtn agendaQuickActionCancel"
+                                  disabled={updatingAppointmentId === appointment.id}
+                                  onClick={() => updateAppointmentStatus(appointment.id, "CANCELED")}
+                                  type="button"
+                                >
+                                  Cancelar
+                                </button>
+                              ) : null}
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
