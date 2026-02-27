@@ -46,10 +46,16 @@ npm run prisma:seed
 npm run reminders:run
 ```
 
-6. Suba o app:
+6. Suba o app (modo resiliente padrão):
 
 ```bash
 npm run dev
+```
+
+Ou modo direto:
+
+```bash
+npm run dev:raw
 ```
 
 App: `http://localhost:3000`

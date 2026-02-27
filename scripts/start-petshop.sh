@@ -8,6 +8,8 @@ PORT="3000"
 LOG_FILE="$PROJECT_DIR/.petshop-dev.log"
 PID_FILE="$PROJECT_DIR/.petshop-dev.pid"
 WATCHER_SCRIPT="$PROJECT_DIR/scripts/auto-stop-petshop.sh"
+HEALER_SCRIPT="$PROJECT_DIR/scripts/auto-heal-next.sh"
+HEALER_PID_FILE="$PROJECT_DIR/.petshop-heal.pid"
 NPM_BIN="$(command -v npm || true)"
 WAIT_SECONDS="90"
 
@@ -41,12 +43,21 @@ stop_stale_server() {
     fi
   fi
 
+  if [ -f "$HEALER_PID_FILE" ]; then
+    local healer_pid
+    healer_pid="$(cat "$HEALER_PID_FILE" 2>/dev/null || true)"
+    if [ -n "$healer_pid" ]; then
+      kill -TERM "$healer_pid" >/dev/null 2>&1 || true
+    fi
+  fi
+
   rm -f "$PID_FILE"
+  rm -f "$HEALER_PID_FILE"
 }
 
 start_server() {
   rm -rf "$PROJECT_DIR/.next"
-  nohup "$NPM_BIN" run dev >>"$LOG_FILE" 2>&1 &
+  nohup "$NPM_BIN" run dev:raw >>"$LOG_FILE" 2>&1 &
   echo "$!" >"$PID_FILE"
 }
 
@@ -82,6 +93,10 @@ fi
 
 if [ -f "$PID_FILE" ] && [ -x "$WATCHER_SCRIPT" ]; then
   nohup "$WATCHER_SCRIPT" >>"$LOG_FILE" 2>&1 &
+fi
+
+if [ -f "$PID_FILE" ] && [ -x "$HEALER_SCRIPT" ]; then
+  nohup "$HEALER_SCRIPT" >>"$LOG_FILE" 2>&1 &
 fi
 
 if is_listening; then

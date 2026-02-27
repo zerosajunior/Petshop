@@ -6,7 +6,8 @@
     "node": ">=20 <23"
   },
   "scripts": {
-    "dev": "NEXT_DISABLE_WEBPACK_CACHE=1 next dev -H 127.0.0.1 -p 3000",
+    "dev": "./scripts/start-petshop.sh",
+    "dev:raw": "NEXT_DISABLE_WEBPACK_CACHE=1 next dev -H 127.0.0.1 -p 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -17,7 +18,8 @@
     "prisma:seed:small": "node --import tsx scripts/seed-small.ts",
     "prisma:seed:large": "node --import tsx scripts/seed-large.ts",
     "reminders:run": "tsx scripts/run-reminders.ts",
-    "lgpd:retention": "tsx scripts/lgpd-retention.ts"
+    "lgpd:retention": "tsx scripts/lgpd-retention.ts",
+    "dev:safe": "./scripts/start-petshop.sh"
   },
   "dependencies": {
     "@prisma/client": "^6.3.1",

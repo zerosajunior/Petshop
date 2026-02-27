@@ -1,7 +1,10 @@
 node_modules
 .next
+.next.broken.*
+.next.heal.*
 .env
 .env.local
 coverage
 .DS_Store
 prisma/dev.db
+.petshop-heal.pid

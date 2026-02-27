@@ -486,20 +486,14 @@ main {
 }
 
 .agendaControlRow {
-  display: grid;
-  grid-template-columns: minmax(320px, 1fr) 90px 85px 110px 100px 170px 190px;
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.55rem;
   align-items: center;
   width: 100%;
   margin-bottom: 1rem;
   padding-bottom: 0.35rem;
   border-bottom: 1px solid #efe4d2;
-}
-
-.agendaControlRow .actionBtnSameSize {
-  width: 100%;
-  min-width: 0;
-  max-width: none;
 }
 
 .agendaCalendarToolbar {
@@ -630,9 +624,10 @@ main {
 }
 
 .agendaSearchInput {
-  width: 100%;
+  flex: 1 1 320px;
+  width: auto;
   height: 42px;
-  min-width: 0;
+  min-width: 220px;
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 0.5rem 0.75rem;
@@ -644,12 +639,14 @@ main {
   border-color: #d7ccb8;
   background: #fff8eb;
   color: var(--text);
+  white-space: nowrap;
 }
 
 .agendaBackBtn {
   min-width: 0;
   margin-left: 0;
-  width: 100%;
+  width: auto;
+  white-space: nowrap;
   background: linear-gradient(180deg, #607698 0%, #516583 100%);
   border-color: #4a5e7a;
   color: #fff;
@@ -758,17 +755,8 @@ main {
 }
 
 @media (max-width: 900px) {
-  .agendaControlRow {
-    grid-template-columns: 1fr 1fr;
-  }
-
   .agendaSearchInput {
-    grid-column: 1 / -1;
-  }
-
-  .agendaControlRow .actionBtnSameSize,
-  .agendaBackBtn {
-    min-width: 150px;
+    flex-basis: 100%;
   }
 
   .agendaCalendarGridWeekly,
