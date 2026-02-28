@@ -527,7 +527,7 @@ export default function AgendaPage() {
         ) : null}
       </article>
 
-      <article className="panel">
+      <article className="panel agendaCalendarPanel">
         <h3>Próximos agendamentos</h3>
         <div className="pageActions agendaCalendarToolbar">
           <div className="agendaPeriodNav">
@@ -569,6 +569,30 @@ export default function AgendaPage() {
               Mensal
             </button>
           </div>
+        </div>
+        <div className="agendaLegend" role="note">
+          <span className="agendaLegendItem">
+            <span className="agendaStatusDot agendaStatusSCHEDULED" /> Agendado
+          </span>
+          <span className="agendaLegendItem">
+            <span className="agendaStatusDot agendaStatusCONFIRMED" /> Confirmado
+          </span>
+          <span className="agendaLegendItem">
+            <span className="agendaStatusDot agendaStatusCOMPLETED" /> Concluído
+          </span>
+          <span className="agendaLegendItem">
+            <span className="agendaStatusDot agendaStatusCANCELED" /> Cancelado
+          </span>
+          <span className="agendaLegendDivider">|</span>
+          <span className="agendaLegendItem">
+            <span className="agendaQuickActionDot agendaQuickActionConfirm" /> Ação confirmar
+          </span>
+          <span className="agendaLegendItem">
+            <span className="agendaQuickActionDot agendaQuickActionComplete" /> Ação concluir
+          </span>
+          <span className="agendaLegendItem">
+            <span className="agendaQuickActionDot agendaQuickActionCancel" /> Ação cancelar
+          </span>
         </div>
         {!hasAnyAppointmentsInView ? (
           <p className="subtle">Nenhum agendamento neste período.</p>

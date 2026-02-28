@@ -80,6 +80,9 @@ if [ ! -d node_modules ]; then
   "$NPM_BIN" install >>"$LOG_FILE" 2>&1
 fi
 
+# Sempre inicia com restart limpo para evitar runtime quebrado de sessões anteriores.
+stop_stale_server
+
 if ! is_listening; then
   start_server
 
@@ -100,7 +103,9 @@ if [ -f "$PID_FILE" ] && [ -x "$HEALER_SCRIPT" ]; then
 fi
 
 if is_listening; then
-  open "http://localhost:$PORT"
+  if command -v open >/dev/null 2>&1; then
+    open "http://localhost:$PORT" >/dev/null 2>&1 || true
+  fi
 else
   echo "$(date '+%Y-%m-%d %H:%M:%S') server did not start within ${WAIT_SECONDS}s" >>"$LOG_FILE"
   exit 1
