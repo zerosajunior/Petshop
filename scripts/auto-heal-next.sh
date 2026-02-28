@@ -98,7 +98,7 @@ has_runtime_chunk_error() {
   last_checked_line="$total_lines"
 
   printf '%s\n' "$new_lines" | grep -Eq \
-    "Cannot find module '\\./[0-9]+\\.js'|GET /_next/static/.+ 500|MODULE_NOT_FOUND.+\\.next/server/webpack-runtime\\.js"
+    "Cannot find module '\\./[0-9]+\\.js'|GET /_next/static/.+ 500|MODULE_NOT_FOUND.+\\.next/server/webpack-runtime\\.js|Failed to get source map:|\\.next/static/chunks/webpack\\.js.+ENOENT|originalFactory is undefined|can't access property \"call\""
 }
 
 while true; do

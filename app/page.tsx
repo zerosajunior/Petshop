@@ -179,12 +179,6 @@ export default function HomePage() {
           note: "carregando"
         },
         {
-          id: "cadastros",
-          title: "Cadastros",
-          value: "-",
-          note: "carregando"
-        },
-        {
           id: "services",
           title: "Serviços",
           value: "-",
@@ -213,12 +207,6 @@ export default function HomePage() {
         note: `${dashboard.appointmentsToday} hoje`
       },
       {
-        id: "cadastros",
-        title: "Cadastros",
-        value: String(dashboard.totalCustomers),
-        note: `${dashboard.totalPets} pets`
-      },
-      {
         id: "services",
         title: "Serviços",
         value: String(dashboard.totalServices),
@@ -244,11 +232,11 @@ export default function HomePage() {
       <article className="panel">
         <h3>Resumo rápido</h3>
         {loadError ? <small style={{ color: "#b42318" }}>{loadError}</small> : null}
-        <div className="compactSummaryRow">
+        <div className="statsGrid">
           {modules.map((module) => (
-            <article className="compactSummaryItem" key={`summary-${module.id}`}>
-              <strong>{module.title}</strong>
-              <span className="compactSummaryValue">{module.value}</span>
+            <article className="statCard" key={`summary-${module.id}`}>
+              <p className="subtle">{module.title}</p>
+              <div className="metric">{module.value}</div>
               <small className="subtle">{module.note}</small>
             </article>
           ))}

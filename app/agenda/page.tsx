@@ -369,18 +369,24 @@ export default function AgendaPage() {
             value={searchInput}
           />
           <button
-            className="btnSecondary actionBtnSameHeight agendaPanelBtn"
+            aria-label="Pesquisar"
+            className="btnSecondary actionBtnSameHeight agendaPanelBtn iconSearchBtn tooltipTrigger"
+            data-tooltip="Pesquisar"
             onClick={() => setSearchTerm(searchInput.trim())}
+            title="Pesquisar"
             type="button"
           >
-            Pesquisar
+            🔍
           </button>
           <button
-            className="btnSecondary actionBtnSameHeight agendaPanelBtn"
+            aria-label="Limpar"
+            className="btnSecondary actionBtnSameHeight agendaPanelBtn iconClearBtn tooltipTrigger"
+            data-tooltip="Limpar"
             onClick={() => {
               setSearchInput("");
               setSearchTerm("");
             }}
+            title="Limpar"
             type="button"
           >
             Limpar
@@ -610,11 +616,11 @@ export default function AgendaPage() {
                                 })}
                               </span>
                               <span className="agendaBusinessHourPet">{appointment.pet.name}</span>
+                            </div>
+                            <div className="agendaQuickActions">
                               <span className={`agendaStatusBadge agendaStatus${appointment.status}`}>
                                 {statusLabelMap[appointment.status]}
                               </span>
-                            </div>
-                            <div className="agendaQuickActions">
                               {canConfirm(appointment) ? (
                                 <button
                                   className="agendaQuickActionBtn agendaQuickActionConfirm"
@@ -664,11 +670,11 @@ export default function AgendaPage() {
                                 })}{" "}
                                 · {appointment.pet.name} · {appointment.service.name}
                               </span>
+                            </div>
+                            <div className="agendaQuickActions">
                               <span className={`agendaStatusBadge agendaStatus${appointment.status}`}>
                                 {statusLabelMap[appointment.status]}
                               </span>
-                            </div>
-                            <div className="agendaQuickActions">
                               {canConfirm(appointment) ? (
                                 <button
                                   className="agendaQuickActionBtn agendaQuickActionConfirm"

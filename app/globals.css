@@ -43,26 +43,49 @@ main {
 }
 
 .nav {
-  display: flex;
-  gap: 0.7rem;
-  flex-wrap: nowrap;
-  overflow-x: auto;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 0.55rem;
+  width: 100%;
   padding-bottom: 0.2rem;
 }
 
 .nav a {
   border: 1px solid #d7ccb8;
   background: #fffaf0;
-  padding: 0.55rem 0.9rem;
+  padding: 0.5rem 0.6rem;
   border-radius: 999px;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .nav a:hover {
   background: #fff2dc;
   border-color: #cdbd9f;
+}
+
+@media (max-width: 1100px) {
+  .nav {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: nowrap;
+    align-items: center;
+    overflow-x: auto;
+  }
+
+  .nav a {
+    padding: 0.55rem 0.9rem;
+    font-size: 0.95rem;
+    overflow: visible;
+    text-overflow: clip;
+    flex: 0 0 auto;
+  }
 }
 
 .grid {
@@ -443,6 +466,70 @@ main {
   color: #fff;
 }
 
+.toolboxSearchInput {
+  flex: 1 1 280px;
+  min-width: 220px;
+  max-width: 420px;
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+  background: #fffdf8;
+  box-sizing: border-box;
+}
+
+.productToolboxRow {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.iconSearchBtn {
+  min-width: 42px !important;
+  width: 42px;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.iconClearBtn {
+  min-width: 92px !important;
+  width: auto;
+  padding: 0 0.85rem;
+  font-size: 0.95rem;
+  border-color: #d7ccb8;
+  background: #fff8eb;
+  color: var(--text);
+}
+
+.tooltipTrigger {
+  position: relative;
+}
+
+.tooltipTrigger::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  transform: translateX(-50%);
+  border-radius: 8px;
+  background: #1f2937;
+  color: #fff;
+  padding: 0.2rem 0.45rem;
+  font-size: 0.72rem;
+  line-height: 1.1;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.12s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.tooltipTrigger:hover::after,
+.tooltipTrigger:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+}
+
 .btnPrimary {
   border: 1px solid #2a8369;
   background: linear-gradient(180deg, #2f9477 0%, #2a8369 100%);
@@ -719,6 +806,8 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 0.28rem;
+  width: 100%;
+  justify-content: flex-end;
 }
 
 .agendaQuickActionBtn {

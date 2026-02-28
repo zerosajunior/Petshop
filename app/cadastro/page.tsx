@@ -28,6 +28,8 @@ export default function CadastroPage() {
   const [consentCode, setConsentCode] = useState("");
   const [consentMessage, setConsentMessage] = useState("");
   const [consentError, setConsentError] = useState("");
+  const [isRegistrationOpen, setIsRegistrationOpen] = useState(true);
+  const [isConsentOpen, setIsConsentOpen] = useState(true);
 
   const refreshCustomers = useCallback(async function refreshCustomerList() {
     const customersRes = await fetch("/api/customers", { cache: "no-store" });
@@ -157,13 +159,47 @@ export default function CadastroPage() {
     setConsentMessage("Consentimento de marketing confirmado.");
   }
 
+  function resetRegistrationFormAndClose() {
+    setCustomerName("");
+    setCustomerPhone("");
+    setCustomerEmail("");
+    setCustomerChannel("WHATSAPP");
+    setNewPetName("");
+    setNewPetType("DOG");
+    setMessage("");
+    setError("");
+    setIsRegistrationOpen(false);
+  }
+
+  function resetConsentFormAndClose() {
+    setConsentCode("");
+    setConsentMessage("");
+    setConsentError("");
+    setIsConsentOpen(false);
+  }
+
   return (
     <section>
-      <h2>Novo cadastro</h2>
-      <p className="subtle">Cadastre clientes e pets em uma tela dedicada.</p>
+      <h2>Cadastros</h2>
+      <p className="subtle">Gerencie clientes, pets e consentimento em uma tela dedicada.</p>
 
       <article className="panel">
         <div className="pageActions appActionBar">
+          <button
+            className="btnSecondary appActionAux"
+            onClick={() => {
+              if (isRegistrationOpen) {
+                resetRegistrationFormAndClose();
+                return;
+              }
+              setMessage("");
+              setError("");
+              setIsRegistrationOpen(true);
+            }}
+            type="button"
+          >
+            {isRegistrationOpen ? "Fechar cadastro" : "Novo cadastro"}
+          </button>
           <Link className="btnPrimary appActionMain" href="/agenda">
             Ir para agendamento
           </Link>
@@ -172,6 +208,7 @@ export default function CadastroPage() {
           </Link>
         </div>
 
+        {isRegistrationOpen ? (
         <div className="formGrid" style={{ marginTop: "0.6rem" }}>
           <form className="stackForm" onSubmit={onCreateCustomer}>
             <div className="formField">
@@ -268,9 +305,12 @@ export default function CadastroPage() {
           </form>
 
         </div>
+        ) : null}
 
-        {message ? <small>{message}</small> : null}
-        {error ? <small style={{ color: "#b42318", display: "block" }}>{error}</small> : null}
+        {isRegistrationOpen && message ? <small>{message}</small> : null}
+        {isRegistrationOpen && error ? (
+          <small style={{ color: "#b42318", display: "block" }}>{error}</small>
+        ) : null}
       </article>
 
       <article className="panel">
@@ -279,62 +319,84 @@ export default function CadastroPage() {
           Envie o código ao celular do cliente e confirme apenas após ele informar o código recebido.
         </p>
 
-        <div className="formGrid">
-          <div className="formField">
-            <label htmlFor="consentCustomerId">Cliente</label>
-            <select
-              id="consentCustomerId"
-              onChange={(e) => setConsentCustomerId(e.target.value)}
-              value={consentCustomerId}
-            >
-              <option value="">Selecione o cliente</option>
-              {customers.map((customer) => (
-                <option key={customer.id} value={customer.id}>
-                  {customer.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="formField">
-            <label htmlFor="consentChannel">Canal de envio</label>
-            <select
-              id="consentChannel"
-              onChange={(e) => setConsentChannel(e.target.value as Channel)}
-              value={consentChannel}
-            >
-              <option value="WHATSAPP">WhatsApp</option>
-              <option value="SMS">SMS</option>
-            </select>
-          </div>
-
-          <div className="formActions">
-            <button className="btnSecondary" onClick={onRequestConsent} type="button">
-              Enviar código
-            </button>
-          </div>
+        <div className="pageActions" style={{ marginTop: "0.4rem" }}>
+          <button
+            className="btnSecondary"
+            onClick={() => {
+              if (isConsentOpen) {
+                resetConsentFormAndClose();
+                return;
+              }
+              setConsentMessage("");
+              setConsentError("");
+              setIsConsentOpen(true);
+            }}
+            type="button"
+          >
+            {isConsentOpen ? "Fechar consentimento" : "Abrir consentimento"}
+          </button>
         </div>
 
-        <form className="formActions" onSubmit={onConfirmConsent}>
-          <div className="formField" style={{ minWidth: "180px" }}>
-            <label htmlFor="consentCode">Código de confirmação</label>
-            <input
-              id="consentCode"
-              maxLength={6}
-              onChange={(e) => setConsentCode(e.target.value.replace(/\D/g, ""))}
-              pattern="\d{6}"
-              required
-              value={consentCode}
-            />
-          </div>
-          <button className="btnPrimary" type="submit">
-            Confirmar consentimento
-          </button>
-        </form>
+        {isConsentOpen ? (
+          <>
+            <div className="formGrid">
+              <div className="formField">
+                <label htmlFor="consentCustomerId">Cliente</label>
+                <select
+                  id="consentCustomerId"
+                  onChange={(e) => setConsentCustomerId(e.target.value)}
+                  value={consentCustomerId}
+                >
+                  <option value="">Selecione o cliente</option>
+                  {customers.map((customer) => (
+                    <option key={customer.id} value={customer.id}>
+                      {customer.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-        {consentMessage ? <small>{consentMessage}</small> : null}
-        {consentError ? (
-          <small style={{ color: "#b42318", display: "block" }}>{consentError}</small>
+              <div className="formField">
+                <label htmlFor="consentChannel">Canal de envio</label>
+                <select
+                  id="consentChannel"
+                  onChange={(e) => setConsentChannel(e.target.value as Channel)}
+                  value={consentChannel}
+                >
+                  <option value="WHATSAPP">WhatsApp</option>
+                  <option value="SMS">SMS</option>
+                </select>
+              </div>
+
+              <div className="formActions">
+                <button className="btnSecondary" onClick={onRequestConsent} type="button">
+                  Enviar código
+                </button>
+              </div>
+            </div>
+
+            <form className="formActions" onSubmit={onConfirmConsent}>
+              <div className="formField" style={{ minWidth: "180px" }}>
+                <label htmlFor="consentCode">Código de confirmação</label>
+                <input
+                  id="consentCode"
+                  maxLength={6}
+                  onChange={(e) => setConsentCode(e.target.value.replace(/\D/g, ""))}
+                  pattern="\d{6}"
+                  required
+                  value={consentCode}
+                />
+              </div>
+              <button className="btnPrimary" type="submit">
+                Confirmar consentimento
+              </button>
+            </form>
+
+            {consentMessage ? <small>{consentMessage}</small> : null}
+            {consentError ? (
+              <small style={{ color: "#b42318", display: "block" }}>{consentError}</small>
+            ) : null}
+          </>
         ) : null}
       </article>
     </section>

@@ -81,6 +81,9 @@ export default function EstoquePage() {
   const [priceBRL, setPriceBRL] = useState(0);
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
   const [previewIndex, setPreviewIndex] = useState(0);
+  const [isProductFormOpen, setIsProductFormOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   async function refresh() {
     const response = await fetch("/api/products", { cache: "no-store" });
@@ -197,13 +200,72 @@ export default function EstoquePage() {
       });
   }
 
+  function resetProductFormAndClose() {
+    setName("");
+    setSku("");
+    setCategory("");
+    setDescription("");
+    setCurrentStock(0);
+    setMinStock(0);
+    setPriceBRL(0);
+    setPhotoPreviews([]);
+    setPreviewIndex(0);
+    setMessage("");
+    setError("");
+    setIsProductFormOpen(false);
+  }
+
   return (
     <section>
       <h2>Produtos</h2>
       <p className="subtle">Cadastre produtos e mantenha o catálogo de estoque.</p>
 
       <article className="panel">
-        <div className="pageActions appActionBar">
+        <div className="pageActions appActionBar productToolboxRow">
+          <input
+            className="toolboxSearchInput"
+            onChange={(event) => setSearchInput(event.target.value)}
+            placeholder="Pesquisar por nome, SKU ou descrição"
+            value={searchInput}
+          />
+          <button
+            aria-label="Pesquisar"
+            className="btnSecondary appActionAux iconSearchBtn tooltipTrigger"
+            data-tooltip="Pesquisar"
+            onClick={() => setSearchTerm(searchInput.trim())}
+            title="Pesquisar"
+            type="button"
+          >
+            🔍
+          </button>
+          <button
+            aria-label="Limpar"
+            className="btnSecondary appActionAux iconClearBtn tooltipTrigger"
+            data-tooltip="Limpar"
+            onClick={() => {
+              setSearchInput("");
+              setSearchTerm("");
+            }}
+            title="Limpar"
+            type="button"
+          >
+            Limpar
+          </button>
+          <button
+            className="btnSecondary appActionAux"
+            onClick={() => {
+              if (isProductFormOpen) {
+                resetProductFormAndClose();
+                return;
+              }
+              setMessage("");
+              setError("");
+              setIsProductFormOpen(true);
+            }}
+            type="button"
+          >
+            {isProductFormOpen ? "Fechar produto" : "Novo produto"}
+          </button>
           <Link className="btnPrimary appActionMain" href="/movimentacoes-estoque">
             Ir para estoque
           </Link>
@@ -212,6 +274,7 @@ export default function EstoquePage() {
           </Link>
         </div>
 
+        {isProductFormOpen ? (
         <form onSubmit={onSubmit}>
           <div className="productFormLayout">
             <div className="productPhotoField">
@@ -350,12 +413,26 @@ export default function EstoquePage() {
             {error ? <small style={{ color: "#b42318" }}>{error}</small> : null}
           </div>
         </form>
+        ) : null}
       </article>
 
       <article className="panel">
         <h3>Produtos cadastrados</h3>
         <ul className="listSimple">
-          {products.slice(0, 10).map((product) => (
+          {products
+            .filter((product) => {
+              if (!searchTerm.trim()) {
+                return true;
+              }
+              const term = searchTerm.toLowerCase();
+              return (
+                product.name.toLowerCase().includes(term) ||
+                product.sku.toLowerCase().includes(term) ||
+                (product.description ?? "").toLowerCase().includes(term)
+              );
+            })
+            .slice(0, 10)
+            .map((product) => (
             <li key={product.id}>
               <ProductPhotoCarousel images={product.images ?? []} name={product.name} />
               {product.name} ({product.sku}){" "}
