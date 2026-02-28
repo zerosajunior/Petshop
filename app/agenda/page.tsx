@@ -115,6 +115,7 @@ export default function AgendaPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [updatingAppointmentId, setUpdatingAppointmentId] = useState("");
   const [isSchedulingOpen, setIsSchedulingOpen] = useState(false);
+  const useCompactCalendarActions = viewMode === "weekly" || viewMode === "monthly";
 
   function resetAppointmentFormAndClose() {
     setPetId("");
@@ -617,38 +618,65 @@ export default function AgendaPage() {
                               </span>
                               <span className="agendaBusinessHourPet">{appointment.pet.name}</span>
                             </div>
-                            <div className="agendaQuickActions">
-                              <span className={`agendaStatusBadge agendaStatus${appointment.status}`}>
-                                {statusLabelMap[appointment.status]}
+                            <div
+                              className={`agendaQuickActions ${
+                                useCompactCalendarActions ? "agendaQuickActionsCompact" : ""
+                              }`}
+                            >
+                              <span
+                                className={`${
+                                  useCompactCalendarActions
+                                    ? "agendaStatusDot tooltipTrigger"
+                                    : "agendaStatusBadge"
+                                } agendaStatus${appointment.status}`}
+                                data-tooltip={statusLabelMap[appointment.status]}
+                                title={statusLabelMap[appointment.status]}
+                              >
+                                {useCompactCalendarActions ? "" : statusLabelMap[appointment.status]}
                               </span>
                               {canConfirm(appointment) ? (
                                 <button
-                                  className="agendaQuickActionBtn agendaQuickActionConfirm"
+                                  aria-label="Confirmar agendamento"
+                                  className={`agendaQuickActionBtn agendaQuickActionConfirm ${
+                                    useCompactCalendarActions ? "agendaQuickActionDot tooltipTrigger" : ""
+                                  }`}
+                                  data-tooltip="Confirmar"
                                   disabled={updatingAppointmentId === appointment.id}
                                   onClick={() => updateAppointmentStatus(appointment.id, "CONFIRMED")}
+                                  title="Confirmar"
                                   type="button"
                                 >
-                                  Confirmar
+                                  {useCompactCalendarActions ? "" : "Confirmar"}
                                 </button>
                               ) : null}
                               {canComplete(appointment) ? (
                                 <button
-                                  className="agendaQuickActionBtn agendaQuickActionComplete"
+                                  aria-label="Concluir agendamento"
+                                  className={`agendaQuickActionBtn agendaQuickActionComplete ${
+                                    useCompactCalendarActions ? "agendaQuickActionDot tooltipTrigger" : ""
+                                  }`}
+                                  data-tooltip="Concluir"
                                   disabled={updatingAppointmentId === appointment.id}
                                   onClick={() => updateAppointmentStatus(appointment.id, "COMPLETED")}
+                                  title="Concluir"
                                   type="button"
                                 >
-                                  Concluir
+                                  {useCompactCalendarActions ? "" : "Concluir"}
                                 </button>
                               ) : null}
                               {canCancel(appointment) ? (
                                 <button
-                                  className="agendaQuickActionBtn agendaQuickActionCancel"
+                                  aria-label="Cancelar agendamento"
+                                  className={`agendaQuickActionBtn agendaQuickActionCancel ${
+                                    useCompactCalendarActions ? "agendaQuickActionDot tooltipTrigger" : ""
+                                  }`}
+                                  data-tooltip="Cancelar"
                                   disabled={updatingAppointmentId === appointment.id}
                                   onClick={() => updateAppointmentStatus(appointment.id, "CANCELED")}
+                                  title="Cancelar"
                                   type="button"
                                 >
-                                  Cancelar
+                                  {useCompactCalendarActions ? "" : "Cancelar"}
                                 </button>
                               ) : null}
                             </div>
@@ -663,7 +691,7 @@ export default function AgendaPage() {
                         return (
                           <div className="agendaCalendarChip" key={appointment.id}>
                             <div className="agendaCalendarChipMain">
-                              <span>
+                              <span className="agendaCalendarChipText">
                                 {startsAt.toLocaleTimeString("pt-BR", {
                                   hour: "2-digit",
                                   minute: "2-digit"
@@ -671,38 +699,65 @@ export default function AgendaPage() {
                                 · {appointment.pet.name} · {appointment.service.name}
                               </span>
                             </div>
-                            <div className="agendaQuickActions">
-                              <span className={`agendaStatusBadge agendaStatus${appointment.status}`}>
-                                {statusLabelMap[appointment.status]}
+                            <div
+                              className={`agendaQuickActions ${
+                                useCompactCalendarActions ? "agendaQuickActionsCompact" : ""
+                              }`}
+                            >
+                              <span
+                                className={`${
+                                  useCompactCalendarActions
+                                    ? "agendaStatusDot tooltipTrigger"
+                                    : "agendaStatusBadge"
+                                } agendaStatus${appointment.status}`}
+                                data-tooltip={statusLabelMap[appointment.status]}
+                                title={statusLabelMap[appointment.status]}
+                              >
+                                {useCompactCalendarActions ? "" : statusLabelMap[appointment.status]}
                               </span>
                               {canConfirm(appointment) ? (
                                 <button
-                                  className="agendaQuickActionBtn agendaQuickActionConfirm"
+                                  aria-label="Confirmar agendamento"
+                                  className={`agendaQuickActionBtn agendaQuickActionConfirm ${
+                                    useCompactCalendarActions ? "agendaQuickActionDot tooltipTrigger" : ""
+                                  }`}
+                                  data-tooltip="Confirmar"
                                   disabled={updatingAppointmentId === appointment.id}
                                   onClick={() => updateAppointmentStatus(appointment.id, "CONFIRMED")}
+                                  title="Confirmar"
                                   type="button"
                                 >
-                                  Confirmar
+                                  {useCompactCalendarActions ? "" : "Confirmar"}
                                 </button>
                               ) : null}
                               {canComplete(appointment) ? (
                                 <button
-                                  className="agendaQuickActionBtn agendaQuickActionComplete"
+                                  aria-label="Concluir agendamento"
+                                  className={`agendaQuickActionBtn agendaQuickActionComplete ${
+                                    useCompactCalendarActions ? "agendaQuickActionDot tooltipTrigger" : ""
+                                  }`}
+                                  data-tooltip="Concluir"
                                   disabled={updatingAppointmentId === appointment.id}
                                   onClick={() => updateAppointmentStatus(appointment.id, "COMPLETED")}
+                                  title="Concluir"
                                   type="button"
                                 >
-                                  Concluir
+                                  {useCompactCalendarActions ? "" : "Concluir"}
                                 </button>
                               ) : null}
                               {canCancel(appointment) ? (
                                 <button
-                                  className="agendaQuickActionBtn agendaQuickActionCancel"
+                                  aria-label="Cancelar agendamento"
+                                  className={`agendaQuickActionBtn agendaQuickActionCancel ${
+                                    useCompactCalendarActions ? "agendaQuickActionDot tooltipTrigger" : ""
+                                  }`}
+                                  data-tooltip="Cancelar"
                                   disabled={updatingAppointmentId === appointment.id}
                                   onClick={() => updateAppointmentStatus(appointment.id, "CANCELED")}
+                                  title="Cancelar"
                                   type="button"
                                 >
-                                  Cancelar
+                                  {useCompactCalendarActions ? "" : "Cancelar"}
                                 </button>
                               ) : null}
                             </div>
