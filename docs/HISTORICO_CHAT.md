@@ -1,6 +1,6 @@
 # Histórico do Chat
 
-Atualizado em: 2026-02-27
+Atualizado em: 2026-03-06
 
 ## Sessão 2026-02-25 (noite)
 - Continuidade do refino visual em todo o sistema, com foco principal em `Agendamentos`.
@@ -32,6 +32,17 @@ Atualizado em: 2026-02-27
   - `scripts/auto-heal-next.sh`
   - `npm run dev` tornou-se modo resiliente
   - `npm run dev:raw` mantido como modo direto.
+
+## Sessão 2026-03-06 (retomada por histórico salvo)
+- Contexto recuperado via `docs/HISTORICO_CHAT.md` e `docs/ESTADO_CONVERSA.md`.
+- Confirmado que o projeto segue compilando sem regressão:
+  - `npm run lint` sem avisos/erros
+  - `npm run build` concluído com sucesso
+- Estado operacional confirmado para continuidade a partir das pendências já registradas.
+- Iniciada validação do auto-healing de `dev`:
+  - revisão dos scripts `start-petshop.sh` e `auto-heal-next.sh`
+  - gatilhos de erro testados em cenário simulado com sucesso (7/7)
+  - validação contínua de processo em background ficará para sessão local persistente.
 
 ## Como manter este arquivo
 - Registrar decisões e mudanças de forma cronológica.

@@ -1,6 +1,17 @@
 # Estado da Conversa (Resumo para retomada)
 
-Atualizado em: 2026-02-27
+Atualizado em: 2026-03-06
+
+## Retomada 2026-03-06
+- Histórico recuperado e validado para continuidade sem depender de memória da sessão anterior.
+- Sanidade técnica validada na retomada:
+  - `npm run lint` OK
+  - `npm run build` OK
+- Sem mudanças de código funcional nesta retomada; foco em recuperação de contexto e confirmação de integridade.
+- Validação técnica do auto-healing iniciada:
+  - script de inicialização resiliente e watcher revisados
+  - regex de detecção validada com casos simulados (7/7 OK)
+  - observação: validação longa de processo em background ficou limitada pelo ambiente de execução desta sessão
 
 ## O que foi alinhado hoje
 - Retomada da tela de `Agendamentos` com foco em funcionalidade e estabilidade.
@@ -31,6 +42,6 @@ Atualizado em: 2026-02-27
 - Salvar estado atual do projeto e da conversa.
 - Manter retorno independente do manuseio manual do operador.
 
-## Pendente para amanhã
-1. Validar em uso real se o auto-healing do `dev` está cobrindo todos os cenários de falha.
+## Pendências abertas
+1. Concluir validação em uso real contínuo do auto-healing do `dev` (sessão local persistente fora do executor).
 2. Ajustar padronização visual fina da barra de ações (largura mínima e ritmo dos botões) se necessário.
