@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/http";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
+import { registerAudit } from "@/lib/audit";
 
 const productSchema = z.object({
   name: z.string().trim().min(2),
@@ -16,7 +17,8 @@ const productSchema = z.object({
   priceCents: z.number().int().positive()
 });
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const includeArchived = request.nextUrl.searchParams.get("includeArchived") === "1";
   const products = await prisma.product.findMany({
     include: {
       images: {
@@ -25,6 +27,7 @@ export async function GET() {
         }
       }
     },
+    where: includeArchived ? undefined : { archivedAt: null },
     orderBy: { name: "asc" }
   });
 
@@ -59,6 +62,13 @@ export async function POST(request: NextRequest) {
             }
           : undefined
       }
+    });
+
+    await registerAudit({
+      action: "PRODUCT_CREATED",
+      entity: "Product",
+      entityId: product.id,
+      details: `Produto ${product.name} (${product.sku}) criado`
     });
 
     return ok(product, 201);

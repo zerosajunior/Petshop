@@ -125,6 +125,7 @@ model Product {
   sku             String          @unique
   category        String?
   description     String?
+  archivedAt      DateTime?
   imageDataUrl    String?
   images          ProductImage[]
   currentStock    Int             @default(0)

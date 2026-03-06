@@ -86,6 +86,10 @@ export async function POST(request: NextRequest) {
       return { error: "Produto não encontrado." } as const;
     }
 
+    if (product.archivedAt) {
+      return { error: "Produto arquivado não pode receber movimentações." } as const;
+    }
+
     const nextStock = product.currentStock + delta;
     if (nextStock < 0) {
       return {

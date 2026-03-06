@@ -936,6 +936,145 @@ main {
   padding-left: 1rem;
 }
 
+.productCardsGrid {
+  margin-top: 0.8rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.productCard {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #f7fbfa;
+  padding: 0.45rem 0.6rem;
+  display: grid;
+  gap: 0.35rem;
+  cursor: pointer;
+}
+
+.productCardLow {
+  border-color: #f0c8c8;
+  background: #fff7f7;
+}
+
+.productCardArchived {
+  opacity: 0.8;
+}
+
+.productCardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.productCardTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.productCardTitle strong {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.productCardTags {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.productTag {
+  border: 1px solid #d7ccb8;
+  border-radius: 999px;
+  padding: 0.12rem 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.productTagLow {
+  background: #fdeeee;
+  border-color: #f2c4c4;
+  color: #8e2a2a;
+}
+
+.productTagArchived {
+  background: #eef1f4;
+  border-color: #cfd7de;
+  color: #4b5563;
+}
+
+.productCardSummary {
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.productCardActions {
+  display: flex;
+  gap: 0.38rem;
+  flex-wrap: wrap;
+}
+
+.productCardActions .agendaQuickActionBtn {
+  padding: 0.16rem 0.52rem;
+  font-size: 0.72rem;
+}
+
+.productActionEdit {
+  background: #eaf7f2;
+  border-color: #b9dfd1;
+  color: #1f6b55;
+}
+
+.productActionArchive {
+  background: #eef6ff;
+  border-color: #bed2ef;
+  color: #2b4f77;
+}
+
+.productActionDelete {
+  background: #fdeeee;
+  border-color: #f2c4c4;
+  color: #8e2a2a;
+}
+
+.productCardExpanded {
+  border-top: 1px dashed #d7ccb8;
+  padding-top: 0.5rem;
+}
+
+.productExpandedMedia {
+  display: grid;
+  gap: 0.4rem;
+  max-width: 320px;
+}
+
+.productExpandedImageWrap {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f8fafb;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.productExpandedMediaActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 .statsGrid {
   display: grid;
   gap: 0.8rem;
@@ -1072,6 +1211,10 @@ main {
 @media (max-width: 620px) {
   .productFields {
     grid-template-columns: 1fr;
+  }
+
+  .productCardHead {
+    align-items: flex-start;
   }
 
   .uploadRow {
