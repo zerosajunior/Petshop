@@ -25,7 +25,15 @@ type Product = {
   archivedAt?: string | null;
 };
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
+const CATEGORY_OPTIONS = [
+  { label: "Higiene e cuidados", icon: "🧴", hint: "Shampoo, perfumes e limpeza diária" },
+  { label: "Escovação e cuidados com o pelo", icon: "🪮", hint: "Escovas, pentes e corte de unha" },
+  { label: "Acessórios", icon: "🐕", hint: "Coleiras, guias, peitorais e roupas" },
+  { label: "Alimentação e petiscos", icon: "🍖", hint: "Petiscos, snacks e ração" },
+  { label: "Saúde básica e controle de pragas", icon: "🐾", hint: "Antipulgas, vermífugos e suplementos" },
+  { label: "Brinquedos", icon: "🧸", hint: "Bolinhas, mordedores e interativos" }
+] as const;
 
 function ProductPhotoCarousel({ images, name }: { images: ProductImage[]; name: string }) {
   const total = images.length;
@@ -115,6 +123,10 @@ function cleanSeedLabel(value?: string | null) {
   return (value ?? "").replace(/^\[seed-demo\]\s*/i, "").trim();
 }
 
+function normalizeCategory(value?: string | null) {
+  return (value ?? "").trim().toLowerCase();
+}
+
 function maskBRLInput(rawValue: string) {
   const digitsOnly = rawValue.replace(/\D/g, "");
   const cents = Number(digitsOnly || "0");
@@ -199,6 +211,7 @@ export default function EstoquePage() {
   const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [showArchived, setShowArchived] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [page, setPage] = useState(1);
   const [expandedProductId, setExpandedProductId] = useState("");
 
@@ -216,7 +229,7 @@ export default function EstoquePage() {
 
   useEffect(() => {
     setPage(1);
-  }, [searchTerm, showArchived]);
+  }, [searchTerm, showArchived, selectedCategory]);
 
   function resetProductFormAndClose() {
     setName("");
@@ -381,34 +394,20 @@ export default function EstoquePage() {
     await refresh(showArchived);
   }
 
-  async function onDeleteProduct(product: Product) {
-    const confirmed = window.confirm(
-      `Excluir produto ${product.name} (${product.sku})? Essa ação remove também o histórico relacionado.`
-    );
-    if (!confirmed) {
-      return;
-    }
-
-    setMessage("");
-    setError("");
-
-    const response = await fetch(`/api/products/${product.id}`, {
-      method: "DELETE"
-    });
-
-    const payload: ApiResponse<unknown> = await response.json();
-    if (!response.ok) {
-      setError(payload.error ?? "Não foi possível excluir o produto.");
-      return;
-    }
-
-    setMessage("Produto excluído com sucesso.");
-    await refresh(showArchived);
-  }
-
   const filteredProducts = useMemo(
     () =>
       products.filter((product) => {
+        const normalizedCategory = normalizeCategory(product.category);
+        if (selectedCategory !== "all") {
+          if (selectedCategory === "uncategorized") {
+            if (normalizedCategory) {
+              return false;
+            }
+          } else if (normalizedCategory !== selectedCategory) {
+            return false;
+          }
+        }
+
         if (!searchTerm.trim()) {
           return true;
         }
@@ -420,12 +419,44 @@ export default function EstoquePage() {
           (product.description ?? "").toLowerCase().includes(term)
         );
       }),
-    [products, searchTerm]
+    [products, searchTerm, selectedCategory]
+  );
+  const categoryCounters = useMemo(() => {
+    const counts = new Map<string, number>();
+    let uncategorized = 0;
+
+    products.forEach((product) => {
+      const normalized = normalizeCategory(product.category);
+      if (!normalized) {
+        uncategorized += 1;
+        return;
+      }
+      counts.set(normalized, (counts.get(normalized) ?? 0) + 1);
+    });
+
+    return { counts, uncategorized };
+  }, [products]);
+  const lowStockAlerts = useMemo(
+    () =>
+      products
+        .filter((product) => !product.archivedAt && product.currentStock < product.minStock)
+        .sort(
+          (a, b) =>
+            a.currentStock - a.minStock - (b.currentStock - b.minStock)
+        ),
+    [products]
   );
 
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PAGE_SIZE));
   const pageSafe = Math.min(page, totalPages);
   const paginatedProducts = filteredProducts.slice((pageSafe - 1) * PAGE_SIZE, pageSafe * PAGE_SIZE);
+  const activeCategoryLabel =
+    selectedCategory === "all"
+      ? "Todas as categorias"
+      : selectedCategory === "uncategorized"
+        ? "Sem categoria"
+        : CATEGORY_OPTIONS.find((item) => normalizeCategory(item.label) === selectedCategory)?.label ??
+          "Categorias";
 
   return (
     <section>
@@ -553,7 +584,17 @@ export default function EstoquePage() {
                 </div>
                 <div className="formField">
                   <label htmlFor="category">Categoria</label>
-                  <input id="category" onChange={(e) => setCategory(e.target.value)} value={category} />
+                  <input
+                    id="category"
+                    list="productCategoryOptions"
+                    onChange={(e) => setCategory(e.target.value)}
+                    value={category}
+                  />
+                  <datalist id="productCategoryOptions">
+                    {CATEGORY_OPTIONS.map((item) => (
+                      <option key={item.label} value={item.label} />
+                    ))}
+                  </datalist>
                 </div>
                 <div className="formField formFieldFull">
                   <label htmlFor="description">Descrição breve</label>
@@ -641,117 +682,183 @@ export default function EstoquePage() {
         ) : null}
       </article>
 
-      <article className="panel">
-        <h3>Produtos cadastrados</h3>
-        <div className="productCardsGrid">
-          {paginatedProducts.map((product) => {
-            const isLowStock = product.currentStock < product.minStock;
-            const isArchived = Boolean(product.archivedAt);
-
-            return (
-              <article
-                className={`productCard ${isLowStock ? "productCardLow" : ""} ${
-                  isArchived ? "productCardArchived" : ""
-                }`}
-                key={product.id}
-                onClick={() =>
-                  setExpandedProductId((prev) => (prev === product.id ? "" : product.id))
-                }
-              >
-                <div className="productCardHead">
-                  <div className="productCardTitleWrap">
-                    <div className="productCardTitle">
-                      <ProductPhotoCarousel images={product.images ?? []} name={product.name} />
-                      <strong>
-                        {product.name} ({product.sku})
-                      </strong>
-                    </div>
-                    <div className="productCardTags">
-                      {isLowStock ? <span className="productTag productTagLow">Estoque baixo</span> : null}
-                      {isArchived ? <span className="productTag productTagArchived">Arquivado</span> : null}
-                    </div>
-                  </div>
-                  <div className="productCardActions">
-                    <button
-                      className="agendaQuickActionBtn productActionEdit"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        onEditProduct(product);
-                      }}
-                      type="button"
-                    >
-                      Editar
-                    </button>
-                    <button
-                      className="agendaQuickActionBtn productActionArchive"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        onToggleArchive(product);
-                      }}
-                      type="button"
-                    >
-                      {isArchived ? "Ativar" : "Arquivar"}
-                    </button>
-                    <button
-                      className="agendaQuickActionBtn productActionDelete"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        onDeleteProduct(product);
-                      }}
-                      type="button"
-                    >
-                      Excluir
-                    </button>
-                  </div>
-                </div>
-
-                <p className="subtle productCardSummary">
-                  Estoque {product.currentStock}/{product.minStock} ·
-                  {" "}
-                  R${" "}
-                  {(product.priceCents / 100).toLocaleString("pt-BR", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                  })}{" "}
-                  · {product.images?.length ?? 0} foto(s)
-                </p>
-
-                {expandedProductId === product.id ? (
-                  <div className="productCardExpanded" onClick={(event) => event.stopPropagation()}>
-                    <ProductPhotoPanel images={product.images ?? []} name={product.name} />
-                  </div>
-                ) : null}
-              </article>
-            );
-          })}
-        </div>
-
-        {filteredProducts.length === 0 ? <p className="subtle">Nenhum produto encontrado.</p> : null}
-
-        {filteredProducts.length > PAGE_SIZE ? (
-          <div className="formActions" style={{ marginTop: "0.8rem" }}>
+      <div className="productTopSplit">
+        <article className="panel productCategoryPanel">
+          <h3>Categorias de produtos</h3>
+          <div className="categoryToolboxCards">
             <button
-              className="btnSecondary"
-              disabled={pageSafe <= 1}
-              onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+              className={`categoryToolboxCard ${selectedCategory === "all" ? "categoryToolboxCardActive" : ""}`}
+              onClick={() => setSelectedCategory("all")}
               type="button"
             >
-              Página anterior
+              <span className="categoryToolboxIcon">📦</span>
+              <span className="categoryToolboxLabel">Todas</span>
+              <small className="subtle">Todos os produtos</small>
+              <strong>{products.length}</strong>
             </button>
-            <small className="subtle">
-              Página {pageSafe} de {totalPages}
-            </small>
+            {CATEGORY_OPTIONS.map((categoryOption) => {
+              const normalized = normalizeCategory(categoryOption.label);
+              const count = categoryCounters.counts.get(normalized) ?? 0;
+              return (
+                <button
+                  className={`categoryToolboxCard ${
+                    selectedCategory === normalized ? "categoryToolboxCardActive" : ""
+                  }`}
+                  key={categoryOption.label}
+                  onClick={() => setSelectedCategory(normalized)}
+                  type="button"
+                >
+                  <span className="categoryToolboxIcon">{categoryOption.icon}</span>
+                  <span className="categoryToolboxLabel">{categoryOption.label}</span>
+                  <small className="subtle">{categoryOption.hint}</small>
+                  <strong>{count}</strong>
+                </button>
+              );
+            })}
             <button
-              className="btnSecondary"
-              disabled={pageSafe >= totalPages}
-              onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
+              className={`categoryToolboxCard ${
+                selectedCategory === "uncategorized" ? "categoryToolboxCardActive" : ""
+              }`}
+              onClick={() => setSelectedCategory("uncategorized")}
               type="button"
             >
-              Próxima página
+              <span className="categoryToolboxIcon">🗂️</span>
+              <span className="categoryToolboxLabel">Sem categoria</span>
+              <small className="subtle">Produtos sem classificação</small>
+              <strong>{categoryCounters.uncategorized}</strong>
             </button>
           </div>
-        ) : null}
-      </article>
+        </article>
+
+        <div className="productSideColumn">
+          <article className="panel productAlertPanel">
+            <h3>Avisos de estoque baixo</h3>
+            {lowStockAlerts.length === 0 ? (
+              <p className="subtle">Nenhum alerta de estoque no momento.</p>
+            ) : (
+              <ul className="productAlertList">
+                {lowStockAlerts.map((product) => (
+                  <li className="productAlertItem" key={product.id}>
+                    <strong>{product.name}</strong>
+                    <small className="subtle">{product.sku}</small>
+                    <small style={{ color: "#8e2a2a" }}>
+                      Estoque {product.currentStock}/{product.minStock}
+                    </small>
+                    <button
+                      className="btnSecondary"
+                      onClick={() => onEditProduct(product)}
+                      type="button"
+                    >
+                      Ajustar
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </article>
+
+          <article className="panel productMainPanel">
+            <h3>Produtos · {activeCategoryLabel}</h3>
+            <div className="productCardsGrid">
+              {paginatedProducts.map((product) => {
+                const isLowStock = product.currentStock < product.minStock;
+                const isArchived = Boolean(product.archivedAt);
+
+                return (
+                <article
+                  className={`productCard ${isLowStock ? "productCardLow" : ""} ${
+                    isArchived ? "productCardArchived" : ""
+                  }`}
+                  key={product.id}
+                    onClick={() =>
+                      setExpandedProductId((prev) => (prev === product.id ? "" : product.id))
+                    }
+                >
+                  <div className="productCardHead">
+                    <div className="productCardTitleWrap">
+                      <div className="productCardTitle">
+                        <ProductPhotoCarousel images={product.images ?? []} name={product.name} />
+                        <div className="productCardTitleMeta">
+                          <strong>{product.name}</strong>
+                          <div className="productCardTags">
+                            {isLowStock ? <span className="productTag productTagLow">Estoque baixo</span> : null}
+                            {isArchived ? <span className="productTag productTagArchived">Arquivado</span> : null}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <div className="productCardActions">
+                        <button
+                          className="agendaQuickActionBtn productActionEdit"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            onEditProduct(product);
+                          }}
+                          type="button"
+                        >
+                          Editar
+                        </button>
+                        <button
+                          className="agendaQuickActionBtn productActionArchive"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            onToggleArchive(product);
+                          }}
+                          type="button"
+                        >
+                          {isArchived ? "Ativar" : "Arquivar"}
+                        </button>
+                      </div>
+                    </div>
+
+                    <p className="subtle productCardSummary">
+                      Estoque {product.currentStock}/{product.minStock} ·
+                      {" "}
+                      R${" "}
+                      {(product.priceCents / 100).toLocaleString("pt-BR", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                      })}
+                    </p>
+
+                    {expandedProductId === product.id ? (
+                      <div className="productCardExpanded" onClick={(event) => event.stopPropagation()}>
+                        <ProductPhotoPanel images={product.images ?? []} name={product.name} />
+                      </div>
+                    ) : null}
+                  </article>
+                );
+              })}
+            </div>
+
+            {filteredProducts.length === 0 ? <p className="subtle">Nenhum produto encontrado.</p> : null}
+
+            {filteredProducts.length > PAGE_SIZE ? (
+              <div className="formActions" style={{ marginTop: "0.8rem" }}>
+                <button
+                  className="btnSecondary"
+                  disabled={pageSafe <= 1}
+                  onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                  type="button"
+                >
+                  Página anterior
+                </button>
+                <small className="subtle">
+                  Página {pageSafe} de {totalPages}
+                </small>
+                <button
+                  className="btnSecondary"
+                  disabled={pageSafe >= totalPages}
+                  onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
+                  type="button"
+                >
+                  Próxima página
+                </button>
+              </div>
+            ) : null}
+          </article>
+        </div>
+      </div>
     </section>
   );
 }
