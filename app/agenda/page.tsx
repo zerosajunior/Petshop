@@ -6,6 +6,7 @@ import Link from "next/link";
 
 type Pet = { id: string; name: string; customer: { name: string } };
 type Service = { id: string; name: string; durationMin: number };
+type CreatedService = { id: string; name: string; durationMin: number };
 type AppointmentStatus = "SCHEDULED" | "CONFIRMED" | "COMPLETED" | "CANCELED";
 type Appointment = {
   id: string;
@@ -115,6 +116,13 @@ export default function AgendaPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [updatingAppointmentId, setUpdatingAppointmentId] = useState("");
   const [isSchedulingOpen, setIsSchedulingOpen] = useState(false);
+  const [isServiceFormOpen, setIsServiceFormOpen] = useState(false);
+  const [serviceName, setServiceName] = useState("");
+  const [serviceDescription, setServiceDescription] = useState("");
+  const [serviceDurationMin, setServiceDurationMin] = useState(60);
+  const [servicePriceBRL, setServicePriceBRL] = useState(100);
+  const [serviceMessage, setServiceMessage] = useState("");
+  const [serviceError, setServiceError] = useState("");
   const useCompactCalendarActions = viewMode === "weekly" || viewMode === "monthly";
 
   function resetAppointmentFormAndClose() {
@@ -127,6 +135,16 @@ export default function AgendaPage() {
     setMessage("");
     setError("");
     setIsSchedulingOpen(false);
+  }
+
+  function resetServiceFormAndClose() {
+    setServiceName("");
+    setServiceDescription("");
+    setServiceDurationMin(60);
+    setServicePriceBRL(100);
+    setServiceMessage("");
+    setServiceError("");
+    setIsServiceFormOpen(false);
   }
 
   const refresh = useCallback(async function refreshData() {
@@ -207,6 +225,37 @@ export default function AgendaPage() {
     setStartTime("");
     setEndTime("");
     await refresh();
+  }
+
+  async function onCreateService(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setServiceMessage("");
+    setServiceError("");
+
+    const response = await fetch("/api/services", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: serviceName,
+        description: serviceDescription || undefined,
+        durationMin: serviceDurationMin,
+        priceCents: Math.round(servicePriceBRL * 100)
+      })
+    });
+
+    const payload: ApiResponse<CreatedService> = await response.json();
+    if (!response.ok) {
+      setServiceError(payload.error ?? "Não foi possível salvar o serviço.");
+      return;
+    }
+
+    setServiceMessage("Serviço criado com sucesso.");
+    const createdServiceId = payload.data?.id ?? "";
+    await refresh();
+    if (createdServiceId) {
+      setServiceId(createdServiceId);
+    }
+    setIsSchedulingOpen(true);
   }
 
   async function updateAppointmentStatus(appointmentId: string, status: AppointmentStatus) {
@@ -356,7 +405,7 @@ export default function AgendaPage() {
         <article className="panel">
           <strong>Faltam opções para agendar.</strong>
           <p className="subtle" style={{ marginTop: "0.4rem" }}>
-            Cadastre cliente/pet em novo cadastro e inclua serviço na tela de serviços.
+            Cadastre cliente/pet em novo cadastro e inclua um serviço usando o botão Novo serviço.
           </p>
         </article>
       ) : null}
@@ -395,9 +444,21 @@ export default function AgendaPage() {
           <Link className="btnSecondary actionBtnSameHeight agendaPanelBtn" href="/cadastro">
             Cadastro
           </Link>
-          <Link className="btnSecondary actionBtnSameHeight agendaPanelBtn" href="/servicos">
-            Serviços
-          </Link>
+          <button
+            className="btnSecondary actionBtnSameHeight agendaPanelBtn"
+            onClick={() => {
+              if (isServiceFormOpen) {
+                resetServiceFormAndClose();
+                return;
+              }
+              setServiceMessage("");
+              setServiceError("");
+              setIsServiceFormOpen(true);
+            }}
+            type="button"
+          >
+            {isServiceFormOpen ? "Fechar serviço" : "Novo serviço"}
+          </button>
           <button
             className="btnSecondary actionBtnSameHeight agendaPanelBtn"
             onClick={() => {
@@ -418,8 +479,65 @@ export default function AgendaPage() {
           </Link>
         </div>
 
+        {isServiceFormOpen ? (
+          <form onSubmit={onCreateService}>
+            <div className="formGrid" style={{ marginBottom: "0.45rem" }}>
+              <div className="formField">
+                <label htmlFor="serviceName">Nome do serviço</label>
+                <input
+                  id="serviceName"
+                  onChange={(event) => setServiceName(event.target.value)}
+                  required
+                  value={serviceName}
+                />
+              </div>
+              <div className="formField">
+                <label htmlFor="serviceDurationMin">Duração (min)</label>
+                <input
+                  id="serviceDurationMin"
+                  min={1}
+                  onChange={(event) => setServiceDurationMin(Number(event.target.value))}
+                  required
+                  type="number"
+                  value={serviceDurationMin}
+                />
+              </div>
+              <div className="formField">
+                <label htmlFor="servicePriceBRL">Preço (R$)</label>
+                <input
+                  id="servicePriceBRL"
+                  min={0.01}
+                  onChange={(event) => setServicePriceBRL(Number(event.target.value))}
+                  required
+                  step="0.01"
+                  type="number"
+                  value={servicePriceBRL}
+                />
+              </div>
+              <div className="formField">
+                <label htmlFor="serviceDescription">Descrição (opcional)</label>
+                <input
+                  id="serviceDescription"
+                  onChange={(event) => setServiceDescription(event.target.value)}
+                  value={serviceDescription}
+                />
+              </div>
+            </div>
+            <div className="formActions" style={{ marginBottom: "0.8rem" }}>
+              <button className="btnPrimary" type="submit">
+                Salvar serviço
+              </button>
+              <button className="btnSecondary" onClick={resetServiceFormAndClose} type="button">
+                Cancelar
+              </button>
+              {serviceMessage ? <small>{serviceMessage}</small> : null}
+              {serviceError ? <small style={{ color: "#b42318" }}>{serviceError}</small> : null}
+            </div>
+          </form>
+        ) : null}
+
         {isSchedulingOpen ? (
-        <form onSubmit={onSubmit}>
+          <form onSubmit={onSubmit}>
             <div className="formGrid agendaScheduleGrid">
               <div className="formField">
                 <label htmlFor="petId">Pet</label>
@@ -449,7 +567,7 @@ export default function AgendaPage() {
                   ))}
                 </select>
                 {services.length === 0 ? (
-                  <small className="subtle">Nenhum serviço predefinido disponível.</small>
+                  <small className="subtle">Nenhum serviço disponível. Use o botão Novo serviço.</small>
                 ) : null}
               </div>
 

@@ -4,7 +4,6 @@ type NavLink = {
   href:
     | "/"
     | "/agenda"
-    | "/servicos"
     | "/estoque"
     | "/movimentacoes-estoque"
     | "/promocoes"
@@ -16,7 +15,6 @@ type NavLink = {
 const links: NavLink[] = [
   { href: "/", label: "Painel inicial" },
   { href: "/agenda", label: "Agendamentos" },
-  { href: "/servicos", label: "Serviços" },
   { href: "/estoque", label: "Produtos" },
   { href: "/movimentacoes-estoque", label: "Estoque" },
   { href: "/relatorios", label: "Relatórios" },
