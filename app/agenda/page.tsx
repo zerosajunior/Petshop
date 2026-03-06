@@ -123,6 +123,7 @@ export default function AgendaPage() {
   const [servicePriceBRL, setServicePriceBRL] = useState(100);
   const [serviceMessage, setServiceMessage] = useState("");
   const [serviceError, setServiceError] = useState("");
+  const [isSavingService, setIsSavingService] = useState(false);
   const useCompactCalendarActions = viewMode === "weekly" || viewMode === "monthly";
 
   function resetAppointmentFormAndClose() {
@@ -134,6 +135,7 @@ export default function AgendaPage() {
     setNotes("");
     setMessage("");
     setError("");
+    resetServiceFormAndClose();
     setIsSchedulingOpen(false);
   }
 
@@ -227,35 +229,62 @@ export default function AgendaPage() {
     await refresh();
   }
 
-  async function onCreateService(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function onCreateService() {
     setServiceMessage("");
     setServiceError("");
-
-    const response = await fetch("/api/services", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: serviceName,
-        description: serviceDescription || undefined,
-        durationMin: serviceDurationMin,
-        priceCents: Math.round(servicePriceBRL * 100)
-      })
-    });
-
-    const payload: ApiResponse<CreatedService> = await response.json();
-    if (!response.ok) {
-      setServiceError(payload.error ?? "Não foi possível salvar o serviço.");
+    if (!serviceName.trim()) {
+      setServiceError("Informe o nome do serviço.");
+      return;
+    }
+    if (!Number.isFinite(serviceDurationMin) || serviceDurationMin <= 0) {
+      setServiceError("Informe uma duração válida (maior que zero).");
+      return;
+    }
+    if (!Number.isFinite(servicePriceBRL) || servicePriceBRL <= 0) {
+      setServiceError("Informe um preço válido (maior que zero).");
+      return;
+    }
+    if (isSavingService) {
       return;
     }
 
-    setServiceMessage("Serviço criado com sucesso.");
-    const createdServiceId = payload.data?.id ?? "";
-    await refresh();
-    if (createdServiceId) {
-      setServiceId(createdServiceId);
+    setIsSavingService(true);
+    try {
+      const response = await fetch("/api/services", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: serviceName.trim(),
+          description: serviceDescription || undefined,
+          durationMin: serviceDurationMin,
+          priceCents: Math.round(servicePriceBRL * 100)
+        })
+      });
+
+      const payload: ApiResponse<CreatedService> = await response.json();
+      if (!response.ok) {
+        setServiceError(payload.error ?? "Não foi possível salvar o serviço.");
+        return;
+      }
+
+      const createdServiceId = payload.data?.id ?? "";
+      await refresh();
+      if (createdServiceId) {
+        setServiceId(createdServiceId);
+      }
+      setMessage("Serviço criado e selecionado para o agendamento.");
+      setError("");
+      setIsServiceFormOpen(false);
+      setServiceName("");
+      setServiceDescription("");
+      setServiceDurationMin(60);
+      setServicePriceBRL(100);
+      setIsSchedulingOpen(true);
+    } catch {
+      setServiceError("Falha de conexão ao salvar o serviço.");
+    } finally {
+      setIsSavingService(false);
     }
-    setIsSchedulingOpen(true);
   }
 
   async function updateAppointmentStatus(appointmentId: string, status: AppointmentStatus) {
@@ -453,6 +482,7 @@ export default function AgendaPage() {
               }
               setServiceMessage("");
               setServiceError("");
+              setIsSchedulingOpen(true);
               setIsServiceFormOpen(true);
             }}
             type="button"
@@ -478,63 +508,6 @@ export default function AgendaPage() {
             Voltar ao painel
           </Link>
         </div>
-
-        {isServiceFormOpen ? (
-          <form onSubmit={onCreateService}>
-            <div className="formGrid" style={{ marginBottom: "0.45rem" }}>
-              <div className="formField">
-                <label htmlFor="serviceName">Nome do serviço</label>
-                <input
-                  id="serviceName"
-                  onChange={(event) => setServiceName(event.target.value)}
-                  required
-                  value={serviceName}
-                />
-              </div>
-              <div className="formField">
-                <label htmlFor="serviceDurationMin">Duração (min)</label>
-                <input
-                  id="serviceDurationMin"
-                  min={1}
-                  onChange={(event) => setServiceDurationMin(Number(event.target.value))}
-                  required
-                  type="number"
-                  value={serviceDurationMin}
-                />
-              </div>
-              <div className="formField">
-                <label htmlFor="servicePriceBRL">Preço (R$)</label>
-                <input
-                  id="servicePriceBRL"
-                  min={0.01}
-                  onChange={(event) => setServicePriceBRL(Number(event.target.value))}
-                  required
-                  step="0.01"
-                  type="number"
-                  value={servicePriceBRL}
-                />
-              </div>
-              <div className="formField">
-                <label htmlFor="serviceDescription">Descrição (opcional)</label>
-                <input
-                  id="serviceDescription"
-                  onChange={(event) => setServiceDescription(event.target.value)}
-                  value={serviceDescription}
-                />
-              </div>
-            </div>
-            <div className="formActions" style={{ marginBottom: "0.8rem" }}>
-              <button className="btnPrimary" type="submit">
-                Salvar serviço
-              </button>
-              <button className="btnSecondary" onClick={resetServiceFormAndClose} type="button">
-                Cancelar
-              </button>
-              {serviceMessage ? <small>{serviceMessage}</small> : null}
-              {serviceError ? <small style={{ color: "#b42318" }}>{serviceError}</small> : null}
-            </div>
-          </form>
-        ) : null}
 
         {isSchedulingOpen ? (
           <form onSubmit={onSubmit}>
@@ -571,6 +544,77 @@ export default function AgendaPage() {
                 ) : null}
               </div>
 
+              {isServiceFormOpen ? (
+                <div className="formField formFieldFull">
+                  <div
+                    style={{
+                      border: "1px dashed var(--border)",
+                      borderRadius: "12px",
+                      padding: "0.7rem",
+                      background: "#fffaf0"
+                    }}
+                  >
+                    <strong style={{ display: "block", marginBottom: "0.55rem" }}>
+                      Cadastro rápido de serviço
+                    </strong>
+                    <div className="formGrid" style={{ marginBottom: "0.5rem" }}>
+                      <div className="formField">
+                        <label htmlFor="serviceName">Nome do serviço</label>
+                        <input
+                          id="serviceName"
+                          onChange={(event) => setServiceName(event.target.value)}
+                          value={serviceName}
+                        />
+                      </div>
+                      <div className="formField">
+                        <label htmlFor="serviceDurationMin">Duração (min)</label>
+                        <input
+                          id="serviceDurationMin"
+                          min={1}
+                          onChange={(event) => setServiceDurationMin(Number(event.target.value))}
+                          type="number"
+                          value={serviceDurationMin}
+                        />
+                      </div>
+                      <div className="formField">
+                        <label htmlFor="servicePriceBRL">Preço (R$)</label>
+                        <input
+                          id="servicePriceBRL"
+                          min={0.01}
+                          onChange={(event) => setServicePriceBRL(Number(event.target.value))}
+                          step="0.01"
+                          type="number"
+                          value={servicePriceBRL}
+                        />
+                      </div>
+                      <div className="formField">
+                        <label htmlFor="serviceDescription">Descrição (opcional)</label>
+                        <input
+                          id="serviceDescription"
+                          onChange={(event) => setServiceDescription(event.target.value)}
+                          value={serviceDescription}
+                        />
+                      </div>
+                    </div>
+                    <div className="formActions">
+                      <button
+                        className="btnPrimary"
+                        disabled={isSavingService}
+                        onClick={() => onCreateService()}
+                        type="button"
+                      >
+                        {isSavingService ? "Salvando..." : "Salvar serviço"}
+                      </button>
+                      <button className="btnSecondary" onClick={resetServiceFormAndClose} type="button">
+                        Cancelar
+                      </button>
+                      {serviceMessage ? <small>{serviceMessage}</small> : null}
+                      {serviceError ? <small style={{ color: "#b42318" }}>{serviceError}</small> : null}
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+
               <div className="formField">
                 <label htmlFor="appointmentDate">Data</label>
                 <select
@@ -603,9 +647,6 @@ export default function AgendaPage() {
                     </option>
                   ))}
                 </select>
-                {serviceId ? (
-                  <small className="subtle">Fim calculado automaticamente conforme duração do serviço.</small>
-                ) : null}
               </div>
 
               <div className="formField">
@@ -625,6 +666,12 @@ export default function AgendaPage() {
                 </select>
               </div>
             </div>
+
+            {serviceId ? (
+              <small className="subtle" style={{ display: "block", marginTop: "0.15rem" }}>
+                Fim calculado automaticamente conforme duração do serviço.
+              </small>
+            ) : null}
 
             <div className="formField" style={{ marginTop: "0.8rem" }}>
               <label htmlFor="notes">Observações</label>
