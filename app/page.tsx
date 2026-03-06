@@ -3,16 +3,18 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ApiResponse, DashboardData } from "@/types/api";
 
-type StatItem = {
+type ModuleItem = {
   id: string;
-  label: string;
+  icon: string;
+  title: string;
   value: string;
   note: string;
 };
 
-type ModuleItem = {
+type QuickIndicatorItem = {
   id: string;
-  title: string;
+  icon: string;
+  label: string;
   value: string;
   note: string;
 };
@@ -131,37 +133,41 @@ export default function HomePage() {
     };
   }, []);
 
-  const stats: StatItem[] = useMemo(() => {
+  const stats: QuickIndicatorItem[] = useMemo(() => {
     if (!dashboard) {
       return [
-        { id: "appointments", label: "Agendamentos hoje", value: "-", note: "Carregando..." },
-        { id: "sms", label: "Avisos enviados", value: "-", note: "Últimas 24h" },
-        { id: "stock", label: "Estoque baixo", value: "-", note: "Abaixo do mínimo" },
-        { id: "campaigns", label: "Campanhas ativas", value: "-", note: "Ativas agora" }
+        { id: "appointments", icon: "📅", label: "Agendamentos hoje", value: "-", note: "Carregando..." },
+        { id: "sms", icon: "📩", label: "Avisos enviados", value: "-", note: "Últimas 24h" },
+        { id: "stock", icon: "⚠️", label: "Estoque baixo", value: "-", note: "Abaixo do mínimo" },
+        { id: "campaigns", icon: "🎯", label: "Campanhas ativas", value: "-", note: "Ativas agora" }
       ];
     }
 
     return [
       {
         id: "appointments",
+        icon: "📅",
         label: "Agendamentos hoje",
         value: String(dashboard.appointmentsToday),
         note: `${dashboard.pendingConfirmations} confirmações pendentes`
       },
       {
         id: "sms",
+        icon: "📩",
         label: "Avisos enviados",
         value: String(dashboard.smsSentLast24h),
         note: "Últimas 24h"
       },
       {
         id: "stock",
+        icon: "⚠️",
         label: "Estoque baixo",
         value: String(dashboard.lowStockProducts),
         note: "Abaixo do mínimo"
       },
       {
         id: "campaigns",
+        icon: "🎯",
         label: "Campanhas ativas",
         value: String(dashboard.activeCampaigns),
         note: "Ativas agora"
@@ -174,24 +180,28 @@ export default function HomePage() {
       return [
         {
           id: "appointments",
+          icon: "📆",
           title: "Agendamentos",
           value: "-",
           note: "carregando"
         },
         {
           id: "services",
+          icon: "✂️",
           title: "Serviços",
           value: "-",
           note: "carregando"
         },
         {
           id: "products",
+          icon: "🧴",
           title: "Produtos",
           value: "-",
           note: "carregando"
         },
         {
           id: "campaigns",
+          icon: "📣",
           title: "Campanhas",
           value: "-",
           note: "carregando"
@@ -202,24 +212,28 @@ export default function HomePage() {
     return [
       {
         id: "appointments",
+        icon: "📆",
         title: "Agendamentos",
         value: String(dashboard.totalAppointments),
         note: `${dashboard.appointmentsToday} hoje`
       },
       {
         id: "services",
+        icon: "✂️",
         title: "Serviços",
         value: String(dashboard.totalServices),
         note: "ativos"
       },
       {
         id: "products",
+        icon: "🧴",
         title: "Produtos",
         value: String(dashboard.totalProducts),
         note: `${dashboard.lowStockProducts} com baixo estoque`
       },
       {
         id: "campaigns",
+        icon: "📣",
         title: "Campanhas",
         value: String(dashboard.totalCampaigns),
         note: `${dashboard.activeCampaigns} ativas`
@@ -232,12 +246,13 @@ export default function HomePage() {
       <article className="panel">
         <h3>Resumo rápido</h3>
         {loadError ? <small style={{ color: "#b42318" }}>{loadError}</small> : null}
-        <div className="statsGrid">
+        <div className="categoryToolboxCards">
           {modules.map((module) => (
-            <article className="statCard" key={`summary-${module.id}`}>
-              <p className="subtle">{module.title}</p>
-              <div className="metric">{module.value}</div>
+            <article className="categoryToolboxCard" key={`summary-${module.id}`}>
+              <span className="categoryToolboxIcon">{module.icon}</span>
+              <span className="categoryToolboxLabel">{module.title}</span>
               <small className="subtle">{module.note}</small>
+              <strong>{module.value}</strong>
             </article>
           ))}
         </div>
@@ -245,12 +260,13 @@ export default function HomePage() {
 
       <article className="panel">
         <h3>Indicadores rápidos</h3>
-        <div className="statsGrid">
+        <div className="categoryToolboxCards">
           {stats.map((stat) => (
-            <article className="statCard" key={stat.id}>
-              <p className="subtle">{stat.label}</p>
-              <div className="metric">{stat.value}</div>
+            <article className="categoryToolboxCard" key={stat.id}>
+              <span className="categoryToolboxIcon">{stat.icon}</span>
+              <span className="categoryToolboxLabel">{stat.label}</span>
               <small className="subtle">{stat.note}</small>
+              <strong>{stat.value}</strong>
             </article>
           ))}
         </div>

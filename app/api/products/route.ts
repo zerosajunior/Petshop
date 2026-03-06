@@ -18,7 +18,14 @@ const productSchema = z.object({
 });
 
 export async function GET(request: NextRequest) {
-  const includeArchived = request.nextUrl.searchParams.get("includeArchived") === "1";
+  const status = request.nextUrl.searchParams.get("status") ?? "active";
+  const where =
+    status === "deleted"
+      ? { archivedAt: { not: null } }
+      : status === "all"
+        ? undefined
+        : { archivedAt: null };
+
   const products = await prisma.product.findMany({
     include: {
       images: {
@@ -27,7 +34,7 @@ export async function GET(request: NextRequest) {
         }
       }
     },
-    where: includeArchived ? undefined : { archivedAt: null },
+    where,
     orderBy: { name: "asc" }
   });
 

@@ -25,7 +25,6 @@ type Product = {
   archivedAt?: string | null;
 };
 
-const PAGE_SIZE = 5;
 const CATEGORY_OPTIONS = [
   { label: "Higiene e cuidados", icon: "🧴", hint: "Shampoo, perfumes e limpeza diária" },
   { label: "Escovação e cuidados com o pelo", icon: "🪮", hint: "Escovas, pentes e corte de unha" },
@@ -53,7 +52,6 @@ function ProductPhotoCarousel({ images, name }: { images: ProductImage[]; name: 
         unoptimized
         width={34}
       />
-      {total > 1 ? <small className="subtle">+{total - 1}</small> : null}
     </span>
   );
 }
@@ -210,26 +208,22 @@ export default function EstoquePage() {
 
   const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [showArchived, setShowArchived] = useState(false);
+  const [showDeleted, setShowDeleted] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [page, setPage] = useState(1);
   const [expandedProductId, setExpandedProductId] = useState("");
 
-  const refresh = useCallback(async (includeArchived = showArchived) => {
-    const response = await fetch(`/api/products?includeArchived=${includeArchived ? "1" : "0"}`, {
+  const refresh = useCallback(async (deletedOnly = showDeleted) => {
+    const status = deletedOnly ? "deleted" : "active";
+    const response = await fetch(`/api/products?status=${status}`, {
       cache: "no-store"
     });
     const payload: ApiResponse<Product[]> = await response.json();
     setProducts(payload.data ?? []);
-  }, [showArchived]);
+  }, [showDeleted]);
 
   useEffect(() => {
-    refresh(showArchived).catch(() => undefined);
-  }, [refresh, showArchived]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [searchTerm, showArchived, selectedCategory]);
+    refresh(showDeleted).catch(() => undefined);
+  }, [refresh, showDeleted]);
 
   function resetProductFormAndClose() {
     setName("");
@@ -314,7 +308,7 @@ export default function EstoquePage() {
       setPhotoPreviews([]);
       setPreviewIndex(0);
       setEditingProductId("");
-      await refresh(showArchived);
+      await refresh(showDeleted);
     } catch {
       setError("Falha de conexão ao salvar o produto.");
     } finally {
@@ -373,15 +367,15 @@ export default function EstoquePage() {
     setPreviewIndex(0);
   }
 
-  async function onToggleArchive(product: Product) {
+  async function onToggleDeleted(product: Product) {
     setMessage("");
     setError("");
 
-    const isArchived = Boolean(product.archivedAt);
+    const isDeleted = Boolean(product.archivedAt);
     const response = await fetch(`/api/products/${product.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ archived: !isArchived })
+      body: JSON.stringify({ archived: !isDeleted })
     });
 
     const payload: ApiResponse<unknown> = await response.json();
@@ -390,8 +384,8 @@ export default function EstoquePage() {
       return;
     }
 
-    setMessage(isArchived ? "Produto reativado." : "Produto arquivado.");
-    await refresh(showArchived);
+    setMessage(isDeleted ? "Produto restaurado." : "Produto excluído da lista.");
+    await refresh(showDeleted);
   }
 
   const filteredProducts = useMemo(
@@ -447,11 +441,10 @@ export default function EstoquePage() {
     [products]
   );
 
-  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PAGE_SIZE));
-  const pageSafe = Math.min(page, totalPages);
-  const paginatedProducts = filteredProducts.slice((pageSafe - 1) * PAGE_SIZE, pageSafe * PAGE_SIZE);
   const activeCategoryLabel =
-    selectedCategory === "all"
+    showDeleted
+      ? "Excluídos"
+      : selectedCategory === "all"
       ? "Todas as categorias"
       : selectedCategory === "uncategorized"
         ? "Sem categoria"
@@ -515,10 +508,10 @@ export default function EstoquePage() {
           </button>
           <button
             className="btnSecondary appActionAux"
-            onClick={() => setShowArchived((prev) => !prev)}
+            onClick={() => setShowDeleted((prev) => !prev)}
             type="button"
           >
-            {showArchived ? "Ocultar arquivados" : "Mostrar arquivados"}
+            {showDeleted ? "Mostrar ativos" : "Mostrar excluídos"}
           </button>
           <Link className="btnPrimary appActionMain" href="/movimentacoes-estoque">
             Ir para estoque
@@ -759,62 +752,78 @@ export default function EstoquePage() {
 
           <article className="panel productMainPanel">
             <h3>Produtos · {activeCategoryLabel}</h3>
-            <div className="productCardsGrid">
-              {paginatedProducts.map((product) => {
+            <div className="productCardsGrid productCardsGridScrollable">
+              {filteredProducts.map((product) => {
                 const isLowStock = product.currentStock < product.minStock;
-                const isArchived = Boolean(product.archivedAt);
+                const isDeleted = Boolean(product.archivedAt);
 
                 return (
-                <article
-                  className={`productCard ${isLowStock ? "productCardLow" : ""} ${
-                    isArchived ? "productCardArchived" : ""
-                  }`}
-                  key={product.id}
+                  <article
+                    className={`productCard ${isLowStock ? "productCardLow" : ""} ${
+                      isDeleted ? "productCardDeleted" : ""
+                    }`}
+                    key={product.id}
                     onClick={() =>
                       setExpandedProductId((prev) => (prev === product.id ? "" : product.id))
                     }
-                >
-                  <div className="productCardHead">
-                    <div className="productCardTitleWrap">
-                      <div className="productCardTitle">
-                        <ProductPhotoCarousel images={product.images ?? []} name={product.name} />
-                        <div className="productCardTitleMeta">
-                          <strong>{product.name}</strong>
-                          <div className="productCardTags">
-                            {isLowStock ? <span className="productTag productTagLow">Estoque baixo</span> : null}
-                            {isArchived ? <span className="productTag productTagArchived">Arquivado</span> : null}
+                  >
+                    <div className="productCardHead">
+                      <div className="productCardTitleWrap">
+                        <div className="productCardTitle">
+                          <ProductPhotoCarousel images={product.images ?? []} name={product.name} />
+                          <div className="productCardTitleMeta">
+                            <strong>{product.name}</strong>
+                            <div className="productCardTags">
+                              {isLowStock ? <span className="productTag productTagLow">Estoque baixo</span> : null}
+                              {isDeleted ? <span className="productTag productTagDeleted">Excluído</span> : null}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
                       <div className="productCardActions">
-                        <button
-                          className="agendaQuickActionBtn productActionEdit"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            onEditProduct(product);
-                          }}
-                          type="button"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          className="agendaQuickActionBtn productActionArchive"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            onToggleArchive(product);
-                          }}
-                          type="button"
-                        >
-                          {isArchived ? "Ativar" : "Arquivar"}
-                        </button>
+                        {isDeleted ? (
+                          <button
+                            aria-label="Restaurar produto"
+                            className="agendaQuickActionBtn agendaQuickActionDot productActionRestore tooltipTrigger"
+                            data-tooltip="Restaurar"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              onToggleDeleted(product);
+                            }}
+                            title="Restaurar"
+                            type="button"
+                          />
+                        ) : (
+                          <>
+                            <button
+                              aria-label="Editar produto"
+                              className="agendaQuickActionBtn agendaQuickActionDot productActionEdit tooltipTrigger"
+                              data-tooltip="Editar"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                onEditProduct(product);
+                              }}
+                              title="Editar"
+                              type="button"
+                            />
+                            <button
+                              aria-label="Excluir produto"
+                              className="agendaQuickActionBtn agendaQuickActionDot productActionDelete tooltipTrigger"
+                              data-tooltip="Excluir"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                onToggleDeleted(product);
+                              }}
+                              title="Excluir"
+                              type="button"
+                            />
+                          </>
+                        )}
                       </div>
                     </div>
 
                     <p className="subtle productCardSummary">
-                      Estoque {product.currentStock}/{product.minStock} ·
-                      {" "}
-                      R${" "}
+                      Estoque {product.currentStock}/{product.minStock} · R${" "}
                       {(product.priceCents / 100).toLocaleString("pt-BR", {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2
@@ -833,29 +842,6 @@ export default function EstoquePage() {
 
             {filteredProducts.length === 0 ? <p className="subtle">Nenhum produto encontrado.</p> : null}
 
-            {filteredProducts.length > PAGE_SIZE ? (
-              <div className="formActions" style={{ marginTop: "0.8rem" }}>
-                <button
-                  className="btnSecondary"
-                  disabled={pageSafe <= 1}
-                  onClick={() => setPage((prev) => Math.max(1, prev - 1))}
-                  type="button"
-                >
-                  Página anterior
-                </button>
-                <small className="subtle">
-                  Página {pageSafe} de {totalPages}
-                </small>
-                <button
-                  className="btnSecondary"
-                  disabled={pageSafe >= totalPages}
-                  onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
-                  type="button"
-                >
-                  Próxima página
-                </button>
-              </div>
-            ) : null}
           </article>
         </div>
       </div>
