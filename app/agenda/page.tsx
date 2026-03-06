@@ -103,6 +103,7 @@ export default function AgendaPage() {
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [isSavingAppointment, setIsSavingAppointment] = useState(false);
 
   const [petId, setPetId] = useState("");
   const [serviceId, setServiceId] = useState("");
@@ -124,6 +125,7 @@ export default function AgendaPage() {
   const [serviceMessage, setServiceMessage] = useState("");
   const [serviceError, setServiceError] = useState("");
   const [isSavingService, setIsSavingService] = useState(false);
+  const [autoSelectedServiceId, setAutoSelectedServiceId] = useState("");
   const useCompactCalendarActions = viewMode === "weekly" || viewMode === "monthly";
 
   function resetAppointmentFormAndClose() {
@@ -132,6 +134,7 @@ export default function AgendaPage() {
     setAppointmentDate(toLocalDateInputValue(new Date()));
     setStartTime("");
     setEndTime("");
+    setAutoSelectedServiceId("");
     setNotes("");
     setMessage("");
     setError("");
@@ -190,6 +193,9 @@ export default function AgendaPage() {
     event.preventDefault();
     setMessage("");
     setError("");
+    if (isSavingAppointment) {
+      return;
+    }
 
     if (!serviceId) {
       setError("Selecione um serviço da lista predefinida.");
@@ -200,33 +206,44 @@ export default function AgendaPage() {
       setError("Selecione data, horário de início e horário de fim.");
       return;
     }
-
-    const startsAt = `${appointmentDate}T${startTime}`;
-    const endsAt = `${appointmentDate}T${endTime}`;
-
-    const response = await fetch("/api/appointments", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        petId,
-        serviceId,
-        startsAt: toIso(startsAt),
-        endsAt: toIso(endsAt),
-        notes
-      })
-    });
-
-    const payload: ApiResponse<unknown> = await response.json();
-    if (!response.ok) {
-      setError(payload.error ?? "Não foi possível salvar o agendamento.");
+    if (endTime <= startTime) {
+      setError("O horário de fim deve ser maior que o horário de início.");
       return;
     }
 
-    setMessage("Agendamento criado com sucesso.");
-    setNotes("");
-    setStartTime("");
-    setEndTime("");
-    await refresh();
+    const startsAt = `${appointmentDate}T${startTime}`;
+    const endsAt = `${appointmentDate}T${endTime}`;
+    setIsSavingAppointment(true);
+    try {
+      const response = await fetch("/api/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          petId,
+          serviceId,
+          startsAt: toIso(startsAt),
+          endsAt: toIso(endsAt),
+          notes
+        })
+      });
+
+      const payload: ApiResponse<unknown> = await response.json();
+      if (!response.ok) {
+        setError(payload.error ?? "Não foi possível salvar o agendamento.");
+        return;
+      }
+
+      setMessage("Agendamento criado com sucesso.");
+      setNotes("");
+      setStartTime("");
+      setEndTime("");
+      setAutoSelectedServiceId("");
+      await refresh();
+    } catch {
+      setError("Falha de conexão ao salvar o agendamento.");
+    } finally {
+      setIsSavingAppointment(false);
+    }
   }
 
   async function onCreateService() {
@@ -271,6 +288,7 @@ export default function AgendaPage() {
       await refresh();
       if (createdServiceId) {
         setServiceId(createdServiceId);
+        setAutoSelectedServiceId(createdServiceId);
       }
       setMessage("Serviço criado e selecionado para o agendamento.");
       setError("");
@@ -528,8 +546,18 @@ export default function AgendaPage() {
                 <label htmlFor="serviceId">Serviço (lista predefinida)</label>
                 <select
                   id="serviceId"
-                  onChange={(e) => setServiceId(e.target.value)}
+                  onChange={(e) => {
+                    setServiceId(e.target.value);
+                    if (e.target.value !== autoSelectedServiceId) {
+                      setAutoSelectedServiceId("");
+                    }
+                  }}
                   required
+                  style={
+                    autoSelectedServiceId && autoSelectedServiceId === serviceId
+                      ? { borderColor: "#2a8369", background: "#f1fbf7" }
+                      : undefined
+                  }
                   value={serviceId}
                 >
                   <option value="">Selecione o serviço</option>
@@ -541,6 +569,9 @@ export default function AgendaPage() {
                 </select>
                 {services.length === 0 ? (
                   <small className="subtle">Nenhum serviço disponível. Use o botão Novo serviço.</small>
+                ) : null}
+                {autoSelectedServiceId && autoSelectedServiceId === serviceId ? (
+                  <small style={{ color: "#1f6b55" }}>Serviço novo selecionado automaticamente.</small>
                 ) : null}
               </div>
 
@@ -679,8 +710,8 @@ export default function AgendaPage() {
             </div>
 
             <div className="formActions">
-              <button className="btnPrimary" disabled={!canSchedule} type="submit">
-                Salvar agendamento
+              <button className="btnPrimary" disabled={!canSchedule || isSavingAppointment} type="submit">
+                {isSavingAppointment ? "Salvando..." : "Salvar agendamento"}
               </button>
               <button className="btnSecondary" onClick={resetAppointmentFormAndClose} type="button">
                 Cancelar
