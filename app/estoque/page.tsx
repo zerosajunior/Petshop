@@ -111,6 +111,10 @@ function parseBRLInputToCents(value: string) {
   return Math.round(parsed * 100);
 }
 
+function cleanSeedLabel(value?: string | null) {
+  return (value ?? "").replace(/^\[seed-demo\]\s*/i, "").trim();
+}
+
 function maskBRLInput(rawValue: string) {
   const digitsOnly = rawValue.replace(/\D/g, "");
   const cents = Number(digitsOnly || "0");
@@ -340,7 +344,7 @@ export default function EstoquePage() {
     setName(product.name);
     setSku(product.sku);
     setCategory(product.category ?? "");
-    setDescription(product.description ?? "");
+    setDescription(cleanSeedLabel(product.description));
     setCurrentStock(product.currentStock);
     setMinStock(product.minStock);
     setPriceInput(formatCentsToBRLInput(product.priceCents));
@@ -655,60 +659,62 @@ export default function EstoquePage() {
                 }
               >
                 <div className="productCardHead">
-                  <div className="productCardTitle">
-                    <ProductPhotoCarousel images={product.images ?? []} name={product.name} />
-                    <strong>
-                      {product.name} ({product.sku})
-                    </strong>
+                  <div className="productCardTitleWrap">
+                    <div className="productCardTitle">
+                      <ProductPhotoCarousel images={product.images ?? []} name={product.name} />
+                      <strong>
+                        {product.name} ({product.sku})
+                      </strong>
+                    </div>
+                    <div className="productCardTags">
+                      {isLowStock ? <span className="productTag productTagLow">Estoque baixo</span> : null}
+                      {isArchived ? <span className="productTag productTagArchived">Arquivado</span> : null}
+                    </div>
                   </div>
-                  <div className="productCardTags">
-                    {isLowStock ? <span className="productTag productTagLow">Estoque baixo</span> : null}
-                    {isArchived ? <span className="productTag productTagArchived">Arquivado</span> : null}
+                  <div className="productCardActions">
+                    <button
+                      className="agendaQuickActionBtn productActionEdit"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onEditProduct(product);
+                      }}
+                      type="button"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="agendaQuickActionBtn productActionArchive"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onToggleArchive(product);
+                      }}
+                      type="button"
+                    >
+                      {isArchived ? "Ativar" : "Arquivar"}
+                    </button>
+                    <button
+                      className="agendaQuickActionBtn productActionDelete"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onDeleteProduct(product);
+                      }}
+                      type="button"
+                    >
+                      Excluir
+                    </button>
                   </div>
                 </div>
 
                 <p className="subtle productCardSummary">
-                  {product.description ? `${product.description} · ` : ""}
-                  Estoque {product.currentStock}/{product.minStock} · R${" "}
+                  Estoque {product.currentStock}/{product.minStock} ·
+                  {" "}
+                  R${" "}
                   {(product.priceCents / 100).toLocaleString("pt-BR", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
                   })}{" "}
                   · {product.images?.length ?? 0} foto(s)
                 </p>
-
-                <div className="productCardActions">
-                  <button
-                    className="agendaQuickActionBtn productActionEdit"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      onEditProduct(product);
-                    }}
-                    type="button"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    className="agendaQuickActionBtn productActionArchive"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      onToggleArchive(product);
-                    }}
-                    type="button"
-                  >
-                    {isArchived ? "Ativar" : "Arquivar"}
-                  </button>
-                  <button
-                    className="agendaQuickActionBtn productActionDelete"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      onDeleteProduct(product);
-                    }}
-                    type="button"
-                  >
-                    Excluir
-                  </button>
-                </div>
 
                 {expandedProductId === product.id ? (
                   <div className="productCardExpanded" onClick={(event) => event.stopPropagation()}>

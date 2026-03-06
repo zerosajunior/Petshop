@@ -963,10 +963,16 @@ main {
 
 .productCardHead {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 0.5rem;
   flex-wrap: wrap;
+}
+
+.productCardTitleWrap {
+  min-width: 0;
+  display: grid;
+  gap: 0.28rem;
 }
 
 .productCardTitle {
@@ -974,6 +980,7 @@ main {
   align-items: center;
   gap: 0.45rem;
   min-width: 0;
+  flex-wrap: wrap;
 }
 
 .productCardTitle strong {
@@ -1023,6 +1030,7 @@ main {
   display: flex;
   gap: 0.38rem;
   flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .productCardActions .agendaQuickActionBtn {

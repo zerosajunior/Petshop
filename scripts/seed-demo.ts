@@ -97,7 +97,7 @@ async function main() {
     name: `Produto Demo ${String(i + 1).padStart(2, "0")}`,
     sku: `DEMO-${String(i + 1).padStart(3, "0")}`,
     category: i % 2 === 0 ? "Higiene" : "Alimentação",
-    description: "[seed-demo] produto com múltiplas fotos",
+    description: "produto com múltiplas fotos",
     currentStock: 10 + i * 2,
     minStock: 4 + (i % 3),
     priceCents: 1990 + i * 550
