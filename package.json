@@ -8,8 +8,9 @@
   "scripts": {
     "dev": "./scripts/start-petshop.sh",
     "dev:raw": "NEXT_DISABLE_WEBPACK_CACHE=1 next dev -H 127.0.0.1 -p 3000",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
+    "postinstall": "prisma generate",
     "lint": "next lint",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",

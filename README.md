@@ -27,6 +27,12 @@ npm install
 cp .env.example .env
 ```
 
+Defina usuários de acesso no `.env`:
+
+```bash
+AUTH_USERS_JSON='[{"username":"admin","password":"troque-esta-senha","role":"ADMIN"}]'
+```
+
 3. Gere o client e banco:
 
 ```bash
@@ -59,6 +65,15 @@ npm run dev:raw
 ```
 
 App: `http://localhost:3000`
+
+## Acesso e perfis
+
+- O sistema usa autenticação HTTP Basic global via `middleware.ts`.
+- Perfis disponíveis: `ADMIN`, `ATTENDANT`, `GROOMER`.
+- Regras atuais:
+  - `ADMIN`: acesso total.
+  - `ATTENDANT`: sem acesso a rotas de privacidade (`/api/privacy`, `/privacidade`) e sem `DELETE` nas APIs.
+  - `GROOMER`: foco em agenda (dashboard + agendamentos), sem acesso administrativo.
 
 ## Endpoints iniciais
 
