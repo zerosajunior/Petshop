@@ -1,8 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { ok } from "@/lib/http";
 import { AppointmentStatus, MessageStatus } from "@prisma/client";
+import { getActiveCompanyId } from "@/lib/company-context";
 
 export async function GET() {
+  const companyId = await getActiveCompanyId();
   const now = new Date();
 
   const startOfDay = new Date(now);
@@ -30,6 +32,7 @@ export async function GET() {
   ] = await Promise.all([
     prisma.appointment.count({
       where: {
+        companyId,
         startsAt: {
           gte: startOfDay,
           lte: endOfDay
@@ -38,6 +41,7 @@ export async function GET() {
     }),
     prisma.appointment.findMany({
       where: {
+        companyId,
         startsAt: {
           gte: startOfDay,
           lte: endOfDay
@@ -58,6 +62,7 @@ export async function GET() {
     }),
     prisma.appointment.count({
       where: {
+        companyId,
         startsAt: {
           gte: startOfDay,
           lte: endOfDay
@@ -67,6 +72,7 @@ export async function GET() {
     }),
     prisma.messageLog.count({
       where: {
+        companyId,
         status: MessageStatus.SENT,
         createdAt: {
           gte: last24h
@@ -75,6 +81,7 @@ export async function GET() {
     }),
     prisma.messageLog.findMany({
       where: {
+        companyId,
         status: MessageStatus.SENT,
         createdAt: {
           gte: last24h
@@ -86,6 +93,7 @@ export async function GET() {
       take: 8
     }),
     prisma.product.findMany({
+      where: { companyId },
       select: {
         id: true,
         name: true,
@@ -95,6 +103,7 @@ export async function GET() {
     }),
     prisma.campaign.findMany({
       where: {
+        companyId,
         isActive: true,
         startsAt: { lte: now },
         endsAt: { gte: now }
@@ -104,12 +113,12 @@ export async function GET() {
       },
       take: 8
     }),
-    prisma.customer.count(),
-    prisma.pet.count(),
-    prisma.service.count(),
-    prisma.product.count(),
-    prisma.campaign.count(),
-    prisma.appointment.count()
+    prisma.customer.count({ where: { companyId } }),
+    prisma.pet.count({ where: { companyId } }),
+    prisma.service.count({ where: { companyId } }),
+    prisma.product.count({ where: { companyId } }),
+    prisma.campaign.count({ where: { companyId } }),
+    prisma.appointment.count({ where: { companyId } })
   ]);
 
   const lowStockProductsItems = products.filter(

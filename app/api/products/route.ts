@@ -4,6 +4,7 @@ import { fail, ok } from "@/lib/http";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { registerAudit } from "@/lib/audit";
+import { getActiveCompanyId } from "@/lib/company-context";
 
 const productSchema = z.object({
   name: z.string().trim().min(2),
@@ -18,13 +19,18 @@ const productSchema = z.object({
 });
 
 export async function GET(request: NextRequest) {
+  const companyId = await getActiveCompanyId().catch(() => null);
+  if (!companyId) {
+    return fail("Empresa ativa não configurada.", 503);
+  }
+
   const status = request.nextUrl.searchParams.get("status") ?? "active";
   const where =
     status === "deleted"
-      ? { archivedAt: { not: null } }
+      ? { companyId, archivedAt: { not: null } }
       : status === "all"
-        ? undefined
-        : { archivedAt: null };
+        ? { companyId }
+        : { companyId, archivedAt: null };
 
   const products = await prisma.product.findMany({
     include: {
@@ -42,6 +48,11 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const companyId = await getActiveCompanyId().catch(() => null);
+  if (!companyId) {
+    return fail("Empresa ativa não configurada.", 503);
+  }
+
   const body = await request.json().catch(() => null);
   const parsed = productSchema.safeParse(body);
 
@@ -53,6 +64,7 @@ export async function POST(request: NextRequest) {
     const product = await prisma.product.create({
       data: {
         name: parsed.data.name,
+        companyId,
         sku: parsed.data.sku.toUpperCase(),
         category: parsed.data.category,
         description: parsed.data.description,
@@ -64,7 +76,8 @@ export async function POST(request: NextRequest) {
           ? {
               create: parsed.data.imageDataUrls.map((dataUrl, index) => ({
                 dataUrl,
-                position: index
+                position: index,
+                companyId
               }))
             }
           : undefined
@@ -72,6 +85,7 @@ export async function POST(request: NextRequest) {
     });
 
     await registerAudit({
+      companyId,
       action: "PRODUCT_CREATED",
       entity: "Product",
       entityId: product.id,

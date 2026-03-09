@@ -8,6 +8,23 @@ const HALF_WINDOW_MS = Math.floor((WINDOW_MINUTES * 60 * 1000) / 2);
 
 type ReminderKind = "24h" | "2h";
 
+async function resolveCompanyIds() {
+  const slug = process.env.DEFAULT_COMPANY_SLUG?.trim();
+  if (slug) {
+    const company = await prisma.company.findFirst({
+      where: { slug, status: "ACTIVE" },
+      select: { id: true }
+    });
+    return company ? [company.id] : [];
+  }
+
+  const companies = await prisma.company.findMany({
+    where: { status: "ACTIVE" },
+    select: { id: true }
+  });
+  return companies.map((company) => company.id);
+}
+
 function windowFor(hoursAhead: number, now: Date) {
   const target = now.getTime() + hoursAhead * 60 * 60 * 1000;
   return {
@@ -31,7 +48,7 @@ function buildReminderBody(
   return `Lembrete: o agendamento de ${petName} para ${serviceName} começa em 2h (${when}).`;
 }
 
-async function processReminder(kind: ReminderKind, now: Date) {
+async function processReminder(kind: ReminderKind, now: Date, companyIds: string[]) {
   const hoursAhead = kind === "24h" ? 24 : 2;
   const sentAtField = kind === "24h" ? "reminder24hSentAt" : "reminder2hSentAt";
   const range = windowFor(hoursAhead, now);
@@ -42,6 +59,7 @@ async function processReminder(kind: ReminderKind, now: Date) {
         gte: range.start,
         lte: range.end
       },
+      companyId: { in: companyIds },
       status: {
         in: [AppointmentStatus.SCHEDULED, AppointmentStatus.CONFIRMED]
       },
@@ -80,6 +98,7 @@ async function processReminder(kind: ReminderKind, now: Date) {
 
     await prisma.messageLog.create({
       data: {
+        companyId: appointment.companyId,
         customerId: appointment.pet.customer.id,
         channel,
         toPhone: appointment.pet.customer.phone,
@@ -109,9 +128,14 @@ async function processReminder(kind: ReminderKind, now: Date) {
 }
 
 async function main() {
+  const companyIds = await resolveCompanyIds();
+  if (companyIds.length === 0) {
+    throw new Error("Nenhuma empresa ativa encontrada para processar lembretes.");
+  }
+
   const now = new Date();
-  const result24h = await processReminder("24h", now);
-  const result2h = await processReminder("2h", now);
+  const result24h = await processReminder("24h", now, companyIds);
+  const result2h = await processReminder("2h", now, companyIds);
 
   console.log("Reminder run finished", {
     now: now.toISOString(),

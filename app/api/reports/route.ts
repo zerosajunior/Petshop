@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { ok } from "@/lib/http";
 import { AppointmentStatus, MessageStatus } from "@prisma/client";
+import { getActiveCompanyId } from "@/lib/company-context";
 
 function startOfMonth(date: Date) {
   return new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
@@ -11,6 +12,7 @@ function endOfMonth(date: Date) {
 }
 
 export async function GET() {
+  const companyId = await getActiveCompanyId();
   const now = new Date();
 
   const dayStart = new Date(now);
@@ -27,6 +29,7 @@ export async function GET() {
   const [appointmentsToday, completedMonth, products, sentMessages24h, activeCampaigns] = await Promise.all([
     prisma.appointment.findMany({
       where: {
+        companyId,
         startsAt: { gte: dayStart, lte: dayEnd },
         status: { not: AppointmentStatus.CANCELED }
       },
@@ -40,6 +43,7 @@ export async function GET() {
     }),
     prisma.appointment.findMany({
       where: {
+        companyId,
         startsAt: { gte: monthStart, lte: monthEnd },
         status: AppointmentStatus.COMPLETED
       },
@@ -53,6 +57,7 @@ export async function GET() {
       }
     }),
     prisma.product.findMany({
+      where: { companyId },
       select: {
         currentStock: true,
         priceCents: true
@@ -60,12 +65,14 @@ export async function GET() {
     }),
     prisma.messageLog.count({
       where: {
+        companyId,
         status: MessageStatus.SENT,
         createdAt: { gte: last24h }
       }
     }),
     prisma.campaign.count({
       where: {
+        companyId,
         isActive: true,
         startsAt: { lte: now },
         endsAt: { gte: now }

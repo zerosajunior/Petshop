@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/http";
 import { registerAudit } from "@/lib/audit";
 import { sameConsentCode } from "@/lib/consent";
+import { getActiveCompanyId } from "@/lib/company-context";
 
 const confirmSchema = z.object({
   customerId: z.string().min(1),
@@ -11,6 +12,11 @@ const confirmSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  const companyId = await getActiveCompanyId().catch(() => null);
+  if (!companyId) {
+    return fail("Empresa ativa não configurada.", 503);
+  }
+
   const body = await request.json().catch(() => null);
   const parsed = confirmSchema.safeParse(body);
 
@@ -22,6 +28,7 @@ export async function POST(request: NextRequest) {
 
   await prisma.marketingConsentRequest.updateMany({
     where: {
+      companyId,
       customerId: parsed.data.customerId,
       status: "PENDING",
       expiresAt: { lt: now }
@@ -33,6 +40,7 @@ export async function POST(request: NextRequest) {
 
   const pending = await prisma.marketingConsentRequest.findFirst({
     where: {
+      companyId,
       customerId: parsed.data.customerId,
       status: "PENDING"
     },
@@ -53,6 +61,7 @@ export async function POST(request: NextRequest) {
 
   if (!sameConsentCode(parsed.data.code, pending.codeHash)) {
     await registerAudit({
+      companyId,
       action: "MARKETING_CONSENT_CONFIRM_FAILED",
       entity: "MarketingConsentRequest",
       entityId: pending.id,
@@ -70,8 +79,8 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    await tx.customer.update({
-      where: { id: parsed.data.customerId },
+    await tx.customer.updateMany({
+      where: { id: parsed.data.customerId, companyId },
       data: {
         marketingConsent: true,
         marketingConsentAt: now
@@ -80,6 +89,7 @@ export async function POST(request: NextRequest) {
   });
 
   await registerAudit({
+    companyId,
     action: "CUSTOMER_MARKETING_OPT_IN_CONFIRMED",
     entity: "Customer",
     entityId: parsed.data.customerId,

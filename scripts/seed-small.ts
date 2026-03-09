@@ -10,6 +10,29 @@ import {
 
 const prisma = new PrismaClient();
 
+async function ensureDefaultCompany() {
+  const slug = process.env.DEFAULT_COMPANY_SLUG?.trim() || "default";
+  const existing = await prisma.company.findFirst({
+    where: { slug },
+    select: { id: true }
+  });
+
+  if (existing) {
+    return existing.id;
+  }
+
+  const company = await prisma.company.create({
+    data: {
+      name: "Petshop Base",
+      slug,
+      status: "ACTIVE"
+    },
+    select: { id: true }
+  });
+
+  return company.id;
+}
+
 function atTime(base: Date, hour: number, minute = 0) {
   const date = new Date(base);
   date.setHours(hour, minute, 0, 0);
@@ -32,6 +55,7 @@ async function clearAllData() {
 
 async function main() {
   const now = new Date();
+  const companyId = await ensureDefaultCompany();
   await clearAllData();
 
   const services = await Promise.all(
@@ -39,6 +63,7 @@ async function main() {
       prisma.service.create({
         data: {
           name: `Serviço ${String(i + 1).padStart(2, "0")}`,
+          companyId,
           description: "[seed-small] serviço fictício",
           durationMin: 30 + i * 5,
           priceCents: 4500 + i * 700
@@ -52,6 +77,7 @@ async function main() {
       prisma.customer.create({
         data: {
           name: `Cliente ${String(i + 1).padStart(2, "0")}`,
+          companyId,
           phone: `+55119999${String(1000 + i)}`,
           email: `cliente${i + 1}@ficticio.local`,
           preferredChannel: i % 2 === 0 ? MessageChannel.WHATSAPP : MessageChannel.SMS,
@@ -69,6 +95,7 @@ async function main() {
       prisma.pet.create({
         data: {
           customerId: customer.id,
+          companyId,
           name: `Pet ${String(i + 1).padStart(2, "0")}`,
           type: [PetType.DOG, PetType.CAT, PetType.BIRD, PetType.OTHER][i % 4],
           breed: i % 2 === 0 ? "SRD" : null,
@@ -83,6 +110,7 @@ async function main() {
       prisma.product.create({
         data: {
           name: `Produto ${String(i + 1).padStart(2, "0")}`,
+          companyId,
           sku: `SMALL-${String(i + 1).padStart(3, "0")}`,
           category: i % 2 === 0 ? "Higiene" : "Alimentação",
           description: "[seed-small] produto fictício",
@@ -99,6 +127,7 @@ async function main() {
       prisma.stockMovement.create({
         data: {
           productId: product.id,
+          companyId,
           type: i % 2 === 0 ? MovementType.IN : MovementType.ADJUSTMENT,
           quantity: 1 + (i % 5),
           reason: "[seed-small] movimento fictício"
@@ -115,6 +144,7 @@ async function main() {
       return prisma.appointment.create({
         data: {
           petId: pets[i].id,
+          companyId,
           serviceId: services[i].id,
           startsAt,
           endsAt,
@@ -135,6 +165,7 @@ async function main() {
       prisma.campaign.create({
         data: {
           title: `[seed-small] Campanha ${String(i + 1).padStart(2, "0")}`,
+          companyId,
           content: "Conteúdo fictício para validação da tela.",
           startsAt: new Date(now.getTime() - 24 * 60 * 60 * 1000),
           endsAt: new Date(now.getTime() + (i + 1) * 24 * 60 * 60 * 1000),
@@ -150,6 +181,7 @@ async function main() {
       prisma.messageLog.create({
         data: {
           customerId: customers[i].id,
+          companyId,
           channel: i % 2 === 0 ? MessageChannel.WHATSAPP : MessageChannel.SMS,
           purpose: i % 3 === 0 ? MessagePurpose.MARKETING : MessagePurpose.TRANSACTIONAL,
           toPhone: customers[i].phone,

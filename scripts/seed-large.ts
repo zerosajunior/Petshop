@@ -10,6 +10,29 @@ import {
 
 const prisma = new PrismaClient();
 
+async function ensureDefaultCompany() {
+  const slug = process.env.DEFAULT_COMPANY_SLUG?.trim() || "default";
+  const existing = await prisma.company.findFirst({
+    where: { slug },
+    select: { id: true }
+  });
+
+  if (existing) {
+    return existing.id;
+  }
+
+  const company = await prisma.company.create({
+    data: {
+      name: "Petshop Base",
+      slug,
+      status: "ACTIVE"
+    },
+    select: { id: true }
+  });
+
+  return company.id;
+}
+
 const CUSTOMER_COUNT = 50;
 const PRODUCT_COUNT = 80;
 const CAMPAIGN_COUNT = 20;
@@ -87,6 +110,7 @@ function startsAtFromNow(offsetHours: number) {
 }
 
 async function ensureServices() {
+  const companyId = await ensureDefaultCompany();
   const serviceSeeds = [
     { id: "srv_banho_tosa", name: "Banho e tosa", durationMin: 90, priceCents: 9000 },
     { id: "srv_consulta", name: "Consulta rápida", durationMin: 45, priceCents: 12000 },
@@ -99,6 +123,7 @@ async function ensureServices() {
     await prisma.service.upsert({
       where: { id: service.id },
       update: {
+        companyId,
         name: service.name,
         description: "[seed-load] serviço de teste",
         durationMin: service.durationMin,
@@ -106,6 +131,7 @@ async function ensureServices() {
       },
       create: {
         id: service.id,
+        companyId,
         name: service.name,
         description: "[seed-load] serviço de teste",
         durationMin: service.durationMin,
@@ -115,41 +141,43 @@ async function ensureServices() {
   }
 
   return prisma.service.findMany({
-    where: { description: { contains: "[seed-load]" } }
+    where: { companyId, description: { contains: "[seed-load]" } }
   });
 }
 
 async function cleanupPreviousLoad() {
+  const companyId = await ensureDefaultCompany();
   await prisma.stockMovement.deleteMany({
-    where: { reason: { contains: "[seed-load]" } }
+    where: { companyId, reason: { contains: "[seed-load]" } }
   });
 
   await prisma.messageLog.deleteMany({
-    where: { provider: "mock-load" }
+    where: { companyId, provider: "mock-load" }
   });
 
   await prisma.campaign.deleteMany({
-    where: { title: { startsWith: "[seed-load]" } }
+    where: { companyId, title: { startsWith: "[seed-load]" } }
   });
 
   await prisma.appointment.deleteMany({
-    where: { notes: { contains: "[seed-load]" } }
+    where: { companyId, notes: { contains: "[seed-load]" } }
   });
 
   await prisma.product.deleteMany({
-    where: { description: { contains: "[seed-load]" } }
+    where: { companyId, description: { contains: "[seed-load]" } }
   });
 
   await prisma.pet.deleteMany({
-    where: { notes: { contains: "[seed-load]" } }
+    where: { companyId, notes: { contains: "[seed-load]" } }
   });
 
   await prisma.customer.deleteMany({
-    where: { notes: { contains: "[seed-load]" } }
+    where: { companyId, notes: { contains: "[seed-load]" } }
   });
 }
 
 async function main() {
+  const companyId = await ensureDefaultCompany();
   await cleanupPreviousLoad();
   const services = await ensureServices();
 
@@ -163,6 +191,7 @@ async function main() {
 
     const customer = await prisma.customer.create({
       data: {
+        companyId,
         name: `${fullName} ${i}`,
         phone,
         email,
@@ -184,6 +213,7 @@ async function main() {
       const type = randomPetType();
       const pet = await prisma.pet.create({
         data: {
+          companyId,
           customerId: customer.id,
           name: `${petNameByType(type)} ${randomInt(1, 99)}`,
           type,
@@ -201,6 +231,7 @@ async function main() {
     const minStock = randomInt(4, 18);
     const product = await prisma.product.create({
       data: {
+        companyId,
         name: `Produto Demo ${String(i).padStart(3, "0")}`,
         sku: `LOAD-${String(i).padStart(4, "0")}`,
         category: pickOne(productCategories),
@@ -217,6 +248,7 @@ async function main() {
     for (let j = 0; j < stockEntries; j++) {
       await prisma.stockMovement.create({
         data: {
+          companyId,
           productId: product.id,
           type: pickOne([MovementType.IN, MovementType.OUT, MovementType.ADJUSTMENT]),
           quantity: randomInt(1, 12),
@@ -240,6 +272,7 @@ async function main() {
 
     await prisma.appointment.create({
       data: {
+        companyId,
         petId: pet.id,
         serviceId: service.id,
         startsAt,
@@ -255,6 +288,7 @@ async function main() {
     const endsAt = startsAtFromNow(randomInt(24, 240));
     await prisma.campaign.create({
       data: {
+        companyId,
         title: `[seed-load] Campanha ${String(i).padStart(2, "0")}`,
         content: "Campanha fictícia para testes de listagem e filtro.",
         startsAt,
@@ -272,6 +306,7 @@ async function main() {
 
     await prisma.messageLog.create({
       data: {
+        companyId,
         customerId: customer.id,
         channel: pickOne([MessageChannel.SMS, MessageChannel.WHATSAPP]),
         purpose,

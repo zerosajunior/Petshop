@@ -1,11 +1,11 @@
 :root {
-  --bg: #fdf8ef;
+  --bg: #f2f4f7;
   --text: #2a2a2a;
   --muted: #667175;
-  --card: #fffdf8;
-  --border: #e4dbc9;
-  --brand: #2c8f73;
-  --brand-2: #f2b56b;
+  --card: #f9fbfd;
+  --border: #d7dee7;
+  --brand: #5c87b1;
+  --brand-2: #9ec0e3;
 }
 
 * {
@@ -17,8 +17,8 @@ body {
   margin: 0;
   padding: 0;
   background:
-    radial-gradient(circle at 12% 0%, #fffdf7 0%, transparent 38%),
-    radial-gradient(circle at 88% 0%, #fff5e3 0%, transparent 36%),
+    radial-gradient(circle at 12% 0%, #f8fbff 0%, transparent 38%),
+    radial-gradient(circle at 88% 0%, #edf3fa 0%, transparent 36%),
     var(--bg);
   color: var(--text);
   font-family: "Avenir Next", "Nunito", "Segoe UI", "Trebuchet MS", sans-serif;
@@ -34,6 +34,9 @@ main {
   max-width: 1120px;
   margin: 0 auto;
   padding: 2rem 1rem 4rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .header {
@@ -51,9 +54,32 @@ main {
   padding-bottom: 0.2rem;
 }
 
+.companySwitcher {
+  display: inline-flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.companySwitcher select {
+  border: 1px solid #c7d4e3;
+  background: #f4f8fd;
+  border-radius: 999px;
+  padding: 0.42rem 0.65rem;
+  font-size: 0.85rem;
+}
+
+.companyAdminLink {
+  border: 1px solid #b9c9dc;
+  background: #edf4fc;
+  border-radius: 999px;
+  padding: 0.42rem 0.68rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
 .nav a {
-  border: 1px solid #d7ccb8;
-  background: #fffaf0;
+  border: 1px solid #c7d4e3;
+  background: #f4f8fd;
   padding: 0.5rem 0.6rem;
   border-radius: 999px;
   font-size: 0.88rem;
@@ -65,9 +91,27 @@ main {
   transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
+.ghostButton {
+  border: 1px solid #c7d4e3;
+  background: #f4f8fd;
+  padding: 0.5rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.ghostButton:hover {
+  background: #e8f0fb;
+  border-color: #b8c9dd;
+}
+
 .nav a:hover {
-  background: #fff2dc;
-  border-color: #cdbd9f;
+  background: #e8f0fb;
+  border-color: #b8c9dd;
 }
 
 @media (max-width: 1100px) {
@@ -84,6 +128,12 @@ main {
     font-size: 0.95rem;
     overflow: visible;
     text-overflow: clip;
+    flex: 0 0 auto;
+  }
+
+  .ghostButton {
+    padding: 0.55rem 0.9rem;
+    font-size: 0.95rem;
     flex: 0 0 auto;
   }
 }
@@ -122,7 +172,7 @@ main {
 .menuColumn {
   border: 1px solid var(--border);
   border-radius: 20px;
-  background: #fffdf8;
+  background: #f9fbfd;
   padding: 0.8rem;
   display: grid;
   gap: 0.55rem;
@@ -242,6 +292,52 @@ main {
   box-shadow: 0 10px 20px rgba(120, 104, 70, 0.06);
 }
 
+.adminSystemPanel {
+  background: #f6f9fd;
+  border-color: #cdd9e8;
+  box-shadow: 0 12px 22px rgba(66, 105, 144, 0.08);
+}
+
+.adminSystemSection h3 {
+  margin: 0;
+}
+
+.adminSystemSection .subtle {
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.adminSystemGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+}
+
+.adminSystemPanel .card {
+  background: #fbfdff;
+  border-color: #ced9e8;
+}
+
+.adminSystemPanel .card h3 {
+  margin: 0 0 0.55rem;
+}
+
+.adminSystemPanel .formGrid {
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+}
+
+.adminSystemPanel .formField > span {
+  font-size: 0.84rem;
+  color: #4f6074;
+}
+
+.adminSystemPanel .btnPrimary {
+  border: 1px solid #4f77a1;
+  background: linear-gradient(180deg, #5f89b5 0%, #527da9 100%);
+  box-shadow: 0 6px 14px rgba(79, 119, 161, 0.2);
+}
+
 .formGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -269,7 +365,7 @@ main {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 0.6rem 0.7rem;
-  background: #fffdf8;
+  background: #f9fbfd;
   color: var(--text);
 }
 
@@ -345,9 +441,9 @@ main {
 }
 
 .uploadButton {
-  border: 1px solid #d5cab7;
+  border: 1px solid #c5d3e4;
   border-radius: 10px;
-  background: #fff4df;
+  background: #e9f2fc;
   color: var(--text);
   padding: 0.4rem 0.7rem;
   white-space: nowrap;
@@ -409,7 +505,7 @@ main {
 
 .galleryNavBtn {
   border: 1px solid var(--border);
-  background: #fff8eb;
+  background: #eef4fb;
   color: var(--text);
   border-radius: 6px;
   width: 22px;
@@ -474,7 +570,7 @@ main {
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 0.5rem 0.75rem;
-  background: #fffdf8;
+  background: #f9fbfd;
   box-sizing: border-box;
 }
 
@@ -495,8 +591,8 @@ main {
   width: auto;
   padding: 0 0.85rem;
   font-size: 0.95rem;
-  border-color: #d7ccb8;
-  background: #fff8eb;
+  border-color: #c7d4e3;
+  background: #eef4fb;
   color: var(--text);
 }
 
@@ -542,7 +638,7 @@ main {
 
 .btnSecondary {
   border: 1px solid var(--border);
-  background: #fff8eb;
+  background: #eef4fb;
   color: var(--text);
   border-radius: 12px;
   padding: 0.55rem 0.85rem;
@@ -580,7 +676,7 @@ main {
   width: 100%;
   margin-bottom: 1rem;
   padding-bottom: 0.35rem;
-  border-bottom: 1px solid #efe4d2;
+  border-bottom: 1px solid #dbe4ef;
 }
 
 .agendaCalendarToolbar {
@@ -654,7 +750,7 @@ main {
 }
 
 .agendaCalendarDayMuted {
-  background: #f8f4eb;
+  background: #eef3f9;
   opacity: 0.78;
 }
 
@@ -671,7 +767,7 @@ main {
 .agendaCalendarChip {
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: #f7fbfa;
+  background: #f2f7fd;
   padding: 0.28rem 0.35rem;
   font-size: 0.8rem;
   overflow: hidden;
@@ -712,7 +808,7 @@ main {
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 0.5rem 0.65rem;
-  background: #fffdf8;
+  background: #f9fbfd;
 }
 
 .agendaSearchRowTop {
@@ -727,13 +823,13 @@ main {
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 0.5rem 0.75rem;
-  background: #fffdf8;
+  background: #f9fbfd;
   box-sizing: border-box;
 }
 
 .agendaPanelBtn {
-  border-color: #d7ccb8;
-  background: #fff8eb;
+  border-color: #c7d4e3;
+  background: #eef4fb;
   color: var(--text);
   white-space: nowrap;
 }
@@ -759,7 +855,7 @@ main {
   gap: 0.35rem;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: #fffdf8;
+  background: #f9fbfd;
   padding: 0.18rem 0.24rem;
   font-size: 0.76rem;
   min-height: 22px;
@@ -785,7 +881,7 @@ main {
 }
 
 .agendaStatusBadge {
-  border: 1px solid #d7ccb8;
+  border: 1px solid #c7d4e3;
   border-radius: 999px;
   padding: 0.1rem 0.42rem;
   font-size: 0.72rem;
@@ -799,12 +895,13 @@ main {
   border-radius: 50%;
   display: inline-block;
   flex: 0 0 16px;
-  border: 1px solid #d7ccb8;
+  border: 1px solid #c7d4e3;
 }
 
 .agendaStatusSCHEDULED {
-  background: #fff8eb;
-  color: #7c4b0a;
+  background: #fff8e8;
+  border-color: #f0dfb4;
+  color: #866020;
 }
 
 .agendaStatusCONFIRMED {
@@ -953,7 +1050,7 @@ main {
 }
 
 .productCardsGridScrollable::-webkit-scrollbar-thumb {
-  background: #d8ccb5;
+  background: #c4d2e3;
   border-radius: 999px;
 }
 
@@ -965,8 +1062,8 @@ main {
 }
 
 .categoryToolboxCard {
-  border: 1px solid #d7ccb8;
-  background: #fff8eb;
+  border: 1px solid #c7d4e3;
+  background: #eef4fb;
   color: var(--text);
   border-radius: 14px;
   padding: 0.55rem 0.6rem;
@@ -1047,7 +1144,7 @@ main {
 .productCard {
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: #f7fbfa;
+  background: #f2f7fd;
   padding: 0.45rem 0.6rem;
   display: grid;
   gap: 0.35rem;
@@ -1107,7 +1204,7 @@ main {
 }
 
 .productTag {
-  border: 1px solid #d7ccb8;
+  border: 1px solid #c7d4e3;
   border-radius: 999px;
   padding: 0.12rem 0.45rem;
   font-size: 0.72rem;
@@ -1166,7 +1263,7 @@ main {
 }
 
 .productCardExpanded {
-  border-top: 1px dashed #d7ccb8;
+  border-top: 1px dashed #c7d4e3;
   padding-top: 0.5rem;
 }
 
@@ -1291,9 +1388,11 @@ main {
 }
 
 .appFooter {
-  margin-top: 1.2rem;
+  margin-top: auto;
+  padding-top: 1.2rem;
   color: var(--muted);
   font-size: 0.9rem;
+  text-align: right;
 }
 
 .appFooter a {
@@ -1388,4 +1487,138 @@ main {
   color: var(--muted);
   font-size: 0.95rem;
   white-space: nowrap;
+}
+
+.loginPage {
+  min-height: calc(100vh - 220px);
+  display: grid;
+  grid-template-columns: 1.1fr minmax(320px, 460px);
+  gap: 1.5rem;
+  align-items: stretch;
+  margin-top: 1rem;
+  background: #edf1f5;
+  border: 1px solid #dde4ec;
+  border-radius: 24px;
+  padding: 1rem;
+}
+
+.loginHero {
+  border: 1px solid #cfd9e6;
+  border-radius: 24px;
+  padding: 2rem;
+  background:
+    radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.82), transparent 40%),
+    radial-gradient(circle at 12% 88%, rgba(255, 255, 255, 0.55), transparent 45%),
+    linear-gradient(140deg, #dfeaf7 0%, #d2e3f5 45%, #c8dcf1 100%);
+  color: #1e3248;
+  display: grid;
+  align-content: center;
+  gap: 0.85rem;
+  box-shadow: 0 16px 28px rgba(64, 99, 93, 0.22);
+}
+
+.loginHero h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.05;
+}
+
+.loginHero p {
+  margin: 0;
+  max-width: 42ch;
+  color: rgba(30, 50, 72, 0.9);
+}
+
+.loginBadge {
+  display: inline-flex;
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #2a4b69;
+  background: #eff5fd;
+}
+
+.loginThemes {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.loginThemes span {
+  border: 1px solid rgba(105, 131, 162, 0.3);
+  background: rgba(255, 255, 255, 0.46);
+  padding: 0.4rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.loginCard {
+  border: 1px solid #d4deeb;
+  border-radius: 22px;
+  background: #f9fbfe;
+  padding: 1.4rem 1.2rem;
+  box-shadow: 0 10px 20px rgba(90, 88, 74, 0.08);
+  align-self: center;
+}
+
+.loginCard h2 {
+  margin: 0;
+}
+
+.loginForm {
+  margin-top: 0.8rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.loginForm label {
+  display: grid;
+  gap: 0.3rem;
+  font-weight: 600;
+}
+
+.loginForm input {
+  border: 1px solid #c4d2e3;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 0.58rem 0.65rem;
+  font: inherit;
+}
+
+.loginForm input:-webkit-autofill,
+.loginForm input:-webkit-autofill:hover,
+.loginForm input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #1f2b3a;
+  box-shadow: 0 0 0 1000px #f8fbff inset;
+  -webkit-box-shadow: 0 0 0 1000px #f8fbff inset;
+  border: 1px solid #c4d2e3;
+}
+
+.loginForm button {
+  margin-top: 0.1rem;
+  border: 1px solid #4a759e;
+  background: #5c87b1;
+  color: #f5f9ff;
+  border-radius: 10px;
+  padding: 0.58rem 0.7rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.loginForm button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+@media (max-width: 900px) {
+  .loginPage {
+    grid-template-columns: 1fr;
+  }
 }

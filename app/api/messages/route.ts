@@ -5,6 +5,7 @@ import { sendMessage } from "@/lib/sms";
 import { MessageChannel, MessagePurpose, MessageStatus } from "@prisma/client";
 import { z } from "zod";
 import { registerAudit } from "@/lib/audit";
+import { CompanyContextError, getActiveCompanyId } from "@/lib/company-context";
 
 const messageSchema = z.object({
   channel: z.enum(["SMS", "WHATSAPP"]).optional(),
@@ -15,15 +16,29 @@ const messageSchema = z.object({
 });
 
 export async function GET() {
-  const messages = await prisma.messageLog.findMany({
-    orderBy: { createdAt: "desc" },
-    take: 50
-  });
+  try {
+    const companyId = await getActiveCompanyId();
+    const messages = await prisma.messageLog.findMany({
+      where: { companyId },
+      orderBy: { createdAt: "desc" },
+      take: 50
+    });
 
-  return ok(messages);
+    return ok(messages);
+  } catch (error) {
+    if (error instanceof CompanyContextError) {
+      return fail(error.message, 503);
+    }
+    return fail("Falha ao carregar mensagens.", 500);
+  }
 }
 
 export async function POST(request: NextRequest) {
+  const companyId = await getActiveCompanyId().catch(() => null);
+  if (!companyId) {
+    return fail("Empresa ativa não configurada.", 503);
+  }
+
   const body = await request.json().catch(() => null);
   const parsed = messageSchema.safeParse(body);
 
@@ -39,8 +54,8 @@ export async function POST(request: NextRequest) {
       return fail("Para mensagens de marketing, informe o cliente.", 400);
     }
 
-    const customer = await prisma.customer.findUnique({
-      where: { id: parsed.data.customerId },
+    const customer = await prisma.customer.findFirst({
+      where: { id: parsed.data.customerId, companyId },
       select: { id: true, phone: true, marketingConsent: true }
     });
 
@@ -50,6 +65,7 @@ export async function POST(request: NextRequest) {
 
     if (!customer.marketingConsent) {
       await registerAudit({
+        companyId,
         action: "MARKETING_MESSAGE_BLOCKED_NO_CONSENT",
         entity: "Customer",
         entityId: customer.id,
@@ -68,6 +84,7 @@ export async function POST(request: NextRequest) {
   const log = await prisma.messageLog.create({
     data: {
       customerId: parsed.data.customerId,
+      companyId,
       channel,
       purpose,
       toPhone: parsed.data.toPhone,
@@ -84,6 +101,7 @@ export async function POST(request: NextRequest) {
   }
 
   await registerAudit({
+    companyId,
     action:
       purpose === MessagePurpose.MARKETING ? "MARKETING_MESSAGE_SENT" : "TRANSACTIONAL_MESSAGE_SENT",
     entity: "MessageLog",

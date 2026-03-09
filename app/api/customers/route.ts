@@ -4,6 +4,7 @@ import { fail, ok } from "@/lib/http";
 import { MessageChannel } from "@prisma/client";
 import { z } from "zod";
 import { registerAudit } from "@/lib/audit";
+import { CompanyContextError, getActiveCompanyId } from "@/lib/company-context";
 
 const customerSchema = z.object({
   name: z.string().min(2),
@@ -14,15 +15,29 @@ const customerSchema = z.object({
 });
 
 export async function GET() {
-  const customers = await prisma.customer.findMany({
-    include: { pets: true },
-    orderBy: { createdAt: "desc" }
-  });
+  try {
+    const companyId = await getActiveCompanyId();
+    const customers = await prisma.customer.findMany({
+      where: { companyId },
+      include: { pets: true },
+      orderBy: { createdAt: "desc" }
+    });
 
-  return ok(customers);
+    return ok(customers);
+  } catch (error) {
+    if (error instanceof CompanyContextError) {
+      return fail(error.message, 503);
+    }
+    return fail("Falha ao carregar clientes.", 500);
+  }
 }
 
 export async function POST(request: NextRequest) {
+  const companyId = await getActiveCompanyId().catch(() => null);
+  if (!companyId) {
+    return fail("Empresa ativa não configurada.", 503);
+  }
+
   const body = await request.json().catch(() => null);
   const parsed = customerSchema.safeParse(body);
 
@@ -32,6 +47,7 @@ export async function POST(request: NextRequest) {
 
   const customer = await prisma.customer.create({
     data: {
+      companyId,
       name: parsed.data.name,
       phone: parsed.data.phone,
       email: parsed.data.email,
@@ -44,6 +60,7 @@ export async function POST(request: NextRequest) {
   });
 
   await registerAudit({
+    companyId,
     action: "CUSTOMER_CREATED",
     entity: "Customer",
     entityId: customer.id,

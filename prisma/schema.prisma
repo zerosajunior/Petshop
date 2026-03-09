@@ -50,17 +50,126 @@ enum ConsentRequestStatus {
   CANCELED
 }
 
+enum CompanyStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+}
+
+enum MembershipRole {
+  ADMIN
+  ATTENDANT
+  PROFESSIONAL
+}
+
+enum MembershipStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum SubscriptionStatus {
+  TRIAL
+  ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+model Plan {
+  id                   String      @id @default(cuid())
+  name                 String      @unique
+  priceCents           Int
+  maxUsers             Int?
+  maxAppointmentsMonth Int?
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  companies            Company[]
+  subscriptions        Subscription[]
+}
+
+model Company {
+  id                String                    @id @default(cuid())
+  name              String
+  slug              String                    @unique
+  status            CompanyStatus             @default(ACTIVE)
+  planId            String?
+  plan              Plan?                     @relation(fields: [planId], references: [id], onDelete: SetNull)
+  createdAt         DateTime                  @default(now())
+  updatedAt         DateTime                  @updatedAt
+  settings          CompanySettings?
+  subscriptions     Subscription[]
+  memberships       Membership[]
+  customers         Customer[]
+  pets              Pet[]
+  services          Service[]
+  appointments      Appointment[]
+  products          Product[]
+  productImages     ProductImage[]
+  stockMovements    StockMovement[]
+  campaigns         Campaign[]
+  messages          MessageLog[]
+  auditLogs         AuditLog[]
+  consentRequests   MarketingConsentRequest[]
+}
+
 model User {
   id        String   @id @default(cuid())
   name      String
   email     String   @unique
+  passwordHash String?
+  isSystemAdmin Boolean @default(false)
   role      String   @default("ADMIN")
+  status    MembershipStatus @default(ACTIVE)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  memberships Membership[]
+  auditLogs  AuditLog[]
+}
+
+model Membership {
+  id        String            @id @default(cuid())
+  userId    String
+  companyId String
+  role      MembershipRole
+  status    MembershipStatus  @default(ACTIVE)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company   Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, companyId])
+  @@index([companyId, role, status])
+}
+
+model Subscription {
+  id          String             @id @default(cuid())
+  companyId   String
+  planId      String
+  status      SubscriptionStatus @default(TRIAL)
+  startsAt    DateTime           @default(now())
+  endsAt      DateTime?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  company     Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  plan        Plan               @relation(fields: [planId], references: [id], onDelete: Restrict)
+
+  @@index([companyId, status])
+}
+
+model CompanySettings {
+  id            String   @id @default(cuid())
+  companyId     String   @unique
+  timezone      String   @default("America/Sao_Paulo")
+  workingHours  String?
+  branding      String?
+  notifications String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
 }
 
 model Customer {
   id        String   @id @default(cuid())
+  companyId String
   name      String
   phone     String
   email     String?
@@ -69,15 +178,19 @@ model Customer {
   marketingConsentAt       DateTime?
   privacyPolicyAcceptedAt  DateTime?
   preferredChannel MessageChannel @default(SMS)
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
   pets      Pet[]
   messages  MessageLog[]
   consentRequests MarketingConsentRequest[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([companyId, createdAt])
 }
 
 model Pet {
   id          String        @id @default(cuid())
+  companyId   String
   name        String
   type        PetType
   breed       String?
@@ -85,29 +198,38 @@ model Pet {
   weightKg    Float?
   notes       String?
   customerId  String
+  company     Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
   customer    Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
   appointments Appointment[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+
+  @@index([companyId, customerId])
 }
 
 model Service {
   id           String         @id @default(cuid())
+  companyId    String
   name         String
   description  String?
   priceCents   Int
   durationMin  Int
+  company      Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
   appointments Appointment[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+
+  @@index([companyId, name])
 }
 
 model Appointment {
   id           String             @id @default(cuid())
+  companyId     String
   petId         String
   pet           Pet               @relation(fields: [petId], references: [id], onDelete: Cascade)
   serviceId     String
   service       Service           @relation(fields: [serviceId], references: [id])
+  company       Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
   startsAt      DateTime
   endsAt        DateTime
   status        AppointmentStatus @default(SCHEDULED)
@@ -117,16 +239,20 @@ model Appointment {
   reminder2hSentAt  DateTime?
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @updatedAt
+
+  @@index([companyId, startsAt])
 }
 
 model Product {
   id              String          @id @default(cuid())
+  companyId       String
   name            String
-  sku             String          @unique
+  sku             String
   category        String?
   description     String?
   archivedAt      DateTime?
   imageDataUrl    String?
+  company         Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
   images          ProductImage[]
   currentStock    Int             @default(0)
   minStock        Int             @default(0)
@@ -134,42 +260,59 @@ model Product {
   stockMovements  StockMovement[]
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
+
+  @@unique([companyId, sku])
+  @@index([companyId, name])
 }
 
 model ProductImage {
   id         String   @id @default(cuid())
+  companyId  String
   productId  String
+  company    Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
   product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   dataUrl    String
   position   Int
   createdAt  DateTime @default(now())
+
+  @@index([companyId, productId])
 }
 
 model StockMovement {
   id          String       @id @default(cuid())
+  companyId   String
   productId   String
+  company     Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
   product     Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
   type        MovementType
   quantity    Int
   reason      String?
   createdAt   DateTime     @default(now())
+
+  @@index([companyId, createdAt])
 }
 
 model Campaign {
   id             String   @id @default(cuid())
+  companyId      String
   title          String
   content        String
   startsAt       DateTime
   endsAt         DateTime
   isActive       Boolean  @default(true)
   segmentPetType PetType?
+  company        Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+
+  @@index([companyId, startsAt])
 }
 
 model MessageLog {
   id            String        @id @default(cuid())
+  companyId     String
   customerId    String?
+  company       Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
   customer      Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
   channel       MessageChannel @default(SMS)
   purpose       MessagePurpose @default(TRANSACTIONAL)
@@ -180,24 +323,33 @@ model MessageLog {
   status        MessageStatus @default(PENDING)
   errorMessage  String?
   createdAt     DateTime      @default(now())
+
+  @@index([companyId, createdAt])
 }
 
 model AuditLog {
   id          String   @id @default(cuid())
+  companyId   String?
+  userId      String?
   action      String
   entity      String
   entityId    String?
   details     String?
   actor       String   @default("system")
+  company     Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   createdAt   DateTime @default(now())
 
+  @@index([companyId, createdAt])
   @@index([entity, entityId])
   @@index([createdAt])
 }
 
 model MarketingConsentRequest {
   id          String               @id @default(cuid())
+  companyId   String
   customerId  String
+  company     Company              @relation(fields: [companyId], references: [id], onDelete: Cascade)
   customer    Customer             @relation(fields: [customerId], references: [id], onDelete: Cascade)
   channel     MessageChannel       @default(WHATSAPP)
   status      ConsentRequestStatus @default(PENDING)
@@ -206,6 +358,7 @@ model MarketingConsentRequest {
   confirmedAt DateTime?
   createdAt   DateTime             @default(now())
 
+  @@index([companyId, customerId, status])
   @@index([customerId, status])
   @@index([expiresAt])
 }

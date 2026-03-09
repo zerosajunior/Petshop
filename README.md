@@ -27,10 +27,13 @@ npm install
 cp .env.example .env
 ```
 
-Defina usuários de acesso no `.env`:
+Defina autenticação no `.env`:
 
 ```bash
-AUTH_USERS_JSON='[{"username":"admin","password":"troque-esta-senha","role":"ADMIN"}]'
+DEFAULT_COMPANY_SLUG="default"
+AUTH_SESSION_SECRET="troque-esta-chave-com-32-caracteres-ou-mais"
+SYSTEM_ADMIN_EMAIL="admin@petshop.local"
+SYSTEM_ADMIN_PASSWORD="troque-esta-senha"
 ```
 
 3. Gere o client e banco:
@@ -46,13 +49,19 @@ npx prisma db push
 npm run prisma:seed
 ```
 
-5. (Opcional) Processar lembretes automáticos (24h e 2h):
+5. Inicializar usuários de acesso no banco:
+
+```bash
+npm run auth:bootstrap
+```
+
+6. (Opcional) Processar lembretes automáticos (24h e 2h):
 
 ```bash
 npm run reminders:run
 ```
 
-6. Suba o app (modo resiliente padrão):
+7. Suba o app (modo resiliente padrão):
 
 ```bash
 npm run dev
@@ -68,12 +77,12 @@ App: `http://localhost:3000`
 
 ## Acesso e perfis
 
-- O sistema usa autenticação HTTP Basic global via `middleware.ts`.
-- Perfis disponíveis: `ADMIN`, `ATTENDANT`, `GROOMER`.
+- O sistema usa autenticação por sessão (cookie HTTP-only) via `/login`.
+- Perfis disponíveis: `ADMIN`, `ATTENDANT`, `PROFESSIONAL`.
 - Regras atuais:
   - `ADMIN`: acesso total.
   - `ATTENDANT`: sem acesso a rotas de privacidade (`/api/privacy`, `/privacidade`) e sem `DELETE` nas APIs.
-  - `GROOMER`: foco em agenda (dashboard + agendamentos), sem acesso administrativo.
+  - `PROFESSIONAL`: foco em agenda (dashboard + agendamentos), sem acesso administrativo.
 
 ## Endpoints iniciais
 

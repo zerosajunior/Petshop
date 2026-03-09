@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/http";
 import { registerAudit } from "@/lib/audit";
+import { getActiveCompanyId } from "@/lib/company-context";
 
 const updateProductSchema = z.object({
   name: z.string().trim().min(2).optional(),
@@ -21,6 +22,11 @@ export async function PATCH(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
+  const companyId = await getActiveCompanyId().catch(() => null);
+  if (!companyId) {
+    return fail("Empresa ativa não configurada.", 503);
+  }
+
   const body = await request.json().catch(() => null);
   const parsed = updateProductSchema.safeParse(body);
 
@@ -31,8 +37,8 @@ export async function PATCH(
   const params = await context.params;
   const productId = params.id;
 
-  const current = await prisma.product.findUnique({
-    where: { id: productId },
+  const current = await prisma.product.findFirst({
+    where: { id: productId, companyId },
     select: { id: true, name: true, sku: true }
   });
 
@@ -60,19 +66,20 @@ export async function PATCH(
 
       if (data.imageDataUrls) {
         await tx.productImage.deleteMany({
-          where: { productId }
+          where: { productId, companyId }
         });
         await tx.productImage.createMany({
           data: data.imageDataUrls.map((dataUrl, index) => ({
             productId,
+            companyId,
             dataUrl,
             position: index
           }))
         });
       }
 
-      return tx.product.findUnique({
-        where: { id: product.id },
+      return tx.product.findFirst({
+        where: { id: product.id, companyId },
         include: {
           images: {
             orderBy: { position: "asc" }
@@ -86,6 +93,7 @@ export async function PATCH(
     }
 
     await registerAudit({
+      companyId,
       action: "PRODUCT_UPDATED",
       entity: "Product",
       entityId: productId,
@@ -109,11 +117,16 @@ export async function DELETE(
   _request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
+  const companyId = await getActiveCompanyId().catch(() => null);
+  if (!companyId) {
+    return fail("Empresa ativa não configurada.", 503);
+  }
+
   const params = await context.params;
   const productId = params.id;
 
-  const current = await prisma.product.findUnique({
-    where: { id: productId },
+  const current = await prisma.product.findFirst({
+    where: { id: productId, companyId },
     select: { id: true, name: true, sku: true }
   });
 
@@ -121,11 +134,12 @@ export async function DELETE(
     return fail("Produto não encontrado.", 404);
   }
 
-  await prisma.product.delete({
-    where: { id: productId }
+  await prisma.product.deleteMany({
+    where: { id: productId, companyId }
   });
 
   await registerAudit({
+    companyId,
     action: "PRODUCT_DELETED",
     entity: "Product",
     entityId: productId,

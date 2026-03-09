@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/http";
 import { registerAudit } from "@/lib/audit";
+import { getActiveCompanyId } from "@/lib/company-context";
 
 function maskPhone(phone: string) {
   const digits = phone.replace(/\D/g, "");
@@ -16,11 +17,16 @@ export async function GET(
   _request: Request,
   context: { params: Promise<{ id: string }> }
 ) {
+  const companyId = await getActiveCompanyId().catch(() => null);
+  if (!companyId) {
+    return fail("Empresa ativa não configurada.", 503);
+  }
+
   const params = await context.params;
   const customerId = params.id;
 
-  const customer = await prisma.customer.findUnique({
-    where: { id: customerId },
+  const customer = await prisma.customer.findFirst({
+    where: { id: customerId, companyId },
     include: {
       pets: {
         include: {
@@ -41,6 +47,7 @@ export async function GET(
   }
 
   await registerAudit({
+    companyId,
     action: "DATA_SUBJECT_EXPORT",
     entity: "Customer",
     entityId: customerId,
@@ -54,11 +61,16 @@ export async function DELETE(
   _request: Request,
   context: { params: Promise<{ id: string }> }
 ) {
+  const companyId = await getActiveCompanyId().catch(() => null);
+  if (!companyId) {
+    return fail("Empresa ativa não configurada.", 503);
+  }
+
   const params = await context.params;
   const customerId = params.id;
 
-  const customer = await prisma.customer.findUnique({
-    where: { id: customerId },
+  const customer = await prisma.customer.findFirst({
+    where: { id: customerId, companyId },
     include: {
       pets: { select: { id: true } }
     }
@@ -99,7 +111,7 @@ export async function DELETE(
     }
 
     await tx.messageLog.updateMany({
-      where: { customerId },
+      where: { customerId, companyId },
       data: {
         customerId: null,
         toPhone: anonymizedPhone
@@ -108,6 +120,7 @@ export async function DELETE(
   });
 
   await registerAudit({
+    companyId,
     action: "DATA_SUBJECT_ANONYMIZED",
     entity: "Customer",
     entityId: customerId,

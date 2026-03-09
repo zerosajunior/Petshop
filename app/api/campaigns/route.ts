@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/http";
 import { PetType } from "@prisma/client";
 import { z } from "zod";
+import { CompanyContextError, getActiveCompanyId } from "@/lib/company-context";
 
 const campaignSchema = z.object({
   title: z.string().min(3),
@@ -14,14 +15,28 @@ const campaignSchema = z.object({
 });
 
 export async function GET() {
-  const campaigns = await prisma.campaign.findMany({
-    orderBy: { startsAt: "desc" }
-  });
+  try {
+    const companyId = await getActiveCompanyId();
+    const campaigns = await prisma.campaign.findMany({
+      where: { companyId },
+      orderBy: { startsAt: "desc" }
+    });
 
-  return ok(campaigns);
+    return ok(campaigns);
+  } catch (error) {
+    if (error instanceof CompanyContextError) {
+      return fail(error.message, 503);
+    }
+    return fail("Falha ao carregar campanhas.", 500);
+  }
 }
 
 export async function POST(request: NextRequest) {
+  const companyId = await getActiveCompanyId().catch(() => null);
+  if (!companyId) {
+    return fail("Empresa ativa não configurada.", 503);
+  }
+
   const body = await request.json().catch(() => null);
   const parsed = campaignSchema.safeParse(body);
 
@@ -31,6 +46,7 @@ export async function POST(request: NextRequest) {
 
   const campaign = await prisma.campaign.create({
     data: {
+      companyId,
       ...parsed.data,
       startsAt: new Date(parsed.data.startsAt),
       endsAt: new Date(parsed.data.endsAt)

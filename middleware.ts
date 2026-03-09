@@ -1,24 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-
-type Role = "ADMIN" | "ATTENDANT" | "GROOMER";
-
-type AuthUser = {
-  username: string;
-  password: string;
-  role: Role;
-};
-
-const REALM = "Petshop";
-
-function unauthorized() {
-  return new NextResponse("Autenticação obrigatória.", {
-    status: 401,
-    headers: {
-      "WWW-Authenticate": `Basic realm="${REALM}", charset="UTF-8"`
-    }
-  });
-}
+import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth-session";
+import type { AuthRole } from "@/lib/auth-users";
 
 function forbidden(isApi: boolean) {
   if (isApi) {
@@ -31,71 +14,16 @@ function forbidden(isApi: boolean) {
   return new NextResponse("Acesso negado.", { status: 403 });
 }
 
-function parseUsers(raw: string | undefined): AuthUser[] {
-  if (!raw) {
-    return [];
+function hasPermission(
+  role: AuthRole,
+  pathname: string,
+  method: string,
+  isSystemAdmin: boolean | undefined
+) {
+  if (pathname.startsWith("/admin/sistema") || pathname.startsWith("/api/system/")) {
+    return Boolean(isSystemAdmin);
   }
 
-  try {
-    const parsed = JSON.parse(raw) as unknown;
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
-
-    return parsed
-      .map((item) => {
-        if (!item || typeof item !== "object") {
-          return null;
-        }
-
-        const username = String((item as Record<string, unknown>).username ?? "").trim();
-        const password = String((item as Record<string, unknown>).password ?? "");
-        const role = String((item as Record<string, unknown>).role ?? "").trim().toUpperCase();
-
-        if (!username || !password) {
-          return null;
-        }
-
-        if (role !== "ADMIN" && role !== "ATTENDANT" && role !== "GROOMER") {
-          return null;
-        }
-
-        return { username, password, role: role as Role };
-      })
-      .filter((item): item is AuthUser => Boolean(item));
-  } catch {
-    return [];
-  }
-}
-
-function extractBasicCredentials(request: NextRequest) {
-  const header = request.headers.get("authorization");
-  if (!header || !header.startsWith("Basic ")) {
-    return null;
-  }
-
-  const encoded = header.slice(6).trim();
-  if (!encoded) {
-    return null;
-  }
-
-  try {
-    const decoded = atob(encoded);
-    const separator = decoded.indexOf(":");
-    if (separator === -1) {
-      return null;
-    }
-
-    return {
-      username: decoded.slice(0, separator),
-      password: decoded.slice(separator + 1)
-    };
-  } catch {
-    return null;
-  }
-}
-
-function hasPermission(role: Role, pathname: string, method: string) {
   if (role === "ADMIN") {
     return true;
   }
@@ -108,7 +36,7 @@ function hasPermission(role: Role, pathname: string, method: string) {
     return false;
   }
 
-  if (role === "GROOMER") {
+  if (role === "PROFESSIONAL") {
     if (pathname.startsWith("/api/appointments")) {
       return method === "GET" || method === "PATCH";
     }
@@ -122,37 +50,48 @@ function hasPermission(role: Role, pathname: string, method: string) {
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isApi = pathname.startsWith("/api");
+  const isLoginPage = pathname === "/login";
+  const isAuthApi = pathname.startsWith("/api/auth/");
 
-  const users = parseUsers(process.env.AUTH_USERS_JSON);
-  if (users.length === 0) {
-    return new NextResponse(
-      "Configuração de autenticação ausente. Defina AUTH_USERS_JSON no ambiente.",
-      { status: 503 }
-    );
+  if (isLoginPage || isAuthApi) {
+    return NextResponse.next();
   }
 
-  const credentials = extractBasicCredentials(request);
-  if (!credentials) {
-    return unauthorized();
+  const token = request.cookies.get(AUTH_COOKIE_NAME)?.value;
+  if (!token) {
+    if (isApi) {
+      return NextResponse.json({ error: "Autenticação obrigatória." }, { status: 401 });
+    }
+    const loginUrl = new URL("/login", request.url);
+    return NextResponse.redirect(loginUrl);
   }
 
-  const user = users.find(
-    (item) =>
-      item.username === credentials.username && item.password === credentials.password
-  );
+  return verifySessionToken(token).then((session) => {
+    if (!session) {
+      if (isApi) {
+        return NextResponse.json({ error: "Sessão inválida ou expirada." }, { status: 401 });
+      }
+      const loginUrl = new URL("/login", request.url);
+      return NextResponse.redirect(loginUrl);
+    }
 
-  if (!user) {
-    return unauthorized();
-  }
+    if (!hasPermission(session.role, pathname, request.method, session.isSystemAdmin)) {
+      return forbidden(isApi);
+    }
 
-  if (!hasPermission(user.role, pathname, request.method)) {
-    return forbidden(isApi);
-  }
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-auth-user", session.username);
+    requestHeaders.set("x-auth-role", session.role);
+    requestHeaders.set("x-company-id", session.companyId);
+    requestHeaders.set("x-company-slug", session.companySlug);
+    requestHeaders.set("x-is-system-admin", session.isSystemAdmin ? "1" : "0");
 
-  const response = NextResponse.next();
-  response.headers.set("x-auth-user", user.username);
-  response.headers.set("x-auth-role", user.role);
-  return response;
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders
+      }
+    });
+  });
 }
 
 export const config = {

@@ -10,6 +10,29 @@ import {
 
 const prisma = new PrismaClient();
 
+async function ensureDefaultCompany() {
+  const slug = process.env.DEFAULT_COMPANY_SLUG?.trim() || "default";
+  const existing = await prisma.company.findFirst({
+    where: { slug },
+    select: { id: true }
+  });
+
+  if (existing) {
+    return existing.id;
+  }
+
+  const company = await prisma.company.create({
+    data: {
+      name: "Petshop Base",
+      slug,
+      status: "ACTIVE"
+    },
+    select: { id: true }
+  });
+
+  return company.id;
+}
+
 function atTime(base: Date, hour: number, minute = 0) {
   const date = new Date(base);
   date.setHours(hour, minute, 0, 0);
@@ -42,6 +65,7 @@ async function clearData() {
 }
 
 async function main() {
+  const companyId = await ensureDefaultCompany();
   await clearData();
   const now = new Date();
 
@@ -55,6 +79,7 @@ async function main() {
     ].map((service) =>
       prisma.service.create({
         data: {
+          companyId,
           ...service,
           description: "[seed-demo] serviço fictício"
         }
@@ -66,6 +91,7 @@ async function main() {
     Array.from({ length: 10 }, (_, i) =>
       prisma.customer.create({
         data: {
+          companyId,
           name: `Cliente Demo ${String(i + 1).padStart(2, "0")}`,
           phone: `+55119888${String(1000 + i)}`,
           email: `demo${i + 1}@petshop.local`,
@@ -83,6 +109,7 @@ async function main() {
     customers.map((customer, i) =>
       prisma.pet.create({
         data: {
+          companyId,
           customerId: customer.id,
           name: `Pet Demo ${String(i + 1).padStart(2, "0")}`,
           type: [PetType.DOG, PetType.CAT, PetType.BIRD, PetType.OTHER][i % 4],
@@ -108,6 +135,7 @@ async function main() {
     const base = productSeed[i];
     const product = await prisma.product.create({
       data: {
+        companyId,
         ...base,
         imageDataUrl: svgDataUrl(`Produto ${i + 1} A`, "#4f7f7a")
       }
@@ -117,16 +145,19 @@ async function main() {
       data: [
         {
           productId: product.id,
+          companyId,
           dataUrl: svgDataUrl(`Produto ${i + 1} A`, "#4f7f7a"),
           position: 0
         },
         {
           productId: product.id,
+          companyId,
           dataUrl: svgDataUrl(`Produto ${i + 1} B`, "#7a6f4f"),
           position: 1
         },
         {
           productId: product.id,
+          companyId,
           dataUrl: svgDataUrl(`Produto ${i + 1} C`, "#4f5f7f"),
           position: 2
         }
@@ -137,12 +168,14 @@ async function main() {
       data: [
         {
           productId: product.id,
+          companyId,
           type: MovementType.IN,
           quantity: 8 + i,
           reason: "[seed-demo] entrada inicial"
         },
         {
           productId: product.id,
+          companyId,
           type: MovementType.ADJUSTMENT,
           quantity: i % 2 === 0 ? 1 : -1,
           reason: "[seed-demo] ajuste inventário"
@@ -173,6 +206,7 @@ async function main() {
             : AppointmentStatus.SCHEDULED;
 
       appointmentData.push({
+        companyId,
         petId: pet.id,
         serviceId: service.id,
         startsAt,
@@ -187,6 +221,7 @@ async function main() {
 
   await prisma.campaign.createMany({
     data: Array.from({ length: 6 }, (_, i) => ({
+      companyId,
       title: `[seed-demo] Campanha ${i + 1}`,
       content: "Promoção fictícia para testes.",
       startsAt: dateOffset(now, -2),
@@ -198,6 +233,7 @@ async function main() {
 
   await prisma.messageLog.createMany({
     data: Array.from({ length: 10 }, (_, i) => ({
+      companyId,
       customerId: customers[i].id,
       channel: i % 2 === 0 ? MessageChannel.WHATSAPP : MessageChannel.SMS,
       purpose: i % 3 === 0 ? MessagePurpose.MARKETING : MessagePurpose.TRANSACTIONAL,
@@ -213,7 +249,7 @@ async function main() {
   const todayStart = atTime(now, 0, 0);
   const todayEnd = atTime(now, 23, 59);
   const appointmentsToday = await prisma.appointment.count({
-    where: { startsAt: { gte: todayStart, lte: todayEnd } }
+    where: { companyId, startsAt: { gte: todayStart, lte: todayEnd } }
   });
 
   console.log("Seed demo concluído", {

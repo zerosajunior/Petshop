@@ -20,7 +20,9 @@
     "prisma:seed:large": "node --import tsx scripts/seed-large.ts",
     "reminders:run": "tsx scripts/run-reminders.ts",
     "lgpd:retention": "tsx scripts/lgpd-retention.ts",
-    "dev:safe": "./scripts/start-petshop.sh"
+    "dev:safe": "./scripts/start-petshop.sh",
+    "export:code:txt": "./scripts/export-code-txt.sh",
+    "auth:bootstrap": "node --import tsx scripts/bootstrap-auth.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.3.1",

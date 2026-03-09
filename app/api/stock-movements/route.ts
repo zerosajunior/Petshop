@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/http";
 import { MovementType } from "@prisma/client";
 import { z } from "zod";
+import { CompanyContextError, getActiveCompanyId } from "@/lib/company-context";
 
 const movementSchema = z
   .object({
@@ -45,26 +46,40 @@ function getDelta(type: MovementType, quantity: number) {
 }
 
 export async function GET() {
-  const movements = await prisma.stockMovement.findMany({
-    include: {
-      product: {
-        select: {
-          id: true,
-          name: true,
-          sku: true
+  try {
+    const companyId = await getActiveCompanyId();
+    const movements = await prisma.stockMovement.findMany({
+      where: { companyId },
+      include: {
+        product: {
+          select: {
+            id: true,
+            name: true,
+            sku: true
+          }
         }
-      }
-    },
-    orderBy: {
-      createdAt: "desc"
-    },
-    take: 40
-  });
+      },
+      orderBy: {
+        createdAt: "desc"
+      },
+      take: 40
+    });
 
-  return ok(movements);
+    return ok(movements);
+  } catch (error) {
+    if (error instanceof CompanyContextError) {
+      return fail(error.message, 503);
+    }
+    return fail("Falha ao carregar movimentações.", 500);
+  }
 }
 
 export async function POST(request: NextRequest) {
+  const companyId = await getActiveCompanyId().catch(() => null);
+  if (!companyId) {
+    return fail("Empresa ativa não configurada.", 503);
+  }
+
   const body = await request.json().catch(() => null);
   const parsed = movementSchema.safeParse(body);
 
@@ -76,9 +91,10 @@ export async function POST(request: NextRequest) {
   const delta = getDelta(data.type, data.quantity);
 
   const result = await prisma.$transaction(async (tx) => {
-    const product = await tx.product.findUnique({
+    const product = await tx.product.findFirst({
       where: {
-        id: data.productId
+        id: data.productId,
+        companyId
       }
     });
 
@@ -99,6 +115,7 @@ export async function POST(request: NextRequest) {
 
     const movement = await tx.stockMovement.create({
       data: {
+        companyId,
         productId: data.productId,
         type: data.type,
         quantity: data.quantity,

@@ -8,6 +8,29 @@ import {
 
 const prisma = new PrismaClient();
 
+async function ensureDefaultCompany() {
+  const slug = process.env.DEFAULT_COMPANY_SLUG?.trim() || "default";
+  const existing = await prisma.company.findFirst({
+    where: { slug },
+    select: { id: true }
+  });
+
+  if (existing) {
+    return existing.id;
+  }
+
+  const company = await prisma.company.create({
+    data: {
+      name: "Petshop Base",
+      slug,
+      status: "ACTIVE"
+    },
+    select: { id: true }
+  });
+
+  return company.id;
+}
+
 function atTime(base: Date, hour: number, minute = 0) {
   const date = new Date(base);
   date.setHours(hour, minute, 0, 0);
@@ -15,6 +38,7 @@ function atTime(base: Date, hour: number, minute = 0) {
 }
 
 async function main() {
+  const companyId = await ensureDefaultCompany();
   const now = new Date();
   const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
   const lastHour = new Date(now.getTime() - 60 * 60 * 1000);
@@ -24,6 +48,7 @@ async function main() {
     prisma.service.upsert({
       where: { id: "srv_banho_tosa" },
       update: {
+        companyId,
         name: "Banho e tosa",
         description: "Pacote padrão",
         priceCents: 9000,
@@ -31,6 +56,7 @@ async function main() {
       },
       create: {
         id: "srv_banho_tosa",
+        companyId,
         name: "Banho e tosa",
         description: "Pacote padrão",
         priceCents: 9000,
@@ -40,6 +66,7 @@ async function main() {
     prisma.service.upsert({
       where: { id: "srv_consulta" },
       update: {
+        companyId,
         name: "Consulta rápida",
         description: "Avaliação geral",
         priceCents: 12000,
@@ -47,6 +74,7 @@ async function main() {
       },
       create: {
         id: "srv_consulta",
+        companyId,
         name: "Consulta rápida",
         description: "Avaliação geral",
         priceCents: 12000,
@@ -56,6 +84,7 @@ async function main() {
     prisma.service.upsert({
       where: { id: "srv_hidratacao" },
       update: {
+        companyId,
         name: "Hidratação premium",
         description: "Tratamento de pelagem",
         priceCents: 15000,
@@ -63,6 +92,7 @@ async function main() {
       },
       create: {
         id: "srv_hidratacao",
+        companyId,
         name: "Hidratação premium",
         description: "Tratamento de pelagem",
         priceCents: 15000,
@@ -95,14 +125,14 @@ async function main() {
   const customers = [];
   for (const customerInput of customersInput) {
     const existing = await prisma.customer.findFirst({
-      where: { email: customerInput.email }
+      where: { companyId, email: customerInput.email }
     });
 
     if (existing) {
       customers.push(
         await prisma.customer.update({
           where: { id: existing.id },
-          data: customerInput
+          data: { ...customerInput, companyId }
         })
       );
       continue;
@@ -110,7 +140,7 @@ async function main() {
 
     customers.push(
       await prisma.customer.create({
-        data: customerInput
+        data: { ...customerInput, companyId }
       })
     );
   }
@@ -129,6 +159,7 @@ async function main() {
     const existing = await prisma.pet.findFirst({
       where: {
         customerId: petInput.customerId,
+        companyId,
         name: petInput.name
       }
     });
@@ -137,7 +168,7 @@ async function main() {
       pets.push(
         await prisma.pet.update({
           where: { id: existing.id },
-          data: petInput
+          data: { ...petInput, companyId }
         })
       );
       continue;
@@ -147,6 +178,7 @@ async function main() {
       await prisma.pet.create({
         data: {
           ...petInput,
+          companyId,
           notes: "[seed-demo]"
         }
       })
@@ -155,8 +187,9 @@ async function main() {
 
   await Promise.all([
     prisma.product.upsert({
-      where: { sku: "SHAM-001" },
+      where: { companyId_sku: { companyId, sku: "SHAM-001" } },
       update: {
+        companyId,
         name: "Shampoo Neutro",
         category: "Higiene",
         currentStock: 6,
@@ -164,6 +197,7 @@ async function main() {
         priceCents: 3500
       },
       create: {
+        companyId,
         name: "Shampoo Neutro",
         sku: "SHAM-001",
         category: "Higiene",
@@ -173,8 +207,9 @@ async function main() {
       }
     }),
     prisma.product.upsert({
-      where: { sku: "RAC-002" },
+      where: { companyId_sku: { companyId, sku: "RAC-002" } },
       update: {
+        companyId,
         name: "Ração Premium Cães 10kg",
         category: "Alimentação",
         currentStock: 12,
@@ -182,6 +217,7 @@ async function main() {
         priceCents: 21990
       },
       create: {
+        companyId,
         name: "Ração Premium Cães 10kg",
         sku: "RAC-002",
         category: "Alimentação",
@@ -191,8 +227,9 @@ async function main() {
       }
     }),
     prisma.product.upsert({
-      where: { sku: "ARE-003" },
+      where: { companyId_sku: { companyId, sku: "ARE-003" } },
       update: {
+        companyId,
         name: "Areia Higiênica 4kg",
         category: "Higiene",
         currentStock: 3,
@@ -200,6 +237,7 @@ async function main() {
         priceCents: 4290
       },
       create: {
+        companyId,
         name: "Areia Higiênica 4kg",
         sku: "ARE-003",
         category: "Higiene",
@@ -209,8 +247,9 @@ async function main() {
       }
     }),
     prisma.product.upsert({
-      where: { sku: "PET-004" },
+      where: { companyId_sku: { companyId, sku: "PET-004" } },
       update: {
+        companyId,
         name: "Petisco Natural",
         category: "Alimentação",
         currentStock: 1,
@@ -218,6 +257,7 @@ async function main() {
         priceCents: 1890
       },
       create: {
+        companyId,
         name: "Petisco Natural",
         sku: "PET-004",
         category: "Alimentação",
@@ -230,6 +270,7 @@ async function main() {
 
   await prisma.appointment.deleteMany({
     where: {
+      companyId,
       notes: { contains: "[seed-demo]" }
     }
   });
@@ -237,6 +278,7 @@ async function main() {
   await prisma.appointment.createMany({
     data: [
       {
+        companyId,
         petId: pets[0].id,
         serviceId: services[0].id,
         startsAt: atTime(now, 9, 0),
@@ -245,6 +287,7 @@ async function main() {
         notes: "[seed-demo] confirmar com cliente"
       },
       {
+        companyId,
         petId: pets[1].id,
         serviceId: services[1].id,
         startsAt: atTime(now, 11, 0),
@@ -253,6 +296,7 @@ async function main() {
         notes: "[seed-demo]"
       },
       {
+        companyId,
         petId: pets[2].id,
         serviceId: services[2].id,
         startsAt: atTime(now, 14, 0),
@@ -261,6 +305,7 @@ async function main() {
         notes: "[seed-demo] aguardando confirmação"
       },
       {
+        companyId,
         petId: pets[3].id,
         serviceId: services[0].id,
         startsAt: atTime(now, 16, 30),
@@ -269,6 +314,7 @@ async function main() {
         notes: "[seed-demo]"
       },
       {
+        companyId,
         petId: pets[0].id,
         serviceId: services[2].id,
         startsAt: atTime(tomorrow, 10, 0),
@@ -281,6 +327,7 @@ async function main() {
 
   await prisma.campaign.deleteMany({
     where: {
+      companyId,
       title: { startsWith: "[seed-demo]" }
     }
   });
@@ -288,6 +335,7 @@ async function main() {
   await prisma.campaign.createMany({
     data: [
       {
+        companyId,
         title: "[seed-demo] Banho para cães",
         content: "20% off para banho e tosa de cães até sexta.",
         startsAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
@@ -296,6 +344,7 @@ async function main() {
         segmentPetType: PetType.DOG
       },
       {
+        companyId,
         title: "[seed-demo] Check-up felino",
         content: "Consulta com preço especial para gatos.",
         startsAt: new Date(now.getTime() - 24 * 60 * 60 * 1000),
@@ -304,6 +353,7 @@ async function main() {
         segmentPetType: PetType.CAT
       },
       {
+        companyId,
         title: "[seed-demo] Campanha encerrada",
         content: "Exemplo de campanha antiga.",
         startsAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000),
@@ -315,12 +365,13 @@ async function main() {
   });
 
   await prisma.messageLog.deleteMany({
-    where: { provider: "mock-seed" }
+    where: { companyId, provider: "mock-seed" }
   });
 
   await prisma.messageLog.createMany({
     data: [
       {
+        companyId,
         customerId: ana.id,
         channel: MessageChannel.WHATSAPP,
         toPhone: ana.phone,
@@ -331,6 +382,7 @@ async function main() {
         createdAt: lastHour
       },
       {
+        companyId,
         customerId: bruno.id,
         channel: MessageChannel.SMS,
         toPhone: bruno.phone,
@@ -341,6 +393,7 @@ async function main() {
         createdAt: lastHour
       },
       {
+        companyId,
         customerId: carla.id,
         channel: MessageChannel.WHATSAPP,
         toPhone: carla.phone,
@@ -351,6 +404,7 @@ async function main() {
         createdAt: now
       },
       {
+        companyId,
         customerId: ana.id,
         channel: MessageChannel.SMS,
         toPhone: ana.phone,
@@ -361,6 +415,7 @@ async function main() {
         createdAt: yesterday
       },
       {
+        companyId,
         customerId: bruno.id,
         channel: MessageChannel.SMS,
         toPhone: bruno.phone,
@@ -376,6 +431,7 @@ async function main() {
 
   const appointmentsToday = await prisma.appointment.count({
     where: {
+      companyId,
       startsAt: {
         gte: atTime(now, 0, 0),
         lte: atTime(now, 23, 59)
@@ -385,6 +441,7 @@ async function main() {
 
   const pendingConfirmations = await prisma.appointment.count({
     where: {
+      companyId,
       startsAt: {
         gte: atTime(now, 0, 0),
         lte: atTime(now, 23, 59)

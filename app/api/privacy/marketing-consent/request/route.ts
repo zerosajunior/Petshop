@@ -6,6 +6,7 @@ import { fail, ok } from "@/lib/http";
 import { sendMessage } from "@/lib/sms";
 import { registerAudit } from "@/lib/audit";
 import { CONSENT_CODE_TTL_MINUTES, generateConsentCode, hashConsentCode } from "@/lib/consent";
+import { getActiveCompanyId } from "@/lib/company-context";
 
 const requestSchema = z.object({
   customerId: z.string().min(1),
@@ -13,6 +14,11 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  const companyId = await getActiveCompanyId().catch(() => null);
+  if (!companyId) {
+    return fail("Empresa ativa não configurada.", 503);
+  }
+
   const body = await request.json().catch(() => null);
   const parsed = requestSchema.safeParse(body);
 
@@ -21,8 +27,8 @@ export async function POST(request: NextRequest) {
   }
 
   const channel = parsed.data.channel ?? MessageChannel.WHATSAPP;
-  const customer = await prisma.customer.findUnique({
-    where: { id: parsed.data.customerId },
+  const customer = await prisma.customer.findFirst({
+    where: { id: parsed.data.customerId, companyId },
     select: { id: true, name: true, phone: true }
   });
 
@@ -36,6 +42,7 @@ export async function POST(request: NextRequest) {
   await prisma.marketingConsentRequest.updateMany({
     where: {
       customerId: customer.id,
+      companyId,
       status: "PENDING"
     },
     data: {
@@ -45,6 +52,7 @@ export async function POST(request: NextRequest) {
 
   const consentRequest = await prisma.marketingConsentRequest.create({
     data: {
+      companyId,
       customerId: customer.id,
       channel,
       codeHash: hashConsentCode(code),
@@ -61,6 +69,7 @@ export async function POST(request: NextRequest) {
   await prisma.messageLog.create({
     data: {
       customerId: customer.id,
+      companyId,
       channel,
       purpose: "TRANSACTIONAL",
       toPhone: customer.phone,
@@ -73,6 +82,7 @@ export async function POST(request: NextRequest) {
   });
 
   await registerAudit({
+    companyId,
     action: "MARKETING_CONSENT_REQUESTED",
     entity: "MarketingConsentRequest",
     entityId: consentRequest.id,

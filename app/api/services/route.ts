@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/http";
 import { z } from "zod";
+import { CompanyContextError, getActiveCompanyId } from "@/lib/company-context";
 
 const serviceSchema = z.object({
   name: z.string().min(2),
@@ -11,14 +12,28 @@ const serviceSchema = z.object({
 });
 
 export async function GET() {
-  const services = await prisma.service.findMany({
-    orderBy: { name: "asc" }
-  });
+  try {
+    const companyId = await getActiveCompanyId();
+    const services = await prisma.service.findMany({
+      where: { companyId },
+      orderBy: { name: "asc" }
+    });
 
-  return ok(services);
+    return ok(services);
+  } catch (error) {
+    if (error instanceof CompanyContextError) {
+      return fail(error.message, 503);
+    }
+    return fail("Falha ao carregar serviços.", 500);
+  }
 }
 
 export async function POST(request: NextRequest) {
+  const companyId = await getActiveCompanyId().catch(() => null);
+  if (!companyId) {
+    return fail("Empresa ativa não configurada.", 503);
+  }
+
   const body = await request.json().catch(() => null);
   const parsed = serviceSchema.safeParse(body);
 
@@ -27,7 +42,10 @@ export async function POST(request: NextRequest) {
   }
 
   const service = await prisma.service.create({
-    data: parsed.data
+    data: {
+      ...parsed.data,
+      companyId
+    }
   });
 
   return ok(service, 201);

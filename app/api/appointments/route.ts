@@ -4,6 +4,8 @@ import { fail, ok } from "@/lib/http";
 import { AppointmentStatus } from "@prisma/client";
 import { z } from "zod";
 import { registerAudit } from "@/lib/audit";
+import { CompanyContextError, getActiveCompanyId } from "@/lib/company-context";
+import { enforceAppointmentLimit } from "@/lib/plan-limits";
 
 const appointmentSchema = z.object({
   petId: z.string().min(1),
@@ -15,18 +17,32 @@ const appointmentSchema = z.object({
 });
 
 export async function GET() {
-  const appointments = await prisma.appointment.findMany({
-    include: {
-      pet: { include: { customer: true } },
-      service: true
-    },
-    orderBy: { startsAt: "asc" }
-  });
+  try {
+    const companyId = await getActiveCompanyId();
+    const appointments = await prisma.appointment.findMany({
+      where: { companyId },
+      include: {
+        pet: { include: { customer: true } },
+        service: true
+      },
+      orderBy: { startsAt: "asc" }
+    });
 
-  return ok(appointments);
+    return ok(appointments);
+  } catch (error) {
+    if (error instanceof CompanyContextError) {
+      return fail(error.message, 503);
+    }
+    return fail("Falha ao carregar agendamentos.", 500);
+  }
 }
 
 export async function POST(request: NextRequest) {
+  const companyId = await getActiveCompanyId().catch(() => null);
+  if (!companyId) {
+    return fail("Empresa ativa não configurada.", 503);
+  }
+
   const body = await request.json().catch(() => null);
   const parsed = appointmentSchema.safeParse(body);
 
@@ -45,8 +61,28 @@ export async function POST(request: NextRequest) {
     return fail("O horário de fim deve ser posterior ao início.");
   }
 
+  const [pet, service] = await Promise.all([
+    prisma.pet.findFirst({
+      where: { id: parsed.data.petId, companyId },
+      select: { id: true }
+    }),
+    prisma.service.findFirst({
+      where: { id: parsed.data.serviceId, companyId },
+      select: { id: true }
+    })
+  ]);
+
+  if (!pet) {
+    return fail("Pet não encontrado para a empresa ativa.", 404);
+  }
+
+  if (!service) {
+    return fail("Serviço não encontrado para a empresa ativa.", 404);
+  }
+
   const conflict = await prisma.appointment.findFirst({
     where: {
+      companyId,
       petId: parsed.data.petId,
       status: {
         not: AppointmentStatus.CANCELED
@@ -67,15 +103,26 @@ export async function POST(request: NextRequest) {
     return fail("Conflito de horário: o pet já possui agendamento neste período.", 409);
   }
 
+  try {
+    await enforceAppointmentLimit(companyId);
+  } catch (error) {
+    return fail(
+      error instanceof Error ? error.message : "Limite do plano atingido para agendamentos.",
+      409
+    );
+  }
+
   const appointment = await prisma.appointment.create({
     data: {
       ...parsed.data,
+      companyId,
       startsAt,
       endsAt
     }
   });
 
   await registerAudit({
+    companyId,
     action: "APPOINTMENT_CREATED",
     entity: "Appointment",
     entityId: appointment.id,
