@@ -11,3 +11,70 @@
 
  ✓ Starting...
  ✓ Ready in 2.2s
+
+> petshop-saas@0.1.0 dev:raw
+> NEXT_DISABLE_WEBPACK_CACHE=1 next dev -H 127.0.0.1 -p 3000
+
+   ▲ Next.js 15.1.6
+   - Local:        http://127.0.0.1:3000
+   - Network:      http://127.0.0.1:3000
+   - Environments: .env
+   - Experiments (use with caution):
+     · typedRoutes
+
+ ✓ Starting...
+ ✓ Ready in 2.1s
+ ✓ Compiled /middleware in 164ms
+ ✓ Compiled (99 modules)
+ ○ Compiling /login ...
+ ✓ Compiled /login in 3.5s (608 modules)
+ GET /login 200 in 3889ms
+ ✓ Compiled /api/auth/login in 446ms (628 modules)
+ POST /api/auth/login 400 in 640ms
+ POST /api/auth/login 200 in 85ms
+ ✓ Compiled / in 163ms (635 modules)
+ GET / 200 in 223ms
+ GET / 200 in 11ms
+ ✓ Compiled /api/dashboard in 336ms (646 modules)
+ GET /api/dashboard 200 in 442ms
+ GET /api/dashboard 200 in 439ms
+ GET /api/auth/me 200 in 441ms
+ GET /api/auth/me 200 in 445ms
+ ✓ Compiled /admin/sistema in 222ms (653 modules)
+ GET /admin/sistema 200 in 273ms
+ ✓ Compiled /api/system/users in 298ms (660 modules)
+ GET /api/system/companies 200 in 341ms
+ GET /api/system/users 200 in 342ms
+ GET /api/system/plans 200 in 343ms
+ GET /api/system/companies 200 in 8ms
+ GET /api/system/users 200 in 9ms
+ GET /api/system/plans 200 in 10ms
+[?25h
+
+> petshop-saas@0.1.0 dev:raw
+> NEXT_DISABLE_WEBPACK_CACHE=1 next dev -H 127.0.0.1 -p 3000
+
+   ▲ Next.js 15.1.6
+   - Local:        http://127.0.0.1:3000
+   - Network:      http://127.0.0.1:3000
+   - Environments: .env
+   - Experiments (use with caution):
+     · typedRoutes
+
+ ✓ Starting...
+ ✓ Ready in 6.5s
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 957ms (99 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 7.1s (608 modules)
+ GET / 200 in 7737ms
+ ○ Compiling /api/dashboard ...
+ ✓ Compiled /api/dashboard in 2.6s (625 modules)
+ GET /api/dashboard 200 in 3077ms
+ GET /api/auth/me 200 in 3082ms
+[?25h
+npm notice
+npm notice New minor version of npm available! 11.9.0 -> 11.11.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.11.0
+npm notice To update run: npm install -g npm@11.11.0
+npm notice
