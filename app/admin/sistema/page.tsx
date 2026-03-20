@@ -36,6 +36,17 @@ const subscriptionStatusOptions = [
   { value: "CANCELED", label: "Cancelada" }
 ] as const;
 
+const companyStatusOptions = [
+  { value: "PENDING", label: "Pendente" },
+  { value: "ACTIVE", label: "Ativa" },
+  { value: "SUSPENDED", label: "Suspensa" }
+] as const;
+
+const userStatusOptions = [
+  { value: "ACTIVE", label: "Ativo" },
+  { value: "INACTIVE", label: "Inativo" }
+] as const;
+
 function formatDate(value?: string) {
   if (!value) {
     return "-";
@@ -58,6 +69,21 @@ export default function AdminSistemaPage() {
   const [newUser, setNewUser] = useState({ name: "", email: "", password: "", isSystemAdmin: false });
   const [newMembership, setNewMembership] = useState({ userId: "", companyId: "", role: "ATTENDANT" });
   const [newSubscription, setNewSubscription] = useState({ companyId: "", planId: "", status: "ACTIVE" });
+  const [selectedCompanyId, setSelectedCompanyId] = useState("");
+  const [companyDraft, setCompanyDraft] = useState({
+    name: "",
+    slug: "",
+    status: "ACTIVE",
+    planId: ""
+  });
+  const [selectedUserId, setSelectedUserId] = useState("");
+  const [userDraft, setUserDraft] = useState({
+    name: "",
+    email: "",
+    status: "ACTIVE",
+    isSystemAdmin: false,
+    newPassword: ""
+  });
 
   async function loadAll() {
     const [plansRes, companiesRes, usersRes] = await Promise.all([
@@ -81,6 +107,28 @@ export default function AdminSistemaPage() {
     loadAll().catch(() => undefined);
   }, []);
 
+  useEffect(() => {
+    if (!selectedCompanyId) {
+      return;
+    }
+    const selected = companies.find((company) => company.id === selectedCompanyId);
+    if (!selected) {
+      setSelectedCompanyId("");
+      setCompanyDraft({ name: "", slug: "", status: "ACTIVE", planId: "" });
+    }
+  }, [companies, selectedCompanyId]);
+
+  useEffect(() => {
+    if (!selectedUserId) {
+      return;
+    }
+    const selected = users.find((user) => user.id === selectedUserId);
+    if (!selected) {
+      setSelectedUserId("");
+      setUserDraft({ name: "", email: "", status: "ACTIVE", isSystemAdmin: false, newPassword: "" });
+    }
+  }, [users, selectedUserId]);
+
   async function submit(url: string, body: unknown) {
     const res = await fetch(url, {
       method: "POST",
@@ -90,6 +138,18 @@ export default function AdminSistemaPage() {
     const payload = await res.json().catch(() => ({}));
     if (!res.ok) {
       throw new Error(payload.error ?? "Falha na operação");
+    }
+  }
+
+  async function patch(url: string, body: unknown) {
+    const res = await fetch(url, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    const payload = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(payload.error ?? "Falha na atualização");
     }
   }
 
@@ -159,6 +219,70 @@ export default function AdminSistemaPage() {
         ...newSubscription
       });
       setMessage("Assinatura criada com sucesso.");
+      await loadAll();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Falha");
+    }
+  }
+
+  function onSelectCompany(company: Company) {
+    setSelectedCompanyId(company.id);
+    setCompanyDraft({
+      name: company.name,
+      slug: company.slug,
+      status: company.status ?? "ACTIVE",
+      planId: ""
+    });
+  }
+
+  function onSelectUser(user: User) {
+    setSelectedUserId(user.id);
+    setUserDraft({
+      name: user.name,
+      email: user.email,
+      status: user.status ?? "ACTIVE",
+      isSystemAdmin: Boolean(user.isSystemAdmin),
+      newPassword: ""
+    });
+  }
+
+  async function onUpdateCompany(event: FormEvent) {
+    event.preventDefault();
+    if (!selectedCompanyId) {
+      setMessage("Selecione uma empresa para editar.");
+      return;
+    }
+
+    try {
+      await patch(`/api/system/companies/${selectedCompanyId}`, {
+        name: companyDraft.name,
+        slug: companyDraft.slug,
+        status: companyDraft.status
+      });
+      setMessage("Empresa atualizada com sucesso.");
+      await loadAll();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Falha");
+    }
+  }
+
+  async function onUpdateUser(event: FormEvent) {
+    event.preventDefault();
+    if (!selectedUserId) {
+      setMessage("Selecione um usuário para editar.");
+      return;
+    }
+
+    try {
+      await patch(`/api/system/users/${selectedUserId}`, {
+        name: userDraft.name,
+        email: userDraft.email,
+        status: userDraft.status,
+        isSystemAdmin: userDraft.isSystemAdmin,
+        newPassword: userDraft.newPassword || undefined
+      });
+      setMessage("Usuário atualizado com sucesso.");
+      setUserDraft((prev) => ({ ...prev, newPassword: "" }));
       await loadAll();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Falha");
@@ -323,52 +447,92 @@ export default function AdminSistemaPage() {
 
       <div className="adminSystemSection" style={{ marginTop: 20 }}>
         <h3>Cadastros existentes</h3>
-        <p className="subtle">Visualize rapidamente empresas e usuários já criados no sistema.</p>
+        <p className="subtle">Use a lista para clicar em um item e editar ao lado.</p>
       </div>
-      <div className="adminSystemGrid" style={{ marginTop: 12 }}>
-        <article className="card">
+      <div className="adminListLayout" style={{ marginTop: 12 }}>
+        <article className="panel adminListPanel">
           <h3>Empresas cadastradas</h3>
           {companies.length === 0 ? (
             <p className="subtle">Nenhuma empresa cadastrada.</p>
           ) : (
-            <div style={{ display: "grid", gap: 10 }}>
+            <div className="adminRows">
               {companies.map((company) => (
-                <div
+                <button
                   key={company.id}
-                  style={{
-                    border: "1px solid #e5e7eb",
-                    borderRadius: 10,
-                    padding: 10,
-                    display: "grid",
-                    gap: 4
-                  }}
+                  type="button"
+                  className={`adminRow ${selectedCompanyId === company.id ? "isActive" : ""}`}
+                  onClick={() => onSelectCompany(company)}
                 >
                   <strong>{company.name}</strong>
-                  <small className="subtle">Identificador único: {company.slug}</small>
+                  <small className="subtle">Identificador: {company.slug}</small>
                   <small className="subtle">Status: {company.status ?? "-"}</small>
                   <small className="subtle">Criada em: {formatDate(company.createdAt)}</small>
-                </div>
+                </button>
               ))}
             </div>
           )}
         </article>
 
-        <article className="card">
+        <article className="panel adminListPanel">
+          <h3>Editar empresa selecionada</h3>
+          {!selectedCompanyId ? (
+            <p className="subtle">Clique em uma empresa na lista para editar.</p>
+          ) : (
+            <form onSubmit={onUpdateCompany} className="formGrid">
+              <label className="formField formFieldFull">
+                <span>Nome da empresa</span>
+                <input
+                  value={companyDraft.name}
+                  onChange={(event) =>
+                    setCompanyDraft((prev) => ({ ...prev, name: event.target.value }))
+                  }
+                  required
+                />
+              </label>
+              <label className="formField formFieldFull">
+                <span>Identificador único da empresa</span>
+                <input
+                  value={companyDraft.slug}
+                  onChange={(event) =>
+                    setCompanyDraft((prev) => ({ ...prev, slug: event.target.value }))
+                  }
+                  required
+                />
+              </label>
+              <label className="formField formFieldFull">
+                <span>Status</span>
+                <select
+                  value={companyDraft.status}
+                  onChange={(event) =>
+                    setCompanyDraft((prev) => ({ ...prev, status: event.target.value }))
+                  }
+                >
+                  {companyStatusOptions.map((status) => (
+                    <option key={status.value} value={status.value}>
+                      {status.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button className="btnPrimary" type="submit">
+                Salvar empresa
+              </button>
+            </form>
+          )}
+        </article>
+
+        <article className="panel adminListPanel">
           <h3>Usuários cadastrados</h3>
           {users.length === 0 ? (
             <p className="subtle">Nenhum usuário cadastrado.</p>
           ) : (
-            <div style={{ display: "grid", gap: 10 }}>
+            <div className="adminRows">
               {users.map((user) => (
-                <div
+                <button
                   key={user.id}
-                  style={{
-                    border: "1px solid #e5e7eb",
-                    borderRadius: 10,
-                    padding: 10,
-                    display: "grid",
-                    gap: 4
-                  }}
+                  type="button"
+                  className={`adminRow ${selectedUserId === user.id ? "isActive" : ""}`}
+                  onClick={() => onSelectUser(user)}
                 >
                   <strong>{user.name}</strong>
                   <small className="subtle">E-mail: {user.email}</small>
@@ -384,10 +548,80 @@ export default function AdminSistemaPage() {
                           .join(", ")
                       : "-"}
                   </small>
-                  <small className="subtle">Criado em: {formatDate(user.createdAt)}</small>
-                </div>
+                </button>
               ))}
             </div>
+          )}
+        </article>
+
+        <article className="panel adminListPanel">
+          <h3>Editar usuário selecionado</h3>
+          {!selectedUserId ? (
+            <p className="subtle">Clique em um usuário na lista para editar.</p>
+          ) : (
+            <form onSubmit={onUpdateUser} className="formGrid">
+              <label className="formField formFieldFull">
+                <span>Nome</span>
+                <input
+                  value={userDraft.name}
+                  onChange={(event) =>
+                    setUserDraft((prev) => ({ ...prev, name: event.target.value }))
+                  }
+                  required
+                />
+              </label>
+              <label className="formField formFieldFull">
+                <span>E-mail</span>
+                <input
+                  type="email"
+                  value={userDraft.email}
+                  onChange={(event) =>
+                    setUserDraft((prev) => ({ ...prev, email: event.target.value }))
+                  }
+                  required
+                />
+              </label>
+              <label className="formField formFieldFull">
+                <span>Status</span>
+                <select
+                  value={userDraft.status}
+                  onChange={(event) =>
+                    setUserDraft((prev) => ({ ...prev, status: event.target.value }))
+                  }
+                >
+                  {userStatusOptions.map((status) => (
+                    <option key={status.value} value={status.value}>
+                      {status.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="subtle">
+                <input
+                  type="checkbox"
+                  checked={userDraft.isSystemAdmin}
+                  onChange={(event) =>
+                    setUserDraft((prev) => ({ ...prev, isSystemAdmin: event.target.checked }))
+                  }
+                />
+                {" "}
+                Administrador do sistema
+              </label>
+              <label className="formField formFieldFull">
+                <span>Nova senha (opcional)</span>
+                <input
+                  type="password"
+                  value={userDraft.newPassword}
+                  onChange={(event) =>
+                    setUserDraft((prev) => ({ ...prev, newPassword: event.target.value }))
+                  }
+                  placeholder="Preencha apenas se quiser resetar a senha"
+                />
+              </label>
+              <button className="btnPrimary" type="submit">
+                Salvar usuário
+              </button>
+            </form>
           )}
         </article>
       </div>
