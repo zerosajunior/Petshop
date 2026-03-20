@@ -345,6 +345,48 @@ main {
   margin-top: auto;
 }
 
+.adminListLayout {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.adminListPanel {
+  margin-top: 0;
+  background: #fbfdff;
+  border-color: #ced9e8;
+}
+
+.adminRows {
+  display: grid;
+  gap: 0.55rem;
+  max-height: 330px;
+  overflow: auto;
+  padding-right: 0.2rem;
+}
+
+.adminRow {
+  border: 1px solid #d8e2ee;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 0.6rem 0.7rem;
+  text-align: left;
+  display: grid;
+  gap: 0.15rem;
+  cursor: pointer;
+}
+
+.adminRow:hover {
+  border-color: #8fb0d2;
+  background: #f4f9ff;
+}
+
+.adminRow.isActive {
+  border-color: #4f77a1;
+  background: #e8f1fb;
+  box-shadow: 0 0 0 1px #4f77a1 inset;
+}
+
 .formGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
