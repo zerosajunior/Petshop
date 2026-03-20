@@ -3,8 +3,25 @@
 import { FormEvent, useEffect, useState } from "react";
 
 type Plan = { id: string; name: string; maxUsers: number | null; maxAppointmentsMonth: number | null };
-type Company = { id: string; name: string; slug: string };
-type User = { id: string; name: string; email: string };
+type Company = {
+  id: string;
+  name: string;
+  slug: string;
+  status?: "PENDING" | "ACTIVE" | "SUSPENDED";
+  createdAt?: string;
+};
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  status?: "ACTIVE" | "INACTIVE";
+  isSystemAdmin?: boolean;
+  createdAt?: string;
+  memberships?: Array<{
+    role: "ADMIN" | "ATTENDANT" | "PROFESSIONAL";
+    company: { id: string; name: string; slug: string };
+  }>;
+};
 
 const roleOptions = [
   { value: "ADMIN", label: "Administrador da empresa" },
@@ -18,6 +35,17 @@ const subscriptionStatusOptions = [
   { value: "PAST_DUE", label: "Pagamento pendente" },
   { value: "CANCELED", label: "Cancelada" }
 ] as const;
+
+function formatDate(value?: string) {
+  if (!value) {
+    return "-";
+  }
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "-";
+  }
+  return date.toLocaleDateString("pt-BR");
+}
 
 export default function AdminSistemaPage() {
   const [plans, setPlans] = useState<Plan[]>([]);
@@ -281,6 +309,77 @@ export default function AdminSistemaPage() {
             </label>
             <button className="btnPrimary" type="submit">Vincular</button>
           </form>
+        </article>
+      </div>
+
+      <div className="adminSystemSection" style={{ marginTop: 20 }}>
+        <h3>Cadastros existentes</h3>
+        <p className="subtle">Visualize rapidamente empresas e usuários já criados no sistema.</p>
+      </div>
+      <div className="adminSystemGrid" style={{ marginTop: 12 }}>
+        <article className="card">
+          <h3>Empresas cadastradas</h3>
+          {companies.length === 0 ? (
+            <p className="subtle">Nenhuma empresa cadastrada.</p>
+          ) : (
+            <div style={{ display: "grid", gap: 10 }}>
+              {companies.map((company) => (
+                <div
+                  key={company.id}
+                  style={{
+                    border: "1px solid #e5e7eb",
+                    borderRadius: 10,
+                    padding: 10,
+                    display: "grid",
+                    gap: 4
+                  }}
+                >
+                  <strong>{company.name}</strong>
+                  <small className="subtle">Slug: {company.slug}</small>
+                  <small className="subtle">Status: {company.status ?? "-"}</small>
+                  <small className="subtle">Criada em: {formatDate(company.createdAt)}</small>
+                </div>
+              ))}
+            </div>
+          )}
+        </article>
+
+        <article className="card">
+          <h3>Usuários cadastrados</h3>
+          {users.length === 0 ? (
+            <p className="subtle">Nenhum usuário cadastrado.</p>
+          ) : (
+            <div style={{ display: "grid", gap: 10 }}>
+              {users.map((user) => (
+                <div
+                  key={user.id}
+                  style={{
+                    border: "1px solid #e5e7eb",
+                    borderRadius: 10,
+                    padding: 10,
+                    display: "grid",
+                    gap: 4
+                  }}
+                >
+                  <strong>{user.name}</strong>
+                  <small className="subtle">E-mail: {user.email}</small>
+                  <small className="subtle">Status: {user.status ?? "-"}</small>
+                  <small className="subtle">
+                    Tipo: {user.isSystemAdmin ? "Administrador do sistema" : "Usuário da empresa"}
+                  </small>
+                  <small className="subtle">
+                    Empresas:{" "}
+                    {user.memberships?.length
+                      ? user.memberships
+                          .map((membership) => `${membership.company.name} (${membership.role})`)
+                          .join(", ")
+                      : "-"}
+                  </small>
+                  <small className="subtle">Criado em: {formatDate(user.createdAt)}</small>
+                </div>
+              ))}
+            </div>
+          )}
         </article>
       </div>
     </section>
