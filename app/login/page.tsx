@@ -8,12 +8,18 @@ type LoginResponse = {
     user: {
       username: string;
       role: string;
+      isSystemAdmin?: boolean;
     };
     company: {
       id: string;
       slug: string;
       name: string;
     };
+    companies?: Array<{
+      id: string;
+      slug: string;
+      name: string;
+    }>;
   };
   error?: string;
 };
@@ -46,6 +52,21 @@ export default function LoginPage() {
       setError(payload.error ?? "Falha ao entrar.");
       setLoading(false);
       return;
+    }
+
+    try {
+      if (payload.data) {
+        window.localStorage.setItem(
+          "petshop_auth_me",
+          JSON.stringify({
+            companyId: payload.data.company.id,
+            isSystemAdmin: Boolean(payload.data.user.isSystemAdmin),
+            companies: payload.data.companies ?? []
+          })
+        );
+      }
+    } catch {
+      // storage indisponível não deve bloquear login
     }
 
     router.push("/");
