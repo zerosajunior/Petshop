@@ -206,8 +206,17 @@ export default function AdminSistemaPage() {
               <input placeholder="Ex.: Pet Feliz" value={newCompany.name} onChange={(e) => setNewCompany((s) => ({ ...s, name: e.target.value }))} required />
             </label>
             <label className="formField formFieldFull">
-              <span>Identificador da empresa (slug)</span>
-              <input placeholder="Ex.: pet-feliz" value={newCompany.slug} onChange={(e) => setNewCompany((s) => ({ ...s, slug: e.target.value }))} required />
+              <span>Identificador único da empresa</span>
+              <input
+                placeholder="Ex.: pet-feliz"
+                value={newCompany.slug}
+                onChange={(e) => setNewCompany((s) => ({ ...s, slug: e.target.value }))}
+                required
+              />
+              <small className="subtle">
+                Usado internamente para identificar a empresa no sistema (sem espaços e sem
+                acentos).
+              </small>
             </label>
             <label className="formField formFieldFull">
               <span>Plano inicial da empresa</span>
@@ -335,7 +344,7 @@ export default function AdminSistemaPage() {
                   }}
                 >
                   <strong>{company.name}</strong>
-                  <small className="subtle">Slug: {company.slug}</small>
+                  <small className="subtle">Identificador único: {company.slug}</small>
                   <small className="subtle">Status: {company.status ?? "-"}</small>
                   <small className="subtle">Criada em: {formatDate(company.createdAt)}</small>
                 </div>
