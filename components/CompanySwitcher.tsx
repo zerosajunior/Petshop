@@ -24,6 +24,20 @@ export function CompanySwitcher() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    try {
+      const cached = window.localStorage.getItem("petshop_auth_me");
+      if (cached) {
+        const parsed = JSON.parse(cached) as MeResponse["data"];
+        if (parsed) {
+          setCompanies(parsed.companies ?? []);
+          setCompanyId(parsed.companyId ?? "");
+          setIsSystemAdmin(Boolean(parsed.isSystemAdmin));
+        }
+      }
+    } catch {
+      // ignora cache inválido
+    }
+
     fetch("/api/auth/me", { cache: "no-store" })
       .then((res) => res.json())
       .then((payload: MeResponse) => {
@@ -33,6 +47,11 @@ export function CompanySwitcher() {
         setCompanies(payload.data.companies ?? []);
         setCompanyId(payload.data.companyId);
         setIsSystemAdmin(Boolean(payload.data.isSystemAdmin));
+        try {
+          window.localStorage.setItem("petshop_auth_me", JSON.stringify(payload.data));
+        } catch {
+          // falha de storage não deve quebrar UX
+        }
       })
       .catch(() => undefined);
   }, []);
@@ -81,7 +100,7 @@ export function CompanySwitcher() {
 
       {isSystemAdmin ? (
         <Link href="/admin/sistema" className="companyAdminLink">
-          Admin sistema
+          Administração
         </Link>
       ) : null}
     </div>
