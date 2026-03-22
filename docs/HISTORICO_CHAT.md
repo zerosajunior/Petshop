@@ -1,6 +1,29 @@
 # Histórico do Chat
 
-Atualizado em: 2026-03-06
+Atualizado em: 2026-03-21
+
+## Sessão 2026-03-21 (retomada no Windows)
+- Repositório do GitHub validado localmente no Windows:
+  - diretório correto em `C:\Programacao\Petshop`
+  - branch `main` acompanhando `origin/main`
+- Confirmado que a documentação principal estava legível em UTF-8; o problema de acentuação observado era da leitura do terminal.
+- Detectada limitação de portabilidade no ambiente:
+  - `npm run dev` dependia de `scripts/start-petshop.sh`
+  - `scripts/auto-heal-next.sh` e `scripts/auto-stop-petshop.sh` usavam `zsh`, `lsof` e caminho absoluto do Mac (`/Users/josejunior/Projetos/Petshop`)
+- Refatoração aplicada para continuidade entre máquinas:
+  - criado `scripts/dev-raw.mjs`
+  - criado `scripts/start-petshop.mjs`
+  - criado `scripts/auto-heal-next.mjs`
+  - criado `scripts/auto-stop-petshop.mjs`
+  - `package.json` atualizado para usar scripts Node.js no `dev` e `dev:raw`
+  - `README.md` atualizado com orientação para Windows/PowerShell
+- Limitação encontrada na máquina Windows desta sessão:
+  - `node` e `npm` não estão no `PATH`
+  - por isso a validação de `install/lint/build/dev` não pôde ser executada ainda
+- Orientação passada para destravar ambiente:
+  - instalar Node.js `20.x` LTS no Windows e validar com `node -v` e `npm -v`
+- Checkpoint solicitado ao final da retomada:
+  - salvar o decorrer da conversa para continuidade entre Windows e MacBook
 
 ## Sessão 2026-02-25 (noite)
 - Continuidade do refino visual em todo o sistema, com foco principal em `Agendamentos`.
