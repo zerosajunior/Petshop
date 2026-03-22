@@ -6,12 +6,14 @@
     "node": ">=20 <23"
   },
   "scripts": {
-    "dev": "./scripts/start-petshop.sh",
-    "dev:raw": "NEXT_DISABLE_WEBPACK_CACHE=1 next dev -H 127.0.0.1 -p 3000",
+    "dev": "node scripts/start-petshop.mjs",
+    "dev:raw": "node scripts/dev-raw.mjs",
     "build": "prisma generate && next build",
     "start": "next start",
     "postinstall": "prisma generate",
     "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "tsx scripts/seed.ts",
@@ -20,13 +22,13 @@
     "prisma:seed:large": "node --import tsx scripts/seed-large.ts",
     "reminders:run": "tsx scripts/run-reminders.ts",
     "lgpd:retention": "tsx scripts/lgpd-retention.ts",
-    "dev:safe": "./scripts/start-petshop.sh",
+    "dev:safe": "node scripts/start-petshop.mjs",
     "export:code:txt": "./scripts/export-code-txt.sh",
     "auth:bootstrap": "node --import tsx scripts/bootstrap-auth.ts"
   },
   "dependencies": {
-    "@prisma/client": "^6.3.1",
-    "next": "^15.1.11",
+    "@prisma/client": "^6.19.2",
+    "next": "^15.5.14",
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
     "zod": "^3.24.1"
@@ -36,9 +38,13 @@
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "eslint": "^9.18.0",
-    "eslint-config-next": "15.1.6",
-    "prisma": "^6.3.1",
+    "eslint-config-next": "^15.5.14",
+    "prisma": "^6.19.2",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vitest": "^4.1.0"
+  },
+  "overrides": {
+    "effect": "3.21.0"
   }
 }

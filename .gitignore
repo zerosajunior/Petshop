@@ -7,4 +7,6 @@ node_modules
 coverage
 .DS_Store
 prisma/dev.db
+.petshop-dev.pid
 .petshop-heal.pid
+.petshop-stop.pid

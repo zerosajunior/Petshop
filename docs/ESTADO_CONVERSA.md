@@ -1,6 +1,21 @@
 # Estado da Conversa (Resumo para retomada)
 
-Atualizado em: 2026-03-06
+Atualizado em: 2026-03-21
+
+## Retomada 2026-03-21
+- Projeto clonado e validado no Windows a partir do GitHub (`main` em `origin/main`).
+- Contexto funcional recuperado com sucesso pelos documentos de estado.
+- Ajuste de portabilidade iniciado para permitir continuidade entre MacBook e Windows sem depender de scripts shell do macOS.
+- Mudanças aplicadas nesta retomada:
+  - `npm run dev` e `npm run dev:raw` migrados para scripts Node.js multiplataforma
+  - mecanismo de auto-heal migrado para Node.js
+  - `README.md` atualizado com orientação explícita para Windows/PowerShell
+- Bloqueio atual da validação local:
+  - `node` e `npm` não estão disponíveis no `PATH` desta máquina Windows nesta sessão
+  - por isso, a validação real de `install/lint/build/dev` ficou preparada, mas não executada ainda
+- Próximo passo alinhado com o usuário:
+  - orientação de instalação do Node.js `20.x` (LTS) no Windows já fornecida
+  - após instalação, executar `node -v` e `npm -v` para confirmar PATH e seguir com validações do projeto
 
 ## Retomada 2026-03-06
 - Histórico recuperado e validado para continuidade sem depender de memória da sessão anterior.
@@ -41,7 +56,9 @@ Atualizado em: 2026-03-06
 ## Pedido final do usuário
 - Salvar estado atual do projeto e da conversa.
 - Manter retorno independente do manuseio manual do operador.
+- Registrar checkpoint desta retomada no Windows para continuidade em qualquer máquina.
 
 ## Pendências abertas
-1. Concluir validação em uso real contínuo do auto-healing do `dev` (sessão local persistente fora do executor).
-2. Ajustar padronização visual fina da barra de ações (largura mínima e ritmo dos botões) se necessário.
+1. Disponibilizar Node.js `20.x` no Windows e validar `npm install`, `npm run lint`, `npm run build` e `npm run dev`.
+2. Concluir validação em uso real contínuo do auto-healing do `dev` (sessão local persistente fora do executor).
+3. Ajustar padronização visual fina da barra de ações (largura mínima e ritmo dos botões) se necessário.
