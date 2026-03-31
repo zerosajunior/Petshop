@@ -47,15 +47,26 @@ export async function POST(request: NextRequest) {
     return fail("Dados de usuário inválidos.");
   }
 
-  const user = await prisma.user.create({
-    data: {
-      name: parsed.data.name,
-      email: parsed.data.email,
-      passwordHash: hashPassword(parsed.data.password),
-      status: "ACTIVE",
-      isSystemAdmin: parsed.data.isSystemAdmin ?? false
-    }
-  });
+  try {
+    const user = await prisma.user.create({
+      data: {
+        name: parsed.data.name,
+        email: parsed.data.email,
+        passwordHash: hashPassword(parsed.data.password),
+        status: "ACTIVE",
+        isSystemAdmin: parsed.data.isSystemAdmin ?? false
+      }
+    });
 
-  return ok(user, 201);
+    return ok(user, 201);
+  } catch (error) {
+    const message =
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code?: string }).code === "P2002"
+        ? "Já existe um usuário com esse e-mail."
+        : "Não foi possível criar o usuário.";
+    return fail(message, 400);
+  }
 }

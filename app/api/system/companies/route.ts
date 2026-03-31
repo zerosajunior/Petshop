@@ -45,14 +45,25 @@ export async function POST(request: NextRequest) {
     return fail("Dados de empresa inválidos.");
   }
 
-  const company = await prisma.company.create({
-    data: {
-      name: parsed.data.name,
-      slug: parsed.data.slug,
-      status: parsed.data.status ?? "ACTIVE",
-      planId: parsed.data.planId ?? null
-    }
-  });
+  try {
+    const company = await prisma.company.create({
+      data: {
+        name: parsed.data.name,
+        slug: parsed.data.slug,
+        status: parsed.data.status ?? "ACTIVE",
+        planId: parsed.data.planId ?? null
+      }
+    });
 
-  return ok(company, 201);
+    return ok(company, 201);
+  } catch (error) {
+    const message =
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code?: string }).code === "P2002"
+        ? "Já existe uma empresa com esse identificador."
+        : "Não foi possível criar a empresa.";
+    return fail(message, 400);
+  }
 }

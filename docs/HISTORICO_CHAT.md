@@ -1,6 +1,6 @@
 # Histórico do Chat
 
-Atualizado em: 2026-03-21
+Atualizado em: 2026-03-30
 
 ## Sessão 2026-03-21 (retomada no Windows)
 - Repositório do GitHub validado localmente no Windows:
@@ -24,6 +24,28 @@ Atualizado em: 2026-03-21
   - instalar Node.js `20.x` LTS no Windows e validar com `node -v` e `npm -v`
 - Checkpoint solicitado ao final da retomada:
   - salvar o decorrer da conversa para continuidade entre Windows e MacBook
+
+## Sessão 2026-03-30 (retomada + ajustes intensivos de admin)
+- Retomada iniciada com leitura de contexto local e revisão dos últimos commits.
+- Construído resumo funcional dos três commits mais recentes para alinhar estado real do projeto.
+- Diagnóstico do estado atual consolidado:
+  - lint/build válidos no momento da retomada
+  - documentação geral parcialmente desatualizada em relação ao estado recente do código.
+- Solicitação central do usuário: refinar drasticamente UX do `Administração do sistema`.
+- Evolução aplicada em ciclos curtos com feedback por imagem:
+  - correções no fluxo de `Criar empresa`
+  - padronização de botões de ação no topo de cada seção
+  - formulários exibidos apenas após clique em ação
+  - eliminação de placeholders visuais desnecessários
+  - transformação de `Cadastros existentes` para padrão de botões expansíveis com interdependência (`Empresas` x `Usuários`).
+- Home/painel inicial também refinada nesta sessão:
+  - cards clicáveis em `Resumo rápido` e `Indicadores rápidos`
+  - reorganização visual horizontal dos elementos internos dos cards.
+- Decisão registrada com o usuário:
+  - foco em arquitetura aplicável para nuvem (`Vercel + GitHub + Neon`)
+  - mudanças de script local não devem conflitar com deploy em produção.
+- Novo padrão de memória adotado:
+  - além dos resumos, passou a existir log literal de sessão em `docs/LOG_SESSAO_2026-03-30.md`.
 
 ## Sessão 2026-02-25 (noite)
 - Continuidade do refino visual em todo o sistema, com foco principal em `Agendamentos`.

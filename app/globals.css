@@ -307,6 +307,27 @@ main {
   margin-top: 0.25rem;
 }
 
+.adminActionBar {
+  gap: 0.45rem;
+}
+
+.adminActionBar > button {
+  min-width: 170px;
+}
+
+.adminActionToggle {
+  opacity: 0.86;
+}
+
+.adminActionToggle:hover {
+  opacity: 0.95;
+}
+
+.adminActionToggleActive {
+  opacity: 1;
+  box-shadow: 0 0 0 2px rgba(79, 119, 161, 0.3) inset, 0 6px 14px rgba(79, 119, 161, 0.2);
+}
+
 .adminSystemGrid {
   display: grid;
   gap: 1rem;
@@ -349,6 +370,19 @@ main {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.adminListLayoutTwoCols {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  .adminListLayoutTwoCols {
+    grid-template-columns: 1fr;
+  }
 }
 
 .adminListPanel {
@@ -428,6 +462,21 @@ main {
 .formField textarea {
   min-height: 100px;
   resize: vertical;
+}
+
+.fieldInlineAction {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.fieldInlineAction input {
+  flex: 1;
+}
+
+.fieldInlineAction .btnSecondary {
+  height: 40px;
+  white-space: nowrap;
 }
 
 .productFormLayout {
@@ -1111,6 +1160,8 @@ main {
 }
 
 .categoryToolboxCard {
+  appearance: none;
+  -webkit-appearance: none;
   border: 1px solid #c7d4e3;
   background: #eef4fb;
   color: var(--text);
@@ -1118,13 +1169,27 @@ main {
   padding: 0.55rem 0.6rem;
   text-align: left;
   display: grid;
-  gap: 0.18rem;
+  gap: 0.4rem;
   cursor: pointer;
-  min-height: 108px;
+  min-height: 88px;
+  width: 100%;
+  font: inherit;
+  transition: transform 0.12s ease, box-shadow 0.15s ease, border-color 0.12s ease;
+}
+
+.categoryToolboxCard:hover {
+  transform: translateY(-1px);
+  border-color: #aebfd4;
+  box-shadow: 0 8px 16px rgba(59, 85, 112, 0.1);
+}
+
+.categoryToolboxCard:focus-visible {
+  outline: 2px solid #4f77a1;
+  outline-offset: 2px;
 }
 
 .categoryToolboxCard strong {
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
 .categoryToolboxIcon {
@@ -1135,6 +1200,23 @@ main {
 .categoryToolboxLabel {
   font-weight: 700;
   font-size: 0.88rem;
+}
+
+.categoryToolboxTopLine {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.categoryToolboxBottomLine {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.categoryToolboxBottomLine .subtle {
+  margin: 0;
 }
 
 .categoryToolboxCardActive {
