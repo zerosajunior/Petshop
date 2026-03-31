@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { ApiResponse, DashboardData } from "@/types/api";
 
 type ModuleItem = {
+  href: ToolboxHref;
   id: string;
   icon: string;
   title: string;
@@ -12,12 +14,20 @@ type ModuleItem = {
 };
 
 type QuickIndicatorItem = {
+  href: ToolboxHref;
   id: string;
   icon: string;
   label: string;
   value: string;
   note: string;
 };
+
+type ToolboxHref =
+  | "/agenda"
+  | "/servicos"
+  | "/estoque"
+  | "/promocoes"
+  | "/relatorios/operacional";
 
 export default function HomePage() {
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
@@ -136,10 +146,24 @@ export default function HomePage() {
   const stats: QuickIndicatorItem[] = useMemo(() => {
     if (!dashboard) {
       return [
-        { id: "appointments", icon: "📅", label: "Agendamentos hoje", value: "-", note: "Carregando..." },
-        { id: "sms", icon: "📩", label: "Avisos enviados", value: "-", note: "Últimas 24h" },
-        { id: "stock", icon: "⚠️", label: "Estoque baixo", value: "-", note: "Abaixo do mínimo" },
-        { id: "campaigns", icon: "🎯", label: "Campanhas ativas", value: "-", note: "Ativas agora" }
+        {
+          id: "appointments",
+          icon: "📅",
+          label: "Agendamentos hoje",
+          value: "-",
+          note: "Carregando...",
+          href: "/agenda"
+        },
+        {
+          id: "sms",
+          icon: "📩",
+          label: "Avisos enviados",
+          value: "-",
+          note: "Últimas 24h",
+          href: "/relatorios/operacional"
+        },
+        { id: "stock", icon: "⚠️", label: "Estoque baixo", value: "-", note: "Abaixo do mínimo", href: "/estoque" },
+        { id: "campaigns", icon: "🎯", label: "Campanhas ativas", value: "-", note: "Ativas agora", href: "/promocoes" }
       ];
     }
 
@@ -149,28 +173,32 @@ export default function HomePage() {
         icon: "📅",
         label: "Agendamentos hoje",
         value: String(dashboard.appointmentsToday),
-        note: `${dashboard.pendingConfirmations} confirmações pendentes`
+        note: `${dashboard.pendingConfirmations} confirmações pendentes`,
+        href: "/agenda"
       },
       {
         id: "sms",
         icon: "📩",
         label: "Avisos enviados",
         value: String(dashboard.smsSentLast24h),
-        note: "Últimas 24h"
+        note: "Últimas 24h",
+        href: "/relatorios/operacional"
       },
       {
         id: "stock",
         icon: "⚠️",
         label: "Estoque baixo",
         value: String(dashboard.lowStockProducts),
-        note: "Abaixo do mínimo"
+        note: "Abaixo do mínimo",
+        href: "/estoque"
       },
       {
         id: "campaigns",
         icon: "🎯",
         label: "Campanhas ativas",
         value: String(dashboard.activeCampaigns),
-        note: "Ativas agora"
+        note: "Ativas agora",
+        href: "/promocoes"
       }
     ];
   }, [dashboard]);
@@ -183,28 +211,32 @@ export default function HomePage() {
           icon: "📆",
           title: "Agendamentos",
           value: "-",
-          note: "carregando"
+          note: "carregando",
+          href: "/agenda"
         },
         {
           id: "services",
           icon: "✂️",
           title: "Serviços",
           value: "-",
-          note: "carregando"
+          note: "carregando",
+          href: "/servicos"
         },
         {
           id: "products",
           icon: "🧴",
           title: "Produtos",
           value: "-",
-          note: "carregando"
+          note: "carregando",
+          href: "/estoque"
         },
         {
           id: "campaigns",
           icon: "📣",
           title: "Campanhas",
           value: "-",
-          note: "carregando"
+          note: "carregando",
+          href: "/promocoes"
         }
       ];
     }
@@ -215,28 +247,32 @@ export default function HomePage() {
         icon: "📆",
         title: "Agendamentos",
         value: String(dashboard.totalAppointments),
-        note: `${dashboard.appointmentsToday} hoje`
+        note: `${dashboard.appointmentsToday} hoje`,
+        href: "/agenda"
       },
       {
         id: "services",
         icon: "✂️",
         title: "Serviços",
         value: String(dashboard.totalServices),
-        note: "ativos"
+        note: "ativos",
+        href: "/servicos"
       },
       {
         id: "products",
         icon: "🧴",
         title: "Produtos",
         value: String(dashboard.totalProducts),
-        note: `${dashboard.lowStockProducts} com baixo estoque`
+        note: `${dashboard.lowStockProducts} com baixo estoque`,
+        href: "/estoque"
       },
       {
         id: "campaigns",
         icon: "📣",
         title: "Campanhas",
         value: String(dashboard.totalCampaigns),
-        note: `${dashboard.activeCampaigns} ativas`
+        note: `${dashboard.activeCampaigns} ativas`,
+        href: "/promocoes"
       }
     ];
   }, [dashboard]);
@@ -248,12 +284,16 @@ export default function HomePage() {
         {loadError ? <small style={{ color: "#b42318" }}>{loadError}</small> : null}
         <div className="categoryToolboxCards">
           {modules.map((module) => (
-            <article className="categoryToolboxCard" key={`summary-${module.id}`}>
-              <span className="categoryToolboxIcon">{module.icon}</span>
-              <span className="categoryToolboxLabel">{module.title}</span>
-              <small className="subtle">{module.note}</small>
-              <strong>{module.value}</strong>
-            </article>
+            <Link className="categoryToolboxCard" key={`summary-${module.id}`} href={module.href}>
+              <span className="categoryToolboxTopLine">
+                <span className="categoryToolboxIcon">{module.icon}</span>
+                <span className="categoryToolboxLabel">{module.title}</span>
+              </span>
+              <span className="categoryToolboxBottomLine">
+                <small className="subtle">{module.note}</small>
+                <strong>{module.value}</strong>
+              </span>
+            </Link>
           ))}
         </div>
       </article>
@@ -262,12 +302,16 @@ export default function HomePage() {
         <h3>Indicadores rápidos</h3>
         <div className="categoryToolboxCards">
           {stats.map((stat) => (
-            <article className="categoryToolboxCard" key={stat.id}>
-              <span className="categoryToolboxIcon">{stat.icon}</span>
-              <span className="categoryToolboxLabel">{stat.label}</span>
-              <small className="subtle">{stat.note}</small>
-              <strong>{stat.value}</strong>
-            </article>
+            <Link className="categoryToolboxCard" key={stat.id} href={stat.href}>
+              <span className="categoryToolboxTopLine">
+                <span className="categoryToolboxIcon">{stat.icon}</span>
+                <span className="categoryToolboxLabel">{stat.label}</span>
+              </span>
+              <span className="categoryToolboxBottomLine">
+                <small className="subtle">{stat.note}</small>
+                <strong>{stat.value}</strong>
+              </span>
+            </Link>
           ))}
         </div>
       </article>

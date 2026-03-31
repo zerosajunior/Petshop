@@ -1,6 +1,6 @@
 # Estado da Conversa (Resumo para retomada)
 
-Atualizado em: 2026-03-21
+Atualizado em: 2026-03-30
 
 ## Retomada 2026-03-21
 - Projeto clonado e validado no Windows a partir do GitHub (`main` em `origin/main`).
@@ -16,6 +16,43 @@ Atualizado em: 2026-03-21
 - Próximo passo alinhado com o usuário:
   - orientação de instalação do Node.js `20.x` (LTS) no Windows já fornecida
   - após instalação, executar `node -v` e `npm -v` para confirmar PATH e seguir com validações do projeto
+
+## Retomada 2026-03-30
+- Conferidos os últimos commits em `main` para recuperar contexto:
+  - `dc937b9` (ajustes de texto no admin)
+  - `c488656` (edição de empresas/usuários no admin + novos PATCH endpoints)
+  - `8e01e83` (cache local de contexto de autenticação e melhorias no switch de empresa)
+- Sanidade técnica executada durante a sessão:
+  - `npm run lint` OK
+  - `npm run build` OK (múltiplas vezes ao longo dos ajustes)
+
+## O que foi alinhado hoje
+- Prioridade dada ao fluxo do `Administração do sistema` com base em feedback visual em tempo real.
+- Correção de confiabilidade no cadastro de empresa:
+  - normalização de identificador (slug)
+  - botão `Gerar do nome`
+  - mensagens de erro mais claras para conflitos de unicidade.
+- Padrão visual revisado para ações do admin:
+  - formulários só aparecem após clique nos botões de ação.
+  - botões `Novo plano`, `Nova empresa`, `Nova assinatura`, `Novo usuário`, `Vincular usuário` passaram a seguir o estilo principal (mesma família visual de `Criar ...`).
+- Página inicial refinada:
+  - cards de `Resumo rápido` e `Indicadores rápidos` ficaram clicáveis com navegação para os módulos correspondentes.
+  - layout dos cards ajustado para leitura horizontal (ícone + título na primeira linha; nota + valor na segunda).
+
+## Estrutura final adotada no Admin (sessão atual)
+- Bloco `Estrutura do negócio`:
+  - botões de ação no topo
+  - formulário exibido somente para a ação selecionada.
+- Bloco `Acesso e permissões`:
+  - botões de ação no topo
+  - formulário exibido somente para a ação selecionada.
+- Bloco `Cadastros existentes`:
+  - também convertido para fluxo por botões expansíveis (`Empresas` e `Usuários`)
+  - interdependência aplicada: ao abrir um, o outro fecha.
+
+## Observações operacionais da sessão
+- Confirmado com o usuário que as mudanças ficaram apenas no ambiente local e não foram enviadas para nuvem.
+- Erros intermitentes locais de `next dev` por chunks/porta foram tratados com limpeza de `.next` e reinício.
 
 ## Retomada 2026-03-06
 - Histórico recuperado e validado para continuidade sem depender de memória da sessão anterior.
@@ -62,3 +99,6 @@ Atualizado em: 2026-03-21
 1. Disponibilizar Node.js `20.x` no Windows e validar `npm install`, `npm run lint`, `npm run build` e `npm run dev`.
 2. Concluir validação em uso real contínuo do auto-healing do `dev` (sessão local persistente fora do executor).
 3. Ajustar padronização visual fina da barra de ações (largura mínima e ritmo dos botões) se necessário.
+4. Testar em uso contínuo local o fluxo final do admin para validar conforto visual (desktop e mobile).
+5. Definir se a seção `Cadastros existentes` deve manter estado selecionado ao alternar entre `Empresas` e `Usuários`.
+6. Atualizar documentação principal (`README`) para refletir estado atual (PostgreSQL/Neon e fluxo real de operação).
