@@ -181,6 +181,7 @@ export default function AdminSistemaPage() {
       setMessage("Plano criado com sucesso.");
       setNewPlan({ name: "", priceCents: 0, maxUsers: "", maxAppointmentsMonth: "" });
       await loadAll();
+      setBusinessAction(null);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Falha");
     }
@@ -204,6 +205,7 @@ export default function AdminSistemaPage() {
       setMessage("Empresa criada com sucesso.");
       setNewCompany({ name: "", slug: "", planId: "" });
       await loadAll();
+      setBusinessAction(null);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Falha");
     } finally {
@@ -220,6 +222,7 @@ export default function AdminSistemaPage() {
       setMessage("Usuário criado com sucesso.");
       setNewUser({ name: "", email: "", password: "", isSystemAdmin: false });
       await loadAll();
+      setAccessAction(null);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Falha");
     }
@@ -232,6 +235,7 @@ export default function AdminSistemaPage() {
         ...newMembership
       });
       setMessage("Vínculo criado com sucesso.");
+      setAccessAction(null);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Falha");
     }
@@ -245,6 +249,7 @@ export default function AdminSistemaPage() {
       });
       setMessage("Assinatura criada com sucesso.");
       await loadAll();
+      setBusinessAction(null);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Falha");
     }
@@ -291,6 +296,8 @@ export default function AdminSistemaPage() {
       });
       setMessage("Empresa atualizada com sucesso.");
       await loadAll();
+      setRegistrySection(null);
+      setSelectedCompanyId("");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Falha");
     }
@@ -314,6 +321,8 @@ export default function AdminSistemaPage() {
       setMessage("Usuário atualizado com sucesso.");
       setUserDraft((prev) => ({ ...prev, newPassword: "" }));
       await loadAll();
+      setRegistrySection(null);
+      setSelectedUserId("");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Falha");
     }
