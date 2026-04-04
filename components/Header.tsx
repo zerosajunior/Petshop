@@ -63,7 +63,7 @@ export function Header() {
     return null;
   }
 
-  const isAdminHubHome = isSystemAdmin && pathname === "/";
+  const isAdminArea = isSystemAdmin && (pathname === "/" || pathname.startsWith("/admin/"));
   const visibleLinks = links.filter((link) => !(isSystemAdmin && link.href === "/configuracoes"));
 
   return (
@@ -78,7 +78,7 @@ export function Header() {
             <CompanySwitcher />
           </div>
         ) : null}
-        {!isAdminHubHome ? (
+        {!isAdminArea ? (
           <div className="navMainGroup">
             {visibleLinks.map((link) => (
               <Link key={link.href} href={link.href}>

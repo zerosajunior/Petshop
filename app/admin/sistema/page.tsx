@@ -95,6 +95,8 @@ export default function AdminSistemaPage() {
 
   const [newPlan, setNewPlan] = useState({ name: "", priceCents: 0, maxUsers: "", maxAppointmentsMonth: "" });
   const [newCompany, setNewCompany] = useState({ name: "", slug: "", planId: "", logoDataUrl: "" });
+  const [createAdminWithCompany, setCreateAdminWithCompany] = useState(true);
+  const [companyAdminUser, setCompanyAdminUser] = useState({ name: "", email: "", password: "" });
   const [newUser, setNewUser] = useState({ name: "", email: "", password: "", isSystemAdmin: false });
   const [newMembership, setNewMembership] = useState({ userId: "", companyId: "", role: "ATTENDANT" });
   const [newSubscription, setNewSubscription] = useState({ companyId: "", planId: "", status: "ACTIVE" });
@@ -223,13 +225,59 @@ export default function AdminSistemaPage() {
         planId: newCompany.planId || null,
         logoDataUrl: newCompany.logoDataUrl || null
       });
-      setMessage("Empresa criada. Próximo passo: criar e vincular o usuário administrador.");
       setNewCompany({ name: "", slug: "", planId: "", logoDataUrl: "" });
+
+      if (createAdminWithCompany) {
+        if (!companyAdminUser.name || !companyAdminUser.email || !companyAdminUser.password) {
+          setMessage("Empresa criada. Preencha nome, e-mail e senha do usuário administrador para concluir.");
+          await loadAll();
+          setBusinessAction(null);
+          setAccessAction("user");
+          setOnboardingCompany({ id: createdCompany.id, name: createdCompany.name });
+          setNewMembership((prev) => ({ ...prev, companyId: createdCompany.id, role: "ADMIN" }));
+          return;
+        }
+
+        try {
+          const createdUser = await submit<User>("/api/system/users", {
+            name: companyAdminUser.name,
+            email: companyAdminUser.email,
+            password: companyAdminUser.password,
+            isSystemAdmin: false
+          });
+
+          await submit("/api/system/memberships", {
+            userId: createdUser.id,
+            companyId: createdCompany.id,
+            role: "ADMIN"
+          });
+
+          setCompanyAdminUser({ name: "", email: "", password: "" });
+          setMessage("Empresa criada e usuário administrador vinculado com sucesso.");
+          await loadAll();
+          setBusinessAction(null);
+          setAccessAction(null);
+          setOnboardingCompany(null);
+          return;
+        } catch (error) {
+          setMessage(
+            `Empresa criada, mas faltou concluir usuário/vínculo: ${error instanceof Error ? error.message : "falha"}`
+          );
+          await loadAll();
+          setBusinessAction(null);
+          setAccessAction("user");
+          setOnboardingCompany({ id: createdCompany.id, name: createdCompany.name });
+          setNewMembership((prev) => ({ ...prev, companyId: createdCompany.id, role: "ADMIN" }));
+          return;
+        }
+      }
+
+      setMessage("Empresa criada. Próximo passo: criar e vincular o usuário administrador.");
       await loadAll();
       setBusinessAction(null);
       setAccessAction("user");
       setOnboardingCompany({ id: createdCompany.id, name: createdCompany.name });
-      setNewMembership((prev) => ({ ...prev, companyId: createdCompany.id }));
+      setNewMembership((prev) => ({ ...prev, companyId: createdCompany.id, role: "ADMIN" }));
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Falha");
     } finally {
@@ -368,6 +416,44 @@ export default function AdminSistemaPage() {
       setSelectedUserId("");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Falha");
+    }
+  }
+
+  async function onArchiveCompany() {
+    if (!selectedCompanyId) {
+      setMessage("Selecione uma empresa para arquivar.");
+      return;
+    }
+    const confirmed = window.confirm(
+      "Arquivar esta empresa? Ela ficará suspensa e deixará de aparecer para acesso normal."
+    );
+    if (!confirmed) {
+      return;
+    }
+    try {
+      await patch(`/api/system/companies/${selectedCompanyId}`, { status: "SUSPENDED" });
+      setMessage("Empresa arquivada com sucesso.");
+      await loadAll();
+      setRegistrySection(null);
+      setSelectedCompanyId("");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Falha ao arquivar empresa.");
+    }
+  }
+
+  async function onReactivateCompany() {
+    if (!selectedCompanyId) {
+      setMessage("Selecione uma empresa para reativar.");
+      return;
+    }
+    try {
+      await patch(`/api/system/companies/${selectedCompanyId}`, { status: "ACTIVE" });
+      setMessage("Empresa reativada com sucesso.");
+      await loadAll();
+      setRegistrySection(null);
+      setSelectedCompanyId("");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Falha ao reativar empresa.");
     }
   }
 
@@ -514,6 +600,51 @@ export default function AdminSistemaPage() {
                   ))}
                 </select>
               </label>
+              <label className="subtle">
+                <input
+                  type="checkbox"
+                  checked={createAdminWithCompany}
+                  onChange={(event) => setCreateAdminWithCompany(event.target.checked)}
+                />
+                {" "}
+                Criar usuário administrador junto com a empresa
+              </label>
+              {createAdminWithCompany ? (
+                <>
+                  <label className="formField formFieldFull">
+                    <span>Nome do usuário administrador</span>
+                    <input
+                      placeholder="Ex.: Maria Admin"
+                      value={companyAdminUser.name}
+                      onChange={(event) =>
+                        setCompanyAdminUser((prev) => ({ ...prev, name: event.target.value }))
+                      }
+                    />
+                  </label>
+                  <label className="formField formFieldFull">
+                    <span>E-mail do usuário administrador</span>
+                    <input
+                      type="email"
+                      placeholder="admin@empresa.com"
+                      value={companyAdminUser.email}
+                      onChange={(event) =>
+                        setCompanyAdminUser((prev) => ({ ...prev, email: event.target.value }))
+                      }
+                    />
+                  </label>
+                  <label className="formField formFieldFull">
+                    <span>Senha inicial do usuário administrador</span>
+                    <input
+                      type="password"
+                      placeholder="Mínimo de 6 caracteres"
+                      value={companyAdminUser.password}
+                      onChange={(event) =>
+                        setCompanyAdminUser((prev) => ({ ...prev, password: event.target.value }))
+                      }
+                    />
+                  </label>
+                </>
+              ) : null}
               <label className="formField formFieldFull">
                 <span>Logotipo da empresa</span>
                 <input
@@ -797,6 +928,17 @@ export default function AdminSistemaPage() {
                 <button className="btnPrimary" type="submit">
                   Salvar empresa
                 </button>
+                <div className="adminInlineActions formFieldFull">
+                  {companyDraft.status === "SUSPENDED" ? (
+                    <button className="btnSecondary" type="button" onClick={onReactivateCompany}>
+                      Reativar empresa
+                    </button>
+                  ) : (
+                    <button className="btnDanger" type="button" onClick={onArchiveCompany}>
+                      Arquivar empresa
+                    </button>
+                  )}
+                </div>
               </form>
             )}
           </article>
