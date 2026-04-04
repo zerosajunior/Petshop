@@ -19,6 +19,10 @@ const companyUpdateSchema = z.object({
   logoDataUrl: logoSchema.nullable().optional()
 });
 
+const companyDeleteSchema = z.object({
+  confirmationText: z.string().trim().optional()
+});
+
 export async function PATCH(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
@@ -92,6 +96,74 @@ export async function PATCH(
       (error as { code?: string }).code === "P2002"
         ? "Já existe uma empresa com esse identificador."
         : "Não foi possível atualizar a empresa.";
+    return fail(message, 400);
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  const actor = await requireSystemAdmin();
+  if (!actor) {
+    return fail("Acesso restrito ao admin do sistema.", 403);
+  }
+
+  const { id } = await context.params;
+  const body = await request.json().catch(() => ({}));
+  const parsed = companyDeleteSchema.safeParse(body);
+  if (!parsed.success) {
+    return fail("Dados de exclusão inválidos.", 400);
+  }
+
+  const company = await prisma.company.findUnique({
+    where: { id },
+    select: { id: true, slug: true, name: true }
+  });
+  if (!company) {
+    return fail("Empresa não encontrada.", 404);
+  }
+
+  const normalizedConfirmation = (parsed.data.confirmationText ?? "").trim().toUpperCase();
+  const expectedWithSlug = `EXCLUIR ${company.slug.toUpperCase()}`;
+  const hasStrongConfirmation =
+    normalizedConfirmation === "EXCLUIR" || normalizedConfirmation === expectedWithSlug;
+  if (!hasStrongConfirmation) {
+    return fail(`Confirmação obrigatória inválida. Use EXCLUIR ou ${expectedWithSlug}.`, 400);
+  }
+
+  if (id === actor.session.companyId) {
+    return fail("Troque de empresa antes de excluir a empresa atualmente em uso.", 409);
+  }
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      await tx.stockMovement.deleteMany({ where: { companyId: id } });
+      await tx.productImage.deleteMany({ where: { companyId: id } });
+      await tx.appointment.deleteMany({ where: { companyId: id } });
+      await tx.marketingConsentRequest.deleteMany({ where: { companyId: id } });
+      await tx.messageLog.deleteMany({ where: { companyId: id } });
+      await tx.campaign.deleteMany({ where: { companyId: id } });
+      await tx.service.deleteMany({ where: { companyId: id } });
+      await tx.pet.deleteMany({ where: { companyId: id } });
+      await tx.customer.deleteMany({ where: { companyId: id } });
+      await tx.product.deleteMany({ where: { companyId: id } });
+      await tx.membership.deleteMany({ where: { companyId: id } });
+      await tx.subscription.deleteMany({ where: { companyId: id } });
+      await tx.companySettings.deleteMany({ where: { companyId: id } });
+      await tx.auditLog.updateMany({
+        where: { companyId: id },
+        data: { companyId: null }
+      });
+      await tx.company.delete({ where: { id } });
+    });
+
+    return ok({ id });
+  } catch (error) {
+    const message =
+      error instanceof Error && error.message
+        ? `Não foi possível excluir a empresa. ${error.message}`
+        : "Não foi possível excluir a empresa.";
     return fail(message, 400);
   }
 }

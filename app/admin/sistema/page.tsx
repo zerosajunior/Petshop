@@ -25,6 +25,13 @@ type User = {
   }>;
 };
 
+type AuthCompaniesResponse = {
+  data?: {
+    currentCompanyId: string;
+    companies: Array<{ id: string; slug: string; name: string }>;
+  };
+};
+
 const roleOptions = [
   { value: "ADMIN", label: "Administrador da empresa" },
   { value: "ATTENDANT", label: "Atendente" },
@@ -92,6 +99,7 @@ export default function AdminSistemaPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [message, setMessage] = useState("");
+  const [currentSessionCompanyId, setCurrentSessionCompanyId] = useState("");
 
   const [newPlan, setNewPlan] = useState({ name: "", priceCents: 0, maxUsers: "", maxAppointmentsMonth: "" });
   const [newCompany, setNewCompany] = useState({ name: "", slug: "", planId: "", logoDataUrl: "" });
@@ -121,23 +129,30 @@ export default function AdminSistemaPage() {
   const [accessAction, setAccessAction] = useState<"user" | "membership" | null>(null);
   const [registrySection, setRegistrySection] = useState<"companies" | "users" | null>(null);
   const [onboardingCompany, setOnboardingCompany] = useState<{ id: string; name: string } | null>(null);
+  const [deleteTargetCompany, setDeleteTargetCompany] = useState<Company | null>(null);
+  const [deleteConfirmStep, setDeleteConfirmStep] = useState<1 | 2>(1);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [isDeletingCompany, setIsDeletingCompany] = useState(false);
 
   async function loadAll() {
-    const [plansRes, companiesRes, usersRes] = await Promise.all([
+    const [plansRes, companiesRes, usersRes, authCompaniesRes] = await Promise.all([
       fetch("/api/system/plans"),
       fetch("/api/system/companies"),
-      fetch("/api/system/users")
+      fetch("/api/system/users"),
+      fetch("/api/auth/companies")
     ]);
 
-    const [plansPayload, companiesPayload, usersPayload] = await Promise.all([
+    const [plansPayload, companiesPayload, usersPayload, authCompaniesPayload] = await Promise.all([
       plansRes.json().catch(() => ({})),
       companiesRes.json().catch(() => ({})),
-      usersRes.json().catch(() => ({}))
+      usersRes.json().catch(() => ({})),
+      authCompaniesRes.json().catch(() => ({}))
     ]);
 
     setPlans(plansPayload.data ?? []);
     setCompanies(companiesPayload.data ?? []);
     setUsers(usersPayload.data ?? []);
+    setCurrentSessionCompanyId((authCompaniesPayload as AuthCompaniesResponse).data?.currentCompanyId ?? "");
   }
 
   useEffect(() => {
@@ -189,6 +204,19 @@ export default function AdminSistemaPage() {
     if (!res.ok) {
       throw new Error(payload.error ?? "Falha na atualização");
     }
+  }
+
+  async function destroy<T>(url: string, body?: unknown) {
+    const res = await fetch(url, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: body === undefined ? undefined : JSON.stringify(body)
+    });
+    const payload = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(payload.error ?? "Falha ao excluir");
+    }
+    return payload.data as T;
   }
 
   async function onCreatePlan(event: FormEvent) {
@@ -454,6 +482,67 @@ export default function AdminSistemaPage() {
       setSelectedCompanyId("");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Falha ao reativar empresa.");
+    }
+  }
+
+  async function onDeleteCompany() {
+    if (!selectedCompanyId) {
+      setMessage("Selecione uma empresa para excluir.");
+      return;
+    }
+
+    const selected = companies.find((company) => company.id === selectedCompanyId);
+    if (!selected) {
+      setMessage("Empresa selecionada não encontrada.");
+      return;
+    }
+    setDeleteTargetCompany(selected);
+    setDeleteConfirmStep(1);
+    setDeleteConfirmText("");
+  }
+
+  function closeDeleteModal() {
+    if (isDeletingCompany) {
+      return;
+    }
+    setDeleteTargetCompany(null);
+    setDeleteConfirmStep(1);
+    setDeleteConfirmText("");
+  }
+
+  async function onConfirmDeleteCompany() {
+    if (!deleteTargetCompany || isDeletingCompany) {
+      return;
+    }
+
+    if (deleteConfirmStep === 1) {
+      setDeleteConfirmStep(2);
+      return;
+    }
+
+    const normalizedConfirm = deleteConfirmText.trim().toUpperCase();
+    const expectedSimple = "EXCLUIR";
+    const expectedWithSlug = `EXCLUIR ${deleteTargetCompany.slug.toUpperCase()}`;
+    if (normalizedConfirm !== expectedSimple && normalizedConfirm !== expectedWithSlug) {
+      setMessage(`Confirmação inválida. Digite EXCLUIR ou ${expectedWithSlug}.`);
+      return;
+    }
+
+    setIsDeletingCompany(true);
+    try {
+      await destroy<{ id: string }>(`/api/system/companies/${deleteTargetCompany.id}`, {
+        confirmationText: normalizedConfirm
+      });
+
+      setMessage("Empresa excluída com sucesso.");
+      await loadAll();
+      setRegistrySection(null);
+      setSelectedCompanyId("");
+      closeDeleteModal();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Falha ao excluir empresa.");
+    } finally {
+      setIsDeletingCompany(false);
     }
   }
 
@@ -938,6 +1027,9 @@ export default function AdminSistemaPage() {
                       Arquivar empresa
                     </button>
                   )}
+                  <button className="btnDanger" type="button" onClick={onDeleteCompany}>
+                    Excluir empresa
+                  </button>
                 </div>
               </form>
             )}
@@ -1050,6 +1142,59 @@ export default function AdminSistemaPage() {
               </form>
             )}
           </article>
+        </div>
+      ) : null}
+
+      {deleteTargetCompany ? (
+        <div className="adminDangerModalOverlay" role="dialog" aria-modal="true">
+          <div className="adminDangerModal">
+            <h3>Confirmar exclusão de empresa</h3>
+            <p className="subtle">
+              Empresa: <strong>{deleteTargetCompany.name}</strong> ({deleteTargetCompany.slug})
+            </p>
+            {deleteTargetCompany.id === currentSessionCompanyId ? (
+            <p className="subtle">
+              Esta é a empresa ativa da sua sessão. Por segurança, a exclusão será bloqueada até
+              você trocar manualmente para outra empresa.
+            </p>
+          ) : null}
+
+            {deleteConfirmStep === 1 ? (
+              <p className="subtle">
+                Esta ação é permanente e remove dados relacionados da empresa selecionada.
+              </p>
+            ) : (
+              <label className="formField formFieldFull">
+                <span>
+                  Digite <strong>EXCLUIR</strong> para confirmar
+                </span>
+                <input
+                  value={deleteConfirmText}
+                  onChange={(event) => setDeleteConfirmText(event.target.value)}
+                  placeholder={`EXCLUIR ${deleteTargetCompany.slug.toUpperCase()}`}
+                  autoFocus
+                />
+              </label>
+            )}
+
+            <div className="adminInlineActions">
+              <button type="button" className="btnSecondary" onClick={closeDeleteModal} disabled={isDeletingCompany}>
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="btnDanger"
+                onClick={onConfirmDeleteCompany}
+                disabled={isDeletingCompany}
+              >
+                {isDeletingCompany
+                  ? "Excluindo..."
+                  : deleteConfirmStep === 1
+                    ? "Continuar"
+                    : "Excluir empresa"}
+              </button>
+            </div>
+          </div>
         </div>
       ) : null}
     </section>
