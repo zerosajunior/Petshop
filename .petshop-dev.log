@@ -337,3 +337,348 @@ prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
  ✓ Compiled in 340ms (616 modules)
  GET /login?next=%2F 200 in 93ms
  ✓ Compiled in 797ms (635 modules)
+ ✓ Compiled in 589ms (649 modules)
+ ✓ Compiled /[companySlug]/[[...rest]] in 286ms (655 modules)
+ GET /login?next=%2F 200 in 412ms
+[?25h
+
+> petshop-saas@0.1.0 dev:raw
+> NEXT_DISABLE_WEBPACK_CACHE=1 next dev -H 127.0.0.1 -p 3000
+
+   ▲ Next.js 15.1.11
+   - Local:        http://127.0.0.1:3000
+   - Network:      http://127.0.0.1:3000
+   - Environments: .env
+   - Experiments (use with caution):
+     · typedRoutes
+
+ ✓ Starting...
+ ✓ Ready in 2s
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 541ms (99 modules)
+ ○ Compiling /login ...
+ ✓ Compiled /login in 3.4s (641 modules)
+ GET /login?next=%2F 200 in 3688ms
+ ✓ Compiled /[companySlug]/[[...rest]] in 446ms (648 modules)
+ GET /favicon.ico 307 in 1263ms
+ GET /login?next=%2Ffavicon.ico 200 in 86ms
+ ✓ Compiled /api/auth/login in 246ms (663 modules)
+ POST /api/auth/login 400 in 310ms
+ POST /api/auth/login 200 in 426ms
+ ✓ Compiled / in 159ms (670 modules)
+ GET / 200 in 257ms
+ GET /login?next=%2Ffavicon.ico 200 in 19ms
+ ✓ Compiled /api/dashboard in 496ms (682 modules)
+ GET /api/auth/me 200 in 683ms
+ GET /api/dashboard 200 in 741ms
+ ✓ Compiled /agenda in 362ms (691 modules)
+ GET /agenda 200 in 431ms
+ ✓ Compiled /api/appointments in 430ms (699 modules)
+ GET /api/pets 200 in 503ms
+ GET /api/pets 200 in 503ms
+ GET /api/appointments 200 in 504ms
+ GET /api/appointments 200 in 505ms
+ GET /api/services 200 in 506ms
+ GET /api/services 200 in 507ms
+ ✓ Compiled /privacidade in 229ms (701 modules)
+ GET /privacidade 200 in 285ms
+ ✓ Compiled /configuracoes in 250ms (708 modules)
+ GET /configuracoes 200 in 292ms
+ ✓ Compiled /api/company-settings in 224ms (711 modules)
+ GET /api/company-settings 200 in 296ms
+ GET /api/company-settings 200 in 297ms
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ ✓ Compiled in 984ms (651 modules)
+ ○ Compiling /api/auth/me ...
+ ✓ Compiled /api/auth/me in 734ms (362 modules)
+ GET /api/auth/me 200 in 2310ms
+ ✓ Compiled in 186ms (673 modules)
+ GET /api/auth/me 200 in 69ms
+ GET /api/auth/me 200 in 200ms
+ ✓ Compiled in 396ms (687 modules)
+ GET /configuracoes 200 in 103ms
+ GET /configuracoes 200 in 97ms
+ GET /login?next=%2Ffavicon.ico 200 in 42ms
+ ○ Compiling /api/company-settings ...
+ ✓ Compiled /api/company-settings in 639ms (382 modules)
+ GET /api/auth/me 200 in 944ms
+ GET /api/auth/me 200 in 945ms
+ GET /api/company-settings 200 in 1019ms
+ ✓ Compiled /admin/sistema in 446ms (700 modules)
+ GET /admin/sistema 200 in 526ms
+ ✓ Compiled /api/system/users in 474ms (708 modules)
+ GET /api/system/plans 200 in 569ms
+ GET /api/system/companies 200 in 600ms
+ GET /api/system/plans 200 in 25ms
+ GET /api/system/users 200 in 616ms
+ GET /api/system/users 200 in 45ms
+ GET /api/system/companies 200 in 64ms
+ GET /admin/sistema 200 in 96ms
+ GET /api/auth/me 200 in 71ms
+ GET /api/system/companies 200 in 96ms
+ GET /api/system/users 200 in 98ms
+ GET /api/system/plans 200 in 167ms
+ GET /api/auth/me 200 in 187ms
+ ✓ Compiled /api/auth/switch-company in 248ms (710 modules)
+ POST /api/auth/switch-company 200 in 390ms
+ GET /admin/sistema 200 in 80ms
+ GET /api/auth/me 200 in 57ms
+ GET /api/system/plans 200 in 63ms
+ GET /api/system/users 200 in 76ms
+ GET /api/system/companies 200 in 78ms
+ GET /api/auth/me 200 in 86ms
+ GET / 200 in 21ms
+ ✓ Compiled /api/dashboard in 249ms (399 modules)
+ GET /api/dashboard 200 in 395ms
+ GET /api/dashboard 200 in 421ms
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ ✓ Compiled /api/dashboard in 863ms (658 modules)
+ ✓ Compiled (689 modules)
+ GET /api/auth/me 200 in 1947ms
+ GET /api/dashboard 200 in 2273ms
+ ✓ Compiled in 526ms (703 modules)
+ GET / 200 in 122ms
+ ✓ Compiled in 335ms (703 modules)
+ GET / 200 in 89ms
+ GET / 200 in 100ms
+ GET /login?next=%2Ffavicon.ico 200 in 26ms
+ GET /api/dashboard 200 in 88ms
+ GET /api/auth/me 200 in 98ms
+ GET /api/auth/me 200 in 111ms
+ GET /api/auth/me 200 in 121ms
+ GET /api/dashboard 200 in 34ms
+ GET /admin/sistema 200 in 20ms
+ ✓ Compiled /api/system/plans in 405ms (389 modules)
+ ✓ Compiled (395 modules)
+ GET /api/system/plans 200 in 737ms
+ GET /api/system/users 200 in 768ms
+ GET /api/system/plans 200 in 24ms
+ GET /api/system/companies 200 in 774ms
+ GET /api/system/companies 200 in 45ms
+ GET /api/system/users 200 in 69ms
+ GET / 200 in 50ms
+ GET /api/dashboard 200 in 53ms
+ GET /api/dashboard 200 in 68ms
+ GET /api/auth/me 200 in 86ms
+ GET /api/auth/me 200 in 88ms
+ GET /admin/sistema 200 in 13ms
+ GET /api/system/plans 200 in 45ms
+ GET /api/system/plans 200 in 23ms
+ GET /api/system/companies 200 in 84ms
+ GET /api/system/users 200 in 94ms
+ GET /api/system/companies 200 in 74ms
+ GET /api/system/users 200 in 76ms
+ GET /admin/sistema 200 in 10ms
+ ✓ Compiled /api/auth/switch-company in 164ms (397 modules)
+ POST /api/auth/switch-company 200 in 245ms
+ GET /admin/sistema 200 in 129ms
+ GET /api/system/plans 200 in 44ms
+ GET /api/auth/me 200 in 48ms
+ GET /api/auth/me 200 in 55ms
+ GET /api/system/users 200 in 65ms
+ GET /api/system/companies 200 in 83ms
+ GET / 200 in 13ms
+ GET /api/dashboard 200 in 40ms
+ GET /api/dashboard 200 in 58ms
+ GET /api/auth/me 200 in 61ms
+ GET /api/auth/me 200 in 79ms
+ ✓ Compiled in 702ms (658 modules)
+ ✓ Compiled in 256ms (658 modules)
+ ✓ Compiled in 415ms (672 modules)
+ GET / 200 in 258ms
+ ✓ Compiled in 283ms (658 modules)
+ ✓ Compiled /api/dashboard in 480ms (367 modules)
+ ✓ Compiled (376 modules)
+ GET /api/dashboard 200 in 1043ms
+ GET /api/auth/me 200 in 1052ms
+ GET / 200 in 131ms
+ GET /api/dashboard 200 in 57ms
+ GET /api/auth/me 200 in 82ms
+ GET /api/auth/me 200 in 88ms
+ GET /api/auth/me 200 in 94ms
+ GET /api/dashboard 200 in 30ms
+ GET / 200 in 11ms
+ GET /admin/sistema 200 in 25ms
+ ✓ Compiled /api/system/plans in 327ms (391 modules)
+ ✓ Compiled (395 modules)
+ GET /api/system/plans 200 in 599ms
+ GET /api/system/plans 200 in 22ms
+ GET /api/system/companies 200 in 636ms
+ GET /api/system/users 200 in 638ms
+ GET /api/system/users 200 in 74ms
+ GET /api/system/companies 200 in 76ms
+ ✓ Compiled /api/auth/switch-company in 173ms (397 modules)
+ POST /api/auth/switch-company 200 in 256ms
+ GET /admin/sistema 200 in 50ms
+ GET /api/system/plans 200 in 67ms
+ GET /api/auth/me 200 in 75ms
+ GET /api/system/companies 200 in 77ms
+ GET /api/auth/me 200 in 95ms
+ GET /api/system/users 200 in 130ms
+ POST /api/auth/switch-company 200 in 36ms
+ GET /admin/sistema 200 in 18ms
+ GET /login?next=%2Ffavicon.ico 200 in 29ms
+ GET /api/system/plans 200 in 42ms
+ GET /api/auth/me 200 in 50ms
+ GET /api/system/companies 200 in 62ms
+ GET /api/auth/me 200 in 70ms
+ GET /api/system/users 200 in 86ms
+ GET /admin/sistema 200 in 24ms
+ GET /api/system/plans 200 in 51ms
+ GET /api/auth/me 200 in 59ms
+ GET /api/system/users 200 in 69ms
+ GET /api/auth/me 200 in 70ms
+ GET /api/system/companies 200 in 88ms
+ GET /admin/sistema 200 in 19ms
+ GET /api/system/plans 200 in 39ms
+ GET /api/auth/me 200 in 44ms
+ GET /api/auth/me 200 in 51ms
+ GET /api/system/users 200 in 56ms
+ GET /api/system/companies 200 in 57ms
+ ✓ Compiled in 1129ms (705 modules)
+ GET /admin/sistema 200 in 185ms
+ GET /login?next=%2Ffavicon.ico 200 in 30ms
+ GET /api/system/plans 200 in 370ms
+ GET /api/auth/me 200 in 384ms
+ GET /api/auth/me 200 in 397ms
+ GET /api/system/users 200 in 407ms
+ GET /api/system/companies 200 in 414ms
+ GET / 200 in 18ms
+ GET /api/auth/me 200 in 54ms
+ ✓ Compiled /api/dashboard in 208ms (395 modules)
+ GET /api/dashboard 200 in 510ms
+ GET /api/auth/me 200 in 526ms
+ GET /api/dashboard 200 in 558ms
+ GET /agenda 200 in 30ms
+ ✓ Compiled /api/services in 339ms (398 modules)
+ ✓ Compiled (403 modules)
+ GET /api/pets 200 in 612ms
+ GET /api/pets 200 in 620ms
+ GET /api/appointments 200 in 620ms
+ GET /api/appointments 200 in 614ms
+ GET /api/services 200 in 623ms
+ GET /api/services 200 in 617ms
+ ○ Compiling /estoque ...
+ ✓ Compiled /estoque in 687ms (723 modules)
+ GET /estoque 200 in 747ms
+ ✓ Compiled /api/products in 247ms (725 modules)
+ GET /api/products?status=active 200 in 333ms
+ GET /api/products?status=active 200 in 334ms
+ GET / 200 in 31ms
+ GET /api/dashboard 200 in 54ms
+ GET /api/dashboard 200 in 69ms
+ GET /api/auth/me 200 in 75ms
+ GET /api/auth/me 200 in 100ms
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ ✓ Compiled in 1452ms (660 modules)
+ ✓ Compiled in 522ms (660 modules)
+ ✓ Compiled /api/dashboard in 119ms (367 modules)
+ ✓ Compiled (376 modules)
+ GET /api/dashboard 200 in 2199ms
+ GET /api/auth/me 200 in 2231ms
+ ✓ Compiled in 482ms (705 modules)
+ GET / 200 in 211ms
+ ✓ Compiled in 277ms (705 modules)
+ GET / 200 in 77ms
+ GET /admin/sistema 200 in 19ms
+ ✓ Compiled /api/system/companies in 308ms (384 modules)
+ ✓ Compiled (389 modules)
+ GET /api/system/plans 200 in 584ms
+ GET /api/system/plans 200 in 23ms
+ GET /api/system/companies 200 in 630ms
+ GET /api/system/users 200 in 632ms
+ GET /api/system/users 200 in 75ms
+ GET /api/system/companies 200 in 76ms
+ GET / 200 in 27ms
+ ✓ Compiled /api/dashboard in 167ms (392 modules)
+ ✓ Compiled (395 modules)
+ GET /api/dashboard 200 in 500ms
+ GET /api/dashboard 200 in 519ms
+ GET /api/auth/me 200 in 534ms
+ GET /api/auth/me 200 in 554ms
+ GET /agenda 200 in 29ms
+ ✓ Compiled /api/appointments in 284ms (398 modules)
+ ✓ Compiled (403 modules)
+ GET /api/services 200 in 539ms
+ GET /api/services 200 in 540ms
+ GET /api/pets 200 in 541ms
+ GET /api/pets 200 in 541ms
+ GET /api/appointments 200 in 542ms
+ GET /api/appointments 200 in 538ms
+ GET / 200 in 24ms
+ GET /api/dashboard 200 in 63ms
+ GET /api/dashboard 200 in 73ms
+ GET /api/auth/me 200 in 81ms
+ GET /api/auth/me 200 in 112ms
+ ✓ Compiled /[companySlug]/[[...rest]] in 139ms (405 modules)
+ GET /default/agenda 307 in 211ms
+ GET /agenda 200 in 22ms
+ GET /api/services 200 in 47ms
+ GET /api/appointments 200 in 54ms
+ GET /api/pets 200 in 55ms
+ GET /api/pets 200 in 56ms
+ GET /api/services 200 in 57ms
+ GET /api/appointments 200 in 65ms
+ GET / 200 in 19ms
+ GET /api/dashboard 200 in 66ms
+ GET /api/dashboard 200 in 78ms
+ GET /api/auth/me 200 in 100ms
+ GET /api/auth/me 200 in 106ms
+ GET /sampet/agenda 307 in 47ms
+ GET /agenda 200 in 10ms
+ GET /api/pets 200 in 33ms
+ GET /api/pets 200 in 35ms
+ GET /api/appointments 200 in 30ms
+ GET /api/services 200 in 38ms
+ GET /api/services 200 in 45ms
+ GET /api/appointments 200 in 46ms
+ GET / 200 in 12ms
+ GET /api/dashboard 200 in 45ms
+ GET /api/dashboard 200 in 58ms
+ GET /api/auth/me 200 in 63ms
+ GET /api/auth/me 200 in 84ms
+ GET / 200 in 89ms
+ GET /login?next=%2Ffavicon.ico 200 in 26ms
+ GET /api/auth/me 200 in 196ms
+ GET /api/dashboard 200 in 167ms
+ GET /api/auth/me 200 in 208ms
+ GET /api/auth/me 200 in 208ms
+ ✓ Compiled in 751ms (691 modules)
+ GET /api/dashboard 200 in 601ms
+ GET /api/auth/me 200 in 649ms

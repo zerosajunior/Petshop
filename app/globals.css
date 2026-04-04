@@ -46,12 +46,30 @@ main {
 }
 
 .nav {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
-  gap: 0.55rem;
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
   width: 100%;
   padding-bottom: 0.2rem;
+}
+
+.navAdminGroup {
+  display: inline-flex;
+  align-items: center;
+  padding-right: 1rem;
+  margin-right: 0.35rem;
+  border-right: 1px solid #cdd8e6;
+  flex: 0 0 auto;
+}
+
+.navMainGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex: 1 1 auto;
+  min-width: max-content;
 }
 
 .companySwitcher {
@@ -94,7 +112,12 @@ main {
   padding: 0.42rem 0.68rem;
   font-size: 0.85rem;
   font-weight: 600;
-  margin-right: 0.35rem;
+}
+
+.companyAdminLink.isActive {
+  border-color: #4f77a1;
+  background: #e2edf9;
+  box-shadow: 0 0 0 1px #4f77a1 inset;
 }
 
 .nav a {
@@ -136,11 +159,16 @@ main {
 
 @media (max-width: 1100px) {
   .nav {
-    display: flex;
+    gap: 0.65rem;
+  }
+
+  .navAdminGroup {
+    padding-right: 0.8rem;
+    margin-right: 0.2rem;
+  }
+
+  .navMainGroup {
     gap: 0.7rem;
-    flex-wrap: nowrap;
-    align-items: center;
-    overflow-x: auto;
   }
 
   .nav a {
@@ -310,6 +338,74 @@ main {
   background: var(--card);
   padding: 1rem;
   box-shadow: 0 10px 20px rgba(120, 104, 70, 0.06);
+}
+
+.adminHubPanel {
+  background: #f6f9fd;
+  border-color: #cad8e8;
+}
+
+.adminHubActions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.9rem;
+  margin-top: 0.85rem;
+}
+
+.adminHubButton {
+  border-radius: 16px;
+  min-height: 96px;
+  padding: 1rem 1.1rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  border: 1px solid #4f77a1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #f8fbff;
+  background: linear-gradient(180deg, #5f89b5 0%, #527da9 100%);
+  box-shadow: 0 8px 18px rgba(79, 119, 161, 0.22);
+  transition: filter 0.15s ease, transform 0.12s ease;
+}
+
+.adminHubPrimary {
+  filter: none;
+}
+
+.adminHubSecondary {
+  cursor: pointer;
+}
+
+.adminHubCompanyAction {
+  filter: saturate(0.98);
+}
+
+.adminHubButton:hover {
+  filter: brightness(1.02);
+  transform: translateY(-1px);
+}
+
+.adminHubCompanies {
+  margin-top: 0.8rem;
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.adminHubCompanyButton {
+  border: 1px solid #c2d3e6;
+  border-radius: 12px;
+  background: #f8fbff;
+  padding: 0.7rem 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.adminHubCompanyButton:hover {
+  background: #edf4fc;
+  border-color: #9eb7d3;
 }
 
 .adminSystemPanel {

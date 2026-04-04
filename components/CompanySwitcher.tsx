@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 type CompanyItem = {
   id: string;
@@ -20,6 +21,7 @@ type MeResponse = {
 };
 
 export function CompanySwitcher() {
+  const pathname = usePathname();
   const [companies, setCompanies] = useState<CompanyItem[]>([]);
   const [companyId, setCompanyId] = useState("");
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
@@ -115,8 +117,12 @@ export function CompanySwitcher() {
       ) : null}
 
       {isSystemAdmin ? (
-        <Link href="/admin/sistema" className="companyAdminLink">
-          Administração
+        <Link
+          href="/admin/sistema"
+          className={`companyAdminLink${pathname === "/admin/sistema" ? " isActive" : ""}`}
+          aria-current={pathname === "/admin/sistema" ? "page" : undefined}
+        >
+          Painel Admin
         </Link>
       ) : null}
     </div>
