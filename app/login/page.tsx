@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
 
 type LoginResponse = {
   data?: {
@@ -25,7 +24,6 @@ type LoginResponse = {
 };
 
 export default function LoginPage() {
-  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -69,8 +67,9 @@ export default function LoginPage() {
       // storage indisponível não deve bloquear login
     }
 
-    router.push("/");
-    router.refresh();
+    const nextPath = new URLSearchParams(window.location.search).get("next");
+    const safeNextPath = nextPath && nextPath.startsWith("/") ? nextPath : "/";
+    window.location.assign(safeNextPath);
   }
 
   return (

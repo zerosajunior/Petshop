@@ -3,6 +3,21 @@ import type { NextRequest } from "next/server";
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth-session";
 import type { AuthRole } from "@/lib/auth-users";
 
+const RESERVED_TOP_LEVEL_SEGMENTS = new Set([
+  "api",
+  "login",
+  "admin",
+  "agenda",
+  "cadastro",
+  "configuracoes",
+  "estoque",
+  "movimentacoes-estoque",
+  "promocoes",
+  "servicos",
+  "relatorios",
+  "privacidade"
+]);
+
 function forbidden(isApi: boolean) {
   if (isApi) {
     return NextResponse.json(
@@ -47,10 +62,30 @@ function hasPermission(
   return true;
 }
 
+function normalizePathForPermission(pathname: string) {
+  const segments = pathname.split("/").filter(Boolean);
+  if (segments.length === 0) {
+    return pathname;
+  }
+
+  const firstSegment = segments[0];
+  if (RESERVED_TOP_LEVEL_SEGMENTS.has(firstSegment)) {
+    return pathname;
+  }
+
+  const remainingSegments = segments.slice(1);
+  if (remainingSegments.length === 0) {
+    return "/";
+  }
+
+  return `/${remainingSegments.join("/")}`;
+}
+
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+  const normalizedPathname = normalizePathForPermission(pathname);
   const isApi = pathname.startsWith("/api");
-  const isLoginPage = pathname === "/login";
+  const isLoginPage = normalizedPathname === "/login";
   const isAuthApi = pathname.startsWith("/api/auth/");
 
   if (isLoginPage || isAuthApi) {
@@ -63,6 +98,7 @@ export function middleware(request: NextRequest) {
       return NextResponse.json({ error: "Autenticação obrigatória." }, { status: 401 });
     }
     const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("next", `${pathname}${request.nextUrl.search}`);
     return NextResponse.redirect(loginUrl);
   }
 
@@ -72,10 +108,11 @@ export function middleware(request: NextRequest) {
         return NextResponse.json({ error: "Sessão inválida ou expirada." }, { status: 401 });
       }
       const loginUrl = new URL("/login", request.url);
+      loginUrl.searchParams.set("next", `${pathname}${request.nextUrl.search}`);
       return NextResponse.redirect(loginUrl);
     }
 
-    if (!hasPermission(session.role, pathname, request.method, session.isSystemAdmin)) {
+    if (!hasPermission(session.role, normalizedPathname, request.method, session.isSystemAdmin)) {
       return forbidden(isApi);
     }
 

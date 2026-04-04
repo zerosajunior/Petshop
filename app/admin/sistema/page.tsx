@@ -1,12 +1,14 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import Image from "next/image";
 
 type Plan = { id: string; name: string; maxUsers: number | null; maxAppointmentsMonth: number | null };
 type Company = {
   id: string;
   name: string;
   slug: string;
+  logoDataUrl?: string | null;
   status?: "PENDING" | "ACTIVE" | "SUSPENDED";
   createdAt?: string;
 };
@@ -70,6 +72,21 @@ function normalizeSlug(value: string) {
     .replace(/^-|-$/g, "");
 }
 
+async function readImageAsDataUrl(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result !== "string") {
+        reject(new Error("Falha ao carregar imagem."));
+        return;
+      }
+      resolve(reader.result);
+    };
+    reader.onerror = () => reject(new Error("Falha ao carregar imagem."));
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function AdminSistemaPage() {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -77,7 +94,7 @@ export default function AdminSistemaPage() {
   const [message, setMessage] = useState("");
 
   const [newPlan, setNewPlan] = useState({ name: "", priceCents: 0, maxUsers: "", maxAppointmentsMonth: "" });
-  const [newCompany, setNewCompany] = useState({ name: "", slug: "", planId: "" });
+  const [newCompany, setNewCompany] = useState({ name: "", slug: "", planId: "", logoDataUrl: "" });
   const [newUser, setNewUser] = useState({ name: "", email: "", password: "", isSystemAdmin: false });
   const [newMembership, setNewMembership] = useState({ userId: "", companyId: "", role: "ATTENDANT" });
   const [newSubscription, setNewSubscription] = useState({ companyId: "", planId: "", status: "ACTIVE" });
@@ -86,7 +103,8 @@ export default function AdminSistemaPage() {
     name: "",
     slug: "",
     status: "ACTIVE",
-    planId: ""
+    planId: "",
+    logoDataUrl: ""
   });
   const [selectedUserId, setSelectedUserId] = useState("");
   const [userDraft, setUserDraft] = useState({
@@ -100,6 +118,7 @@ export default function AdminSistemaPage() {
   const [businessAction, setBusinessAction] = useState<"plan" | "company" | "subscription" | null>(null);
   const [accessAction, setAccessAction] = useState<"user" | "membership" | null>(null);
   const [registrySection, setRegistrySection] = useState<"companies" | "users" | null>(null);
+  const [onboardingCompany, setOnboardingCompany] = useState<{ id: string; name: string } | null>(null);
 
   async function loadAll() {
     const [plansRes, companiesRes, usersRes] = await Promise.all([
@@ -130,7 +149,7 @@ export default function AdminSistemaPage() {
     const selected = companies.find((company) => company.id === selectedCompanyId);
     if (!selected) {
       setSelectedCompanyId("");
-      setCompanyDraft({ name: "", slug: "", status: "ACTIVE", planId: "" });
+      setCompanyDraft({ name: "", slug: "", status: "ACTIVE", planId: "", logoDataUrl: "" });
     }
   }, [companies, selectedCompanyId]);
 
@@ -145,7 +164,7 @@ export default function AdminSistemaPage() {
     }
   }, [users, selectedUserId]);
 
-  async function submit(url: string, body: unknown) {
+  async function submit<T>(url: string, body: unknown) {
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -155,6 +174,7 @@ export default function AdminSistemaPage() {
     if (!res.ok) {
       throw new Error(payload.error ?? "Falha na operação");
     }
+    return payload.data as T;
   }
 
   async function patch(url: string, body: unknown) {
@@ -197,15 +217,19 @@ export default function AdminSistemaPage() {
 
     setIsSubmittingCompany(true);
     try {
-      await submit("/api/system/companies", {
+      const createdCompany = await submit<Company>("/api/system/companies", {
         name: newCompany.name.trim(),
         slug: normalizedSlug,
-        planId: newCompany.planId || null
+        planId: newCompany.planId || null,
+        logoDataUrl: newCompany.logoDataUrl || null
       });
-      setMessage("Empresa criada com sucesso.");
-      setNewCompany({ name: "", slug: "", planId: "" });
+      setMessage("Empresa criada. Próximo passo: criar e vincular o usuário administrador.");
+      setNewCompany({ name: "", slug: "", planId: "", logoDataUrl: "" });
       await loadAll();
       setBusinessAction(null);
+      setAccessAction("user");
+      setOnboardingCompany({ id: createdCompany.id, name: createdCompany.name });
+      setNewMembership((prev) => ({ ...prev, companyId: createdCompany.id }));
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Falha");
     } finally {
@@ -216,12 +240,23 @@ export default function AdminSistemaPage() {
   async function onCreateUser(event: FormEvent) {
     event.preventDefault();
     try {
-      await submit("/api/system/users", {
+      const createdUser = await submit<User>("/api/system/users", {
         ...newUser
       });
-      setMessage("Usuário criado com sucesso.");
       setNewUser({ name: "", email: "", password: "", isSystemAdmin: false });
       await loadAll();
+      if (onboardingCompany) {
+        setMessage(`Usuário criado. Falta apenas vincular à empresa ${onboardingCompany.name}.`);
+        setAccessAction("membership");
+        setNewMembership((prev) => ({
+          ...prev,
+          userId: createdUser.id,
+          companyId: onboardingCompany.id,
+          role: "ADMIN"
+        }));
+        return;
+      }
+      setMessage("Usuário criado com sucesso.");
       setAccessAction(null);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Falha");
@@ -234,7 +269,13 @@ export default function AdminSistemaPage() {
       await submit("/api/system/memberships", {
         ...newMembership
       });
-      setMessage("Vínculo criado com sucesso.");
+      if (onboardingCompany && newMembership.companyId === onboardingCompany.id) {
+        setMessage("Cadastro concluído: empresa criada e usuário administrador vinculado.");
+        setOnboardingCompany(null);
+      } else {
+        setMessage("Vínculo criado com sucesso.");
+      }
+      setNewMembership((prev) => ({ ...prev, userId: "", role: "ATTENDANT" }));
       setAccessAction(null);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Falha");
@@ -261,7 +302,8 @@ export default function AdminSistemaPage() {
       name: company.name,
       slug: company.slug,
       status: company.status ?? "ACTIVE",
-      planId: ""
+      planId: "",
+      logoDataUrl: company.logoDataUrl ?? ""
     });
   }
 
@@ -292,7 +334,8 @@ export default function AdminSistemaPage() {
       await patch(`/api/system/companies/${selectedCompanyId}`, {
         name: companyDraft.name.trim(),
         slug: normalizedSlug,
-        status: companyDraft.status
+        status: companyDraft.status,
+        logoDataUrl: companyDraft.logoDataUrl || null
       });
       setMessage("Empresa atualizada com sucesso.");
       await loadAll();
@@ -330,6 +373,44 @@ export default function AdminSistemaPage() {
 
   function onToggleRegistrySection(section: "companies" | "users") {
     setRegistrySection((prev) => (prev === section ? null : section));
+  }
+
+  async function onChangeNewCompanyLogo(file: File | null) {
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setMessage("Selecione um arquivo de imagem válido para o logotipo.");
+      return;
+    }
+
+    try {
+      const dataUrl = await readImageAsDataUrl(file);
+      setNewCompany((prev) => ({ ...prev, logoDataUrl: dataUrl }));
+      setMessage("Logotipo carregado para a nova empresa.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Falha ao carregar logotipo.");
+    }
+  }
+
+  async function onChangeDraftCompanyLogo(file: File | null) {
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setMessage("Selecione um arquivo de imagem válido para o logotipo.");
+      return;
+    }
+
+    try {
+      const dataUrl = await readImageAsDataUrl(file);
+      setCompanyDraft((prev) => ({ ...prev, logoDataUrl: dataUrl }));
+      setMessage("Logotipo da empresa atualizado localmente. Clique em salvar para confirmar.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Falha ao carregar logotipo.");
+    }
   }
 
   return (
@@ -433,6 +514,37 @@ export default function AdminSistemaPage() {
                   ))}
                 </select>
               </label>
+              <label className="formField formFieldFull">
+                <span>Logotipo da empresa</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => onChangeNewCompanyLogo(event.target.files?.[0] ?? null)}
+                />
+                <small className="subtle">
+                  O sistema mostra o logotipo no topo sempre em preto, sem alterar as cores da interface.
+                </small>
+              </label>
+              {newCompany.logoDataUrl ? (
+                <div className="formField formFieldFull">
+                  <Image
+                    className="adminCompanyLogoPreview"
+                    src={newCompany.logoDataUrl}
+                    alt="Prévia do logotipo da empresa"
+                    width={120}
+                    height={120}
+                    unoptimized
+                  />
+                  <button
+                    className="btnSecondary"
+                    type="button"
+                    onClick={() => setNewCompany((prev) => ({ ...prev, logoDataUrl: "" }))}
+                    style={{ marginTop: 8 }}
+                  >
+                    Remover logotipo
+                  </button>
+                </div>
+              ) : null}
               <button className="btnPrimary" type="submit" disabled={isSubmittingCompany}>
                 {isSubmittingCompany ? "Criando..." : "Criar empresa"}
               </button>
@@ -475,6 +587,12 @@ export default function AdminSistemaPage() {
       <div className="adminSystemSection" style={{ marginTop: 20 }}>
         <h3>Acesso e permissões</h3>
         <p className="subtle">Cadastre usuários e vincule cada um à empresa com o perfil correto.</p>
+        {onboardingCompany ? (
+          <small className="subtle">
+            Fluxo guiado ativo para <strong>{onboardingCompany.name}</strong>: criar usuário e
+            vincular como administrador.
+          </small>
+        ) : null}
       </div>
       <div className="appActionBar adminActionBar" style={{ marginTop: 12 }}>
         <button
@@ -496,6 +614,11 @@ export default function AdminSistemaPage() {
         {accessAction === "user" ? (
           <article className="card">
             <h3>Novo usuário</h3>
+            {onboardingCompany ? (
+              <p className="subtle">
+                Este usuário será usado no onboarding da empresa <strong>{onboardingCompany.name}</strong>.
+              </p>
+            ) : null}
             <form onSubmit={onCreateUser} className="formGrid">
               <label className="formField formFieldFull">
                 <span>Nome do usuário</span>
@@ -522,6 +645,11 @@ export default function AdminSistemaPage() {
         {accessAction === "membership" ? (
           <article className="card">
             <h3>Vincular usuário</h3>
+            {onboardingCompany ? (
+              <p className="subtle">
+                Finalize o onboarding vinculando o usuário à empresa <strong>{onboardingCompany.name}</strong>.
+              </p>
+            ) : null}
             <form onSubmit={onCreateMembership} className="formGrid">
               <label className="formField formFieldFull">
                 <span>Usuário a ser vinculado</span>
@@ -588,6 +716,7 @@ export default function AdminSistemaPage() {
                   >
                     <strong>{company.name}</strong>
                     <small className="subtle">Identificador: {company.slug}</small>
+                    <small className="subtle">Logotipo: {company.logoDataUrl ? "Configurado" : "Não configurado"}</small>
                     <small className="subtle">Status: {company.status ?? "-"}</small>
                     <small className="subtle">Criada em: {formatDate(company.createdAt)}</small>
                   </button>
@@ -637,6 +766,34 @@ export default function AdminSistemaPage() {
                     ))}
                   </select>
                 </label>
+                <label className="formField formFieldFull">
+                  <span>Logotipo da empresa</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(event) => onChangeDraftCompanyLogo(event.target.files?.[0] ?? null)}
+                  />
+                </label>
+                {companyDraft.logoDataUrl ? (
+                  <div className="formField formFieldFull">
+                    <Image
+                      className="adminCompanyLogoPreview"
+                      src={companyDraft.logoDataUrl}
+                      alt="Prévia do logotipo da empresa"
+                      width={120}
+                      height={120}
+                      unoptimized
+                    />
+                    <button
+                      className="btnSecondary"
+                      type="button"
+                      onClick={() => setCompanyDraft((prev) => ({ ...prev, logoDataUrl: "" }))}
+                      style={{ marginTop: 8 }}
+                    >
+                      Remover logotipo
+                    </button>
+                  </div>
+                ) : null}
                 <button className="btnPrimary" type="submit">
                   Salvar empresa
                 </button>

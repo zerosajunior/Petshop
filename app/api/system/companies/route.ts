@@ -3,12 +3,20 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/http";
 import { requireSystemAdmin } from "@/lib/request-auth";
+import { parseCompanyBranding, serializeCompanyBranding } from "@/lib/company-branding";
+
+const logoSchema = z
+  .string()
+  .trim()
+  .max(1_500_000)
+  .refine((value) => value.startsWith("data:image/"), "Logotipo inválido.");
 
 const companySchema = z.object({
   name: z.string().trim().min(2),
   slug: z.string().trim().min(2).regex(/^[a-z0-9-]+$/),
   status: z.enum(["PENDING", "ACTIVE", "SUSPENDED"]).optional(),
-  planId: z.string().optional().nullable()
+  planId: z.string().optional().nullable(),
+  logoDataUrl: logoSchema.optional().nullable()
 });
 
 export async function GET() {
@@ -19,6 +27,9 @@ export async function GET() {
 
   const companies = await prisma.company.findMany({
     include: {
+      settings: {
+        select: { branding: true }
+      },
       plan: true,
       subscriptions: {
         orderBy: { createdAt: "desc" },
@@ -29,7 +40,15 @@ export async function GET() {
     orderBy: { createdAt: "desc" }
   });
 
-  return ok(companies);
+  return ok(
+    companies.map((company) => {
+      const { settings, ...companyBase } = company;
+      return {
+        ...companyBase,
+        logoDataUrl: parseCompanyBranding(settings?.branding).logoDataUrl
+      };
+    })
+  );
 }
 
 export async function POST(request: NextRequest) {
@@ -51,11 +70,33 @@ export async function POST(request: NextRequest) {
         name: parsed.data.name,
         slug: parsed.data.slug,
         status: parsed.data.status ?? "ACTIVE",
-        planId: parsed.data.planId ?? null
+        planId: parsed.data.planId ?? null,
+        ...(parsed.data.logoDataUrl
+          ? {
+              settings: {
+                create: {
+                  branding: serializeCompanyBranding({ logoDataUrl: parsed.data.logoDataUrl })
+                }
+              }
+            }
+          : {})
+      },
+      include: {
+        settings: {
+          select: { branding: true }
+        }
       }
     });
 
-    return ok(company, 201);
+    const { settings, ...companyBase } = company;
+
+    return ok(
+      {
+        ...companyBase,
+        logoDataUrl: parseCompanyBranding(settings?.branding).logoDataUrl
+      },
+      201
+    );
   } catch (error) {
     const message =
       typeof error === "object" &&
