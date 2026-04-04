@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 type CompanyItem = {
   id: string;
   slug: string;
   name: string;
+  logoDataUrl?: string | null;
 };
 
 type MeResponse = {
@@ -22,6 +24,7 @@ export function CompanySwitcher() {
   const [companyId, setCompanyId] = useState("");
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
   const [loading, setLoading] = useState(false);
+  const selectedCompany = companies.find((company) => company.id === companyId);
 
   useEffect(() => {
     try {
@@ -83,6 +86,19 @@ export function CompanySwitcher() {
 
   return (
     <div className="companySwitcher">
+      {selectedCompany?.logoDataUrl ? (
+        <span className="companyLogoShell" aria-hidden="true">
+          <Image
+            className="companyMonoLogo"
+            src={selectedCompany.logoDataUrl}
+            alt=""
+            width={24}
+            height={24}
+            unoptimized
+          />
+        </span>
+      ) : null}
+
       {companies.length > 1 ? (
         <select
           value={companyId}

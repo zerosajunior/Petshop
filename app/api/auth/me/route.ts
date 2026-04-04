@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/http";
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth-session";
+import { parseCompanyBranding } from "@/lib/company-branding";
 
 export async function GET(request: NextRequest) {
   const token = request.cookies.get(AUTH_COOKIE_NAME)?.value;
@@ -27,7 +28,12 @@ export async function GET(request: NextRequest) {
     ? await prisma.company.findMany({
         where: { status: "ACTIVE" },
         orderBy: { name: "asc" },
-        select: { id: true, slug: true, name: true }
+        select: {
+          id: true,
+          slug: true,
+          name: true,
+          settings: { select: { branding: true } }
+        }
       })
     : (
         await prisma.membership.findMany({
@@ -39,10 +45,26 @@ export async function GET(request: NextRequest) {
           orderBy: { company: { name: "asc" } },
           select: {
             role: true,
-            company: { select: { id: true, slug: true, name: true } }
+            company: {
+              select: {
+                id: true,
+                slug: true,
+                name: true,
+                settings: { select: { branding: true } }
+              }
+            }
           }
         })
       ).map((item) => ({ ...item.company, role: item.role }));
+
+  const companiesWithLogo = companies.map((company) => {
+    const { settings, ...companyBase } = company;
+    return {
+      ...companyBase,
+      logoDataUrl: parseCompanyBranding(settings?.branding).logoDataUrl
+    };
+  });
+  const currentCompany = companiesWithLogo.find((company) => company.id === session.companyId) ?? null;
 
   return ok({
     username: session.username,
@@ -50,6 +72,7 @@ export async function GET(request: NextRequest) {
     companyId: session.companyId,
     companySlug: session.companySlug,
     isSystemAdmin: user.isSystemAdmin,
-    companies
+    currentCompany,
+    companies: companiesWithLogo
   });
 }

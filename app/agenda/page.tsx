@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { ApiResponse } from "@/types/api";
 import Link from "next/link";
+import { DEFAULT_PETSHOP_SERVICES } from "@/lib/default-services";
 
 type Pet = { id: string; name: string; customer: { name: string } };
 type Service = { id: string; name: string; durationMin: number };
@@ -96,6 +97,15 @@ function toDateKey(date: Date) {
   ).padStart(2, "0")}`;
 }
 
+function normalizeText(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
 export default function AgendaPage() {
   const [pets, setPets] = useState<Pet[]>([]);
   const [services, setServices] = useState<Service[]>([]);
@@ -118,6 +128,7 @@ export default function AgendaPage() {
   const [updatingAppointmentId, setUpdatingAppointmentId] = useState("");
   const [isSchedulingOpen, setIsSchedulingOpen] = useState(false);
   const [isServiceFormOpen, setIsServiceFormOpen] = useState(false);
+  const [isDefaultServicePickerOpen, setIsDefaultServicePickerOpen] = useState(false);
   const [serviceName, setServiceName] = useState("");
   const [serviceDescription, setServiceDescription] = useState("");
   const [serviceDurationMin, setServiceDurationMin] = useState(60);
@@ -125,6 +136,8 @@ export default function AgendaPage() {
   const [serviceMessage, setServiceMessage] = useState("");
   const [serviceError, setServiceError] = useState("");
   const [isSavingService, setIsSavingService] = useState(false);
+  const [isSavingDefaultServices, setIsSavingDefaultServices] = useState(false);
+  const [selectedDefaultServices, setSelectedDefaultServices] = useState<string[]>([]);
   const [autoSelectedServiceId, setAutoSelectedServiceId] = useState("");
   const useCompactCalendarActions = viewMode === "weekly" || viewMode === "monthly";
 
@@ -171,6 +184,13 @@ export default function AgendaPage() {
   useEffect(() => {
     refresh().catch(() => undefined);
   }, [refresh]);
+
+  useEffect(() => {
+    if (services.length === 0) {
+      setIsDefaultServicePickerOpen(true);
+      setIsSchedulingOpen(true);
+    }
+  }, [services.length]);
 
   useEffect(() => {
     if (!startTime || !serviceId) {
@@ -305,6 +325,72 @@ export default function AgendaPage() {
     }
   }
 
+  function toggleDefaultService(serviceKey: string) {
+    setSelectedDefaultServices((prev) =>
+      prev.includes(serviceKey) ? prev.filter((item) => item !== serviceKey) : [...prev, serviceKey]
+    );
+  }
+
+  async function onSaveSelectedDefaultServices() {
+    setServiceMessage("");
+    setServiceError("");
+    if (selectedDefaultServices.length === 0) {
+      setServiceError("Selecione ao menos um serviço para continuar.");
+      return;
+    }
+    if (isSavingDefaultServices) {
+      return;
+    }
+
+    const selectedCatalogItems = DEFAULT_PETSHOP_SERVICES.filter((item) =>
+      selectedDefaultServices.includes(item.key)
+    );
+    const existingNames = new Set(services.map((service) => normalizeText(service.name)));
+    const toCreate = selectedCatalogItems.filter((item) => !existingNames.has(normalizeText(item.name)));
+    if (toCreate.length === 0) {
+      setServiceMessage("Nenhum serviço novo para adicionar.");
+      setSelectedDefaultServices([]);
+      setIsDefaultServicePickerOpen(false);
+      return;
+    }
+
+    setIsSavingDefaultServices(true);
+    try {
+      const results = await Promise.all(
+        toCreate.map((item) =>
+          fetch("/api/services", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: item.name,
+              description: item.description,
+              durationMin: item.durationMin,
+              priceCents: item.priceCents
+            })
+          })
+        )
+      );
+
+      const firstError = results.find((result) => !result.ok);
+      if (firstError) {
+        const payload: ApiResponse<unknown> = await firstError.json().catch(() => ({}));
+        setServiceError(payload.error ?? "Não foi possível salvar a seleção de serviços.");
+        return;
+      }
+
+      await refresh();
+      setSelectedDefaultServices([]);
+      setIsDefaultServicePickerOpen(false);
+      setServiceMessage("Serviços selecionados e liberados para agendamento.");
+      setMessage("Serviços configurados com sucesso.");
+      setIsSchedulingOpen(true);
+    } catch {
+      setServiceError("Falha de conexão ao salvar serviços selecionados.");
+    } finally {
+      setIsSavingDefaultServices(false);
+    }
+  }
+
   async function updateAppointmentStatus(appointmentId: string, status: AppointmentStatus) {
     setMessage("");
     setError("");
@@ -358,6 +444,12 @@ export default function AgendaPage() {
   });
 
   const canSchedule = pets.length > 0 && services.length > 0;
+  const needsInitialServiceSetup = services.length === 0;
+  const activeServiceNames = new Set(services.map((service) => normalizeText(service.name)));
+  const defaultServicesView = DEFAULT_PETSHOP_SERVICES.map((item) => ({
+    ...item,
+    isActive: activeServiceNames.has(normalizeText(item.name))
+  }));
   const periodStart =
     viewMode === "daily"
       ? startOfDay(referenceDate)
@@ -452,7 +544,7 @@ export default function AgendaPage() {
         <article className="panel">
           <strong>Faltam opções para agendar.</strong>
           <p className="subtle" style={{ marginTop: "0.4rem" }}>
-            Cadastre cliente/pet em novo cadastro e inclua um serviço usando o botão Novo serviço.
+            Cadastre cliente/pet em novo cadastro e configure os serviços da empresa.
           </p>
         </article>
       ) : null}
@@ -494,18 +586,33 @@ export default function AgendaPage() {
           <button
             className="btnSecondary actionBtnSameHeight agendaPanelBtn"
             onClick={() => {
+              setServiceMessage("");
+              setServiceError("");
+              setIsServiceFormOpen(false);
+              setIsSchedulingOpen(true);
+              setIsDefaultServicePickerOpen((prev) => !prev);
+            }}
+            type="button"
+          >
+            {isDefaultServicePickerOpen ? "Fechar seleção" : "Selecionar novo serviço"}
+          </button>
+          <button
+            className="btnSecondary actionBtnSameHeight agendaPanelBtn"
+            onClick={() => {
               if (isServiceFormOpen) {
                 resetServiceFormAndClose();
                 return;
               }
               setServiceMessage("");
               setServiceError("");
+              setIsDefaultServicePickerOpen(false);
               setIsSchedulingOpen(true);
               setIsServiceFormOpen(true);
             }}
+            disabled={needsInitialServiceSetup}
             type="button"
           >
-            {isServiceFormOpen ? "Fechar serviço" : "Novo serviço"}
+            {isServiceFormOpen ? "Fechar serviço" : "Novo serviço personalizado"}
           </button>
           <button
             className="btnSecondary actionBtnSameHeight agendaPanelBtn"
@@ -529,7 +636,60 @@ export default function AgendaPage() {
 
         {isSchedulingOpen ? (
           <form onSubmit={onSubmit}>
+            {needsInitialServiceSetup ? (
+              <p className="subtle" style={{ marginTop: 0 }}>
+                Para liberar agendamentos, selecione e salve os serviços que a empresa presta.
+              </p>
+            ) : null}
             <div className="formGrid agendaScheduleGrid">
+              {isDefaultServicePickerOpen ? (
+                <div className="formField formFieldFull">
+                  <div className="serviceCatalogPanel">
+                    <strong style={{ display: "block", marginBottom: "0.4rem" }}>
+                      {needsInitialServiceSetup
+                        ? "Seleção inicial obrigatória de serviços"
+                        : "Selecionar novos serviços da lista padrão"}
+                    </strong>
+                    <p className="subtle" style={{ marginTop: 0 }}>
+                      Marque os serviços que você presta. Os não selecionados permanecem esmaecidos.
+                    </p>
+                    <div className="servicePicker">
+                      {defaultServicesView.map((service) => {
+                        const isSelected = selectedDefaultServices.includes(service.key);
+                        const className = `serviceOption ${
+                          service.isActive ? "active" : isSelected ? "pending" : "muted"
+                        }`;
+                        return (
+                          <label className={className} key={service.key}>
+                            <input
+                              checked={isSelected}
+                              disabled={service.isActive}
+                              onChange={() => toggleDefaultService(service.key)}
+                              type="checkbox"
+                            />
+                            <span>
+                              {service.name} ({service.durationMin} min)
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                    <div className="formActions" style={{ marginTop: "0.6rem" }}>
+                      <button
+                        className="btnPrimary"
+                        disabled={isSavingDefaultServices}
+                        onClick={() => onSaveSelectedDefaultServices()}
+                        type="button"
+                      >
+                        {isSavingDefaultServices ? "Salvando..." : "Salvar seleção de serviços"}
+                      </button>
+                      {serviceMessage ? <small>{serviceMessage}</small> : null}
+                      {serviceError ? <small style={{ color: "#b42318" }}>{serviceError}</small> : null}
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+
               <div className="formField">
                 <label htmlFor="petId">Pet</label>
                 <select id="petId" onChange={(e) => setPetId(e.target.value)} required value={petId}>
@@ -568,7 +728,7 @@ export default function AgendaPage() {
                   ))}
                 </select>
                 {services.length === 0 ? (
-                  <small className="subtle">Nenhum serviço disponível. Use o botão Novo serviço.</small>
+                  <small className="subtle">Nenhum serviço disponível. Use o botão Selecionar novo serviço.</small>
                 ) : null}
                 {autoSelectedServiceId && autoSelectedServiceId === serviceId ? (
                   <small style={{ color: "#1f6b55" }}>Serviço novo selecionado automaticamente.</small>

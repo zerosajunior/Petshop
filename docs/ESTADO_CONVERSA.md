@@ -1,6 +1,32 @@
 # Estado da Conversa (Resumo para retomada)
 
-Atualizado em: 2026-03-30
+Atualizado em: 2026-04-04
+
+## Retomada 2026-04-04
+- Contexto recuperado via `git status`, `git log` e documentos de sessão anteriores.
+- Fluxo de onboarding de empresa reforçado no Admin:
+  - após `Nova empresa`, abertura automática de `Novo usuário`;
+  - após criar usuário, abertura automática de `Vincular usuário` com empresa pré-selecionada e papel `ADMIN`.
+- Agenda evoluída com seleção inicial obrigatória de serviços:
+  - criada lista padrão de serviços com duração média em `lib/default-services.ts`;
+  - quando empresa não possui serviços, fluxo obrigatório de seleção e salvamento;
+  - serviços não selecionados permanecem esmaecidos;
+  - adicionado botão `Selecionar novo serviço` para incluir novos serviços depois.
+- URLs por empresa implementadas no formato `/{slug}`:
+  - rota dinâmica `app/[companySlug]/[[...rest]]/route.ts` troca empresa ativa na sessão e redireciona;
+  - login passou a respeitar `next` para retornar ao caminho solicitado.
+- Branding por empresa com logotipo:
+  - admin de sistema recebeu campo de upload de logotipo em criar/editar empresa;
+  - logotipo é exibido no topo da aplicação em estilo monocromático preto;
+  - serialização de branding centralizada em `lib/company-branding.ts`, preservando compatibilidade com branding textual.
+- Sanidade técnica executada:
+  - `npm run lint` OK
+  - `npm run build` OK
+
+## Pendências abertas (atualizadas)
+1. Atualizar `README` principal com estado atual da arquitetura (PostgreSQL/Neon + URLs por slug + onboarding de serviços).
+2. Validar UX mobile do Admin em uso contínuo (cadastro/edição com logotipo).
+3. Avaliar exibição do logotipo também na tela de login por empresa (opcional, monocromático).
 
 ## Retomada 2026-03-21
 - Projeto clonado e validado no Windows a partir do GitHub (`main` em `origin/main`).

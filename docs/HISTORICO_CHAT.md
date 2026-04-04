@@ -1,6 +1,31 @@
 # Histórico do Chat
 
-Atualizado em: 2026-03-30
+Atualizado em: 2026-04-04
+
+## Sessão 2026-04-04 (retomada + onboarding + URLs por slug + logotipo)
+- Retomada iniciada com recuperação do contexto local (`git status`, `git log`) e leitura dos arquivos de memória.
+- Alinhamento funcional com o usuário:
+  - empresa nova deve seguir com criação/vínculo de usuário administrador;
+  - serviços do petshop devem ter catálogo inicial selecionável antes do primeiro agendamento.
+- Implementação aplicada no Admin:
+  - fluxo guiado `Nova empresa -> Novo usuário -> Vincular usuário` com pré-preenchimento inteligente.
+- Implementação aplicada na Agenda:
+  - catálogo padrão de serviços com duração média;
+  - seleção obrigatória inicial para liberar agendamento;
+  - não selecionados esmaecidos;
+  - botão `Selecionar novo serviço` para inclusão posterior.
+- Implementação aplicada para multitenancy por URL:
+  - suporte a `/{companySlug}` e `/{companySlug}/...` com troca segura da empresa ativa na sessão;
+  - login com redirecionamento por `next`.
+- Implementação aplicada para branding com logotipo:
+  - upload no cadastro/edição de empresa no Admin;
+  - exibição no header em modo monocromático preto;
+  - parsing/serialização de branding centralizados para preservar compatibilidade.
+- Solicitação final da sessão:
+  - salvar sistema e conversa antes de atualização do VS Code.
+- Validação técnica:
+  - `npm run lint` OK
+  - `npm run build` OK
 
 ## Sessão 2026-03-21 (retomada no Windows)
 - Repositório do GitHub validado localmente no Windows:
