@@ -29,12 +29,62 @@ type ToolboxHref =
   | "/promocoes"
   | "/relatorios/operacional";
 
+type MeCompany = {
+  id: string;
+  slug: string;
+  name: string;
+};
+
+type MeResponse = {
+  data?: {
+    companyId: string;
+    isSystemAdmin: boolean;
+    companies: MeCompany[];
+  };
+};
+
 export default function HomePage() {
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
   const [loadError, setLoadError] = useState("");
+  const [isSystemAdmin, setIsSystemAdmin] = useState(false);
+  const [companyId, setCompanyId] = useState("");
+  const [companies, setCompanies] = useState<MeCompany[]>([]);
+
+  useEffect(() => {
+    try {
+      const cached = window.localStorage.getItem("petshop_auth_me");
+      if (cached) {
+        const parsed = JSON.parse(cached) as MeResponse["data"];
+        if (parsed) {
+          setIsSystemAdmin(Boolean(parsed.isSystemAdmin));
+          setCompanyId(parsed.companyId ?? "");
+          setCompanies(parsed.companies ?? []);
+        }
+      }
+    } catch {
+      // cache inválido não deve bloquear tela inicial
+    }
+
+    fetch("/api/auth/me", { cache: "no-store" })
+      .then((res) => res.json())
+      .then((payload: MeResponse) => {
+        if (!payload.data) {
+          return;
+        }
+        setIsSystemAdmin(Boolean(payload.data.isSystemAdmin));
+        setCompanyId(payload.data.companyId);
+        setCompanies(payload.data.companies ?? []);
+      })
+      .catch(() => undefined);
+  }, []);
 
   useEffect(() => {
     let active = true;
+    if (isSystemAdmin) {
+      return () => {
+        active = false;
+      };
+    }
 
     async function loadMetrics() {
       setLoadError("");
@@ -141,7 +191,7 @@ export default function HomePage() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [isSystemAdmin]);
 
   const stats: QuickIndicatorItem[] = useMemo(() => {
     if (!dashboard) {
@@ -276,6 +326,39 @@ export default function HomePage() {
       }
     ];
   }, [dashboard]);
+
+  if (isSystemAdmin) {
+    const currentCompany = companies.find((company) => company.id === companyId) ?? null;
+    const otherCompanies = companies.filter((company) => company.id !== companyId);
+
+    return (
+      <section>
+        <article className="panel adminHubPanel">
+          <h2>Hub do administrador</h2>
+          <div className="adminHubActions">
+            <Link className="adminHubButton adminHubPrimary" href="/admin/sistema">
+              Administração do Sistema
+            </Link>
+            <Link className="adminHubButton adminHubSecondary" href="/agenda">
+              {currentCompany ? `Sistema - ${currentCompany.name}` : "Sistema"}
+            </Link>
+            {otherCompanies.map((company) => (
+              <Link
+                key={company.id}
+                className="adminHubButton adminHubCompanyAction"
+                href={`/${company.slug}/agenda`}
+              >
+                {company.name}
+              </Link>
+            ))}
+          </div>
+          {companies.length === 0 ? (
+            <small className="subtle">Nenhuma empresa ativa disponível.</small>
+          ) : null}
+        </article>
+      </section>
+    );
+  }
 
   return (
     <section>
