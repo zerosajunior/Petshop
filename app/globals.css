@@ -869,6 +869,22 @@ main {
   cursor: pointer;
 }
 
+.btnDanger {
+  border: 1px solid #b54747;
+  background: linear-gradient(180deg, #cc5a5a 0%, #b54747 100%);
+  color: #fff;
+  border-radius: 12px;
+  padding: 0.55rem 0.85rem;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(181, 71, 71, 0.2);
+}
+
+.adminInlineActions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.2rem;
+}
+
 .actionBtnEqual {
   display: inline-flex;
   align-items: center;
