@@ -682,3 +682,856 @@ prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
  ✓ Compiled in 751ms (691 modules)
  GET /api/dashboard 200 in 601ms
  GET /api/auth/me 200 in 649ms
+2026-04-04 15:50:47 idle timeout reached, stopping dev server pid=40946
+ ⨯ Failed to start server
+Error: listen EPERM: operation not permitted 127.0.0.1:3000
+    at <unknown> (Error: listen EPERM: operation not permitted 127.0.0.1:3000) {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3000
+}
+[?25h
+   ▲ Next.js 15.1.11
+   - Local:        http://127.0.0.1:3000
+   - Network:      http://127.0.0.1:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ⚠ Invalid next.config.mjs options detected: 
+ ⚠     Unrecognized key(s) in object: 'typedRoutes'
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ ✓ Ready in 2.8s
+2026-04-04T19:00:19.644Z first boot attempt failed, retrying clean start
+ ⨯ Failed to start server
+Error: listen EPERM: operation not permitted 127.0.0.1:3000
+    at <unknown> (Error: listen EPERM: operation not permitted 127.0.0.1:3000) {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3000
+}
+[?25h
+2026-04-04T19:02:06.928Z server did not start within 90s
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 621ms (99 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 4.2s (641 modules)
+ GET / 200 in 4560ms
+ ○ Compiling /login ...
+ ✓ Compiled /api/dashboard in 1930ms (666 modules)
+ GET /login?next=%2Ffavicon.ico 200 in 2273ms
+ GET /api/auth/me 200 in 1799ms
+ GET /api/dashboard 200 in 1830ms
+ GET /api/auth/me 200 in 1832ms
+ GET /api/auth/me 200 in 1834ms
+ ✓ Compiled /admin/sistema in 241ms (673 modules)
+ GET /admin/sistema 200 in 287ms
+ ✓ Compiled /api/system/plans in 489ms (692 modules)
+ GET /api/system/plans 200 in 599ms
+ GET /api/system/users 200 in 626ms
+ GET /api/system/plans 200 in 33ms
+ GET /api/system/companies 200 in 647ms
+ GET /api/system/companies 200 in 47ms
+ GET /api/system/users 200 in 78ms
+ ✓ Compiled in 700ms (632 modules)
+ ✓ Compiled /api/system/companies/[id] in 228ms (670 modules)
+ DELETE /api/system/companies/cmngdrnyp0001pbcredfyt9y4 409 in 1409ms
+ DELETE /api/system/companies/cmngdrnyp0001pbcredfyt9y4 409 in 20ms
+ GET /admin/sistema 200 in 138ms
+ ✓ Compiled /api/system/users in 116ms (365 modules)
+ ✓ Compiled (373 modules)
+ GET /api/system/plans 200 in 344ms
+ GET /api/auth/me 200 in 347ms
+ GET /api/system/companies 200 in 361ms
+ GET /api/auth/me 200 in 376ms
+ GET /api/system/users 200 in 393ms
+ DELETE /api/system/companies/cmngdrnyp0001pbcredfyt9y4 409 in 28ms
+ ✓ Compiled in 192ms (373 modules)
+ GET /admin/sistema 200 in 269ms
+ DELETE /api/system/companies/cmngdrnyp0001pbcredfyt9y4 409 in 77ms
+ GET /admin/sistema 200 in 99ms
+ GET /api/auth/me 200 in 75ms
+ GET /api/system/plans 200 in 72ms
+ GET /api/auth/me 200 in 87ms
+ GET /api/system/companies 200 in 81ms
+ GET /api/system/users 200 in 115ms
+ DELETE /api/system/companies/cmngdrnyp0001pbcredfyt9y4 409 in 21ms
+ DELETE /api/system/companies/cmngdrnyp0001pbcredfyt9y4 409 in 20ms
+ PATCH /api/system/companies/cmngdrnyp0001pbcredfyt9y4 200 in 122ms
+ GET /api/system/companies 200 in 55ms
+ GET /api/system/plans 200 in 56ms
+ GET /api/system/users 200 in 61ms
+ DELETE /api/system/companies/cmngdrnyp0001pbcredfyt9y4 409 in 26ms
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ ✓ Compiled /api/system/users in 1113ms (632 modules)
+ ✓ Compiled in 133ms (308 modules)
+ GET /api/system/plans 200 in 1659ms
+ GET /api/auth/companies 200 in 1665ms
+ GET /api/system/users 200 in 1688ms
+ GET /api/system/companies 200 in 1689ms
+ ✓ Compiled in 354ms (679 modules)
+ ✓ Compiled in 438ms (679 modules)
+ ✓ Compiled in 640ms (693 modules)
+ GET /admin/sistema 200 in 110ms
+ ✓ Compiled /api/system/companies/[id] in 278ms (362 modules)
+ GET /admin/sistema 200 in 69ms
+ DELETE /api/system/companies/cmngdrnyp0001pbcredfyt9y4 200 in 806ms
+ ✓ Compiled /api/auth/switch-company in 224ms (673 modules)
+ POST /api/auth/switch-company 200 in 328ms
+ ✓ Compiled /api/system/users in 217ms (367 modules)
+ ✓ Compiled (375 modules)
+ GET /api/system/plans 200 in 421ms
+ GET /api/auth/companies 200 in 422ms
+ GET /api/system/users 200 in 437ms
+ GET /api/system/companies 200 in 448ms
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ ✓ Compiled in 135ms (324 modules)
+ GET /admin/sistema 200 in 331ms
+ ✓ Compiled /login in 284ms (329 modules)
+ GET /login?next=%2Ffavicon.ico 200 in 373ms
+ ✓ Compiled /api/system/users in 262ms (351 modules)
+ ✓ Compiled (378 modules)
+ GET /api/system/plans 200 in 1432ms
+ GET /api/auth/me 200 in 1485ms
+ GET /api/system/companies 200 in 1472ms
+ GET /api/system/users 200 in 1476ms
+ GET /api/auth/companies 200 in 1792ms
+ GET /api/auth/me 200 in 1847ms
+ ✓ Compiled in 587ms (686 modules)
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ POST /api/system/companies 201 in 986ms
+ POST /api/system/users 201 in 112ms
+ ✓ Compiled /api/system/memberships in 431ms (677 modules)
+ POST /api/system/memberships 201 in 592ms
+ GET /api/system/companies 200 in 89ms
+ ✓ Compiled /api/auth/companies in 87ms (371 modules)
+ ✓ Compiled (374 modules)
+ GET /api/system/users 200 in 297ms
+ GET /api/auth/companies 200 in 360ms
+ GET /api/system/plans 200 in 363ms
+ ✓ Compiled /api/system/companies/[id] in 162ms (376 modules)
+ GET /admin/sistema 200 in 68ms
+ PATCH /api/system/companies/cmnktkryy0001pb8728be3u5g 200 in 406ms
+ GET /api/system/plans 200 in 34ms
+ GET /api/system/companies 200 in 69ms
+ GET /api/system/users 200 in 94ms
+ GET /api/auth/companies 200 in 135ms
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ ○ Compiling / ...
+ ✓ Compiled / in 766ms (329 modules)
+ GET / 200 in 1077ms
+ GET /admin/sistema 200 in 30ms
+ ✓ Compiled /login in 335ms (334 modules)
+ GET /login?next=%2Ffavicon.ico 200 in 425ms
+ ✓ Compiled /api/dashboard in 321ms (356 modules)
+ ✓ Compiled (365 modules)
+ GET /api/auth/me 200 in 2056ms
+ GET /api/auth/me 200 in 2057ms
+ GET /api/auth/me 200 in 2063ms
+ GET /api/dashboard 200 in 2085ms
+ ⨯ Error: Cannot find module './638.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/api/auth/me/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/swc/options.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/swc/index.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/router-server.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/login/page.js:1:9163)
+    at Object.<anonymous> (.next/server/app/login/page.js:1:9209) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/login'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 1881ms (915 modules)
+ ⨯ Error: Cannot find module './638.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/pages/_document.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/swc/options.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/swc/index.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/router-server.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/admin/sistema/page.js:1:34115)
+    at Object.<anonymous> (.next/server/app/admin/sistema/page.js:1:34159) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /login?next=%2F 500 in 2628ms
+ GET /admin/sistema 500 in 884ms
+ ⨯ Error: Cannot find module './638.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/pages/_document.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/swc/options.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/swc/index.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/router-server.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/admin/sistema/page.js:1:34115)
+    at Object.<anonymous> (.next/server/app/admin/sistema/page.js:1:34159) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /admin/sistema 500 in 256ms
+ ⨯ Error: Cannot find module './638.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/pages/_document.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/swc/options.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/swc/index.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/router-server.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/admin/sistema/page.js:1:34115)
+    at Object.<anonymous> (.next/server/app/admin/sistema/page.js:1:34159) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /admin/sistema 500 in 628ms
+2026-04-04T22:17:55.258Z auto-heal: chunk error detected, restarting next dev with clean build
+ ○ Compiling /[companySlug]/[[...rest]] ...
+ ✓ Compiled /[companySlug]/[[...rest]] in 553ms (917 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+Failed to get source map: [Error: Failed to read file contents of /Users/josejunior/Projetos/Petshop/.next/server/app/admin/sistema/page.js.] {
+  [cause]: [Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/server/app/admin/sistema/page.js'] {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/Users/josejunior/Projetos/Petshop/.next/server/app/admin/sistema/page.js'
+  }
+}
+Failed to get source map: [Error: Failed to read file contents of /Users/josejunior/Projetos/Petshop/.next/server/app/admin/sistema/page.js.] {
+  [cause]: [Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/server/app/admin/sistema/page.js'] {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/Users/josejunior/Projetos/Petshop/.next/server/app/admin/sistema/page.js'
+  }
+}
+2026-04-04T22:17:57.395Z auto-heal: chunk error detected, restarting next dev with clean build
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/login'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/login'
+}
+ GET /favicon.ico 500 in 2274ms
+ GET /login?next=%2F 500 in 1513ms
+2026-04-04T22:17:57.785Z auto-heal: server recovered
+ ⨯ Failed to start server
+Error: listen EPERM: operation not permitted 127.0.0.1:3000
+    at <unknown> (Error: listen EPERM: operation not permitted 127.0.0.1:3000) {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3000
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/build-manifest.json'] {
+  type: 'Error',
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/build-manifest.json',
+  page: '/favicon.ico'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/build-manifest.json'] {
+  type: 'Error',
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/build-manifest.json',
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 708ms
+ GET /login?next=%2F 500 in 717ms
+[?25h
+ ⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use 127.0.0.1:3000
+    at <unknown> (Error: listen EADDRINUSE: address already in use 127.0.0.1:3000) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3000
+}
+[?25h
+ ✓ Compiled /_not-found in 498ms (921 modules)
+ GET /login?next=%2F 404 in 878ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /_next/static/webpack/6aab8756297a0afb.webpack.hot-update.json 404 in 509ms
+ GET /admin/sistema 404 in 31ms
+ GET /_next/static/css/app/layout.css?v=1775341080152 404 in 86ms
+ GET /_next/static/chunks/main-app.js?v=1775341080152 404 in 87ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 88ms
+ GET /_next/static/chunks/app/layout.js 404 in 89ms
+ GET /login?next=%2Ffavicon.ico 404 in 31ms
+ GET /login?next=%2F 404 in 26ms
+ GET /login?next=%2F 404 in 21ms
+ GET /_next/static/css/app/layout.css?v=1775341081873 404 in 69ms
+ GET /_next/static/chunks/main-app.js?v=1775341081873 404 in 113ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 113ms
+ GET /_next/static/chunks/app/layout.js 404 in 111ms
+ GET /favicon.ico 404 in 9ms
+[Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/client-development/7.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/client-development/7.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/client-development/7.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/client-development/7.pack.gz'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/client-development/7.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/client-development/7.pack.gz'
+}
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/client-development/4.pack.gz'
+[Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/10.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/10.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/10.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/10.pack.gz'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/10.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/10.pack.gz'
+}
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/3.pack.gz'
+ ⚠ Found a change in next.config.mjs. Restarting the server to apply the changes...
+   ▲ Next.js 15.1.11
+   - Local:        http://127.0.0.1:3000
+   - Network:      http://127.0.0.1:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 2.4s
+2026-04-04T22:19:42.869Z auto-heal: server did not respond after recovery
+2026-04-04T22:19:46.870Z auto-heal: chunk error detected, restarting next dev with clean build
+ ⨯ Failed to start server
+Error: listen EPERM: operation not permitted 127.0.0.1:3000
+    at <unknown> (Error: listen EPERM: operation not permitted 127.0.0.1:3000) {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3000
+}
+[?25h
+2026-04-04T22:21:34.121Z auto-heal: server did not respond after recovery
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 642ms (99 modules)
+ ○ Compiling /login ...
+ ✓ Compiled /admin/sistema in 5.5s (634 modules)
+ GET /login?next=%2F 200 in 5923ms
+ GET /admin/sistema 200 in 1541ms
+ ○ Compiling /api/system/users ...
+ ✓ Compiled /api/system/users in 1131ms (684 modules)
+ GET /api/auth/me 401 in 1347ms
+ GET /api/system/companies 200 in 1582ms
+ GET /api/auth/companies 200 in 1593ms
+ GET /api/system/plans 200 in 1605ms
+ GET /api/auth/me 200 in 1610ms
+ GET /api/system/users 200 in 1635ms
+ GET /api/auth/me 200 in 1659ms
+ ✓ Compiled /api/auth/login in 281ms (668 modules)
+ POST /api/auth/login 200 in 584ms
+ ✓ Compiled / in 265ms (675 modules)
+ GET / 200 in 433ms
+ ✓ Compiled /api/dashboard in 100ms (370 modules)
+ ✓ Compiled in 136ms (308 modules)
+ GET /api/auth/me 200 in 530ms
+ GET /api/auth/me 200 in 532ms
+ GET /api/auth/me 200 in 543ms
+ GET /api/dashboard 200 in 546ms
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ ✓ Compiled in 863ms (656 modules)
+ GET / 200 in 178ms
+ GET /admin/sistema 200 in 185ms
+ ✓ Compiled in 699ms (642 modules)
+ ✓ Compiled /api/auth/me in 208ms (356 modules)
+ GET /api/auth/me 200 in 1683ms
+ GET /api/auth/me 200 in 1706ms
+ GET /api/auth/me 200 in 1706ms
+ GET /api/auth/me 200 in 1742ms
+ ✓ Compiled in 309ms (678 modules)
+ GET / 200 in 126ms
+ GET /admin/sistema 200 in 137ms
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ GET / 200 in 96ms
+ ✓ Compiled /api/dashboard in 373ms (365 modules)
+ GET /api/auth/me 200 in 1318ms
+ GET /api/dashboard 200 in 1319ms
+ GET /api/auth/me 200 in 1320ms
+ GET /api/auth/me 200 in 1363ms
+ ✓ Compiled in 536ms (642 modules)
+ ✓ Compiled in 194ms (642 modules)
+ ✓ Compiled /api/auth/me in 135ms (356 modules)
+ GET /api/auth/me 200 in 332ms
+ GET /api/auth/me 200 in 363ms
+ ✓ Compiled /api/system/companies/[id] in 335ms (680 modules)
+ PATCH /api/system/companies/cmnktkryy0001pb8728be3u5g 200 in 1642ms
+ ✓ Compiled /api/system/companies in 113ms (375 modules)
+ ✓ Compiled (383 modules)
+ GET /api/system/plans 200 in 335ms
+ GET /api/auth/companies 200 in 341ms
+ GET /api/system/users 200 in 356ms
+ GET /api/system/companies 200 in 365ms
+ GET / 200 in 145ms
+ ✓ Compiled /api/dashboard in 106ms (385 modules)
+ ✓ Compiled (388 modules)
+ GET /api/dashboard 200 in 506ms
+ GET /api/auth/me 200 in 555ms
+ GET /api/auth/me 200 in 557ms
+ ✓ Compiled in 601ms (696 modules)
+ ✓ Compiled in 477ms (710 modules)
+ GET /admin/sistema 200 in 127ms
+ GET / 200 in 129ms
+ GET / 200 in 88ms
+ GET /api/dashboard 200 in 80ms
+ GET /api/auth/me 200 in 123ms
+ GET /api/auth/me 200 in 142ms
+ GET / 200 in 24ms
+ GET /api/dashboard 200 in 103ms
+ GET /api/auth/me 200 in 140ms
+ GET /api/auth/me 200 in 188ms
+ ✓ Compiled in 308ms (673 modules)
+ ✓ Compiled in 336ms (687 modules)
+ GET / 200 in 146ms
+ GET /admin/sistema 200 in 161ms
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ ✓ Compiled in 415ms (656 modules)
+ GET /admin/sistema 200 in 223ms
+ GET / 200 in 225ms
+ GET / 200 in 88ms
+ ✓ Compiled /api/dashboard in 90ms (356 modules)
+ ✓ Compiled (365 modules)
+ GET /api/auth/me 200 in 1273ms
+ GET /api/auth/me 200 in 1274ms
+ GET /api/dashboard 200 in 1543ms
+ GET / 200 in 98ms
+ GET /api/dashboard 200 in 73ms
+ GET /api/auth/me 200 in 95ms
+ GET /api/auth/me 200 in 136ms
+ ✓ Compiled in 490ms (673 modules)
+ ✓ Compiled in 379ms (656 modules)
+ GET /admin/sistema 200 in 231ms
+ GET / 200 in 237ms
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ GET / 200 in 96ms
+ ✓ Compiled /api/dashboard in 125ms (356 modules)
+ ✓ Compiled (365 modules)
+ GET /api/auth/me 200 in 1250ms
+ GET /api/auth/me 200 in 1252ms
+ GET /api/dashboard 200 in 1689ms
+ ✓ Compiled /api/auth/logout in 327ms (675 modules)
+ POST /api/auth/logout 200 in 378ms
+ GET /login?next=%2Fadmin%2Fsistema 200 in 107ms
+ GET /login?next=%2Ffavicon.ico 200 in 33ms
+ GET /api/auth/me 401 in 12ms
+ ✓ Compiled /api/auth/login in 123ms (381 modules)
+ POST /api/auth/login 200 in 296ms
+ GET /admin/sistema 200 in 66ms
+ GET /api/auth/me 200 in 90ms
+ ✓ Compiled /api/system/users in 131ms (384 modules)
+ ✓ Compiled (390 modules)
+ GET /api/auth/companies 200 in 455ms
+ GET /api/system/plans 200 in 462ms
+ GET /api/system/users 200 in 474ms
+ GET /api/system/companies 200 in 497ms
+ ✓ Compiled in 1066ms (642 modules)
+ GET / 200 in 149ms
+ ✓ Compiled /api/dashboard in 190ms (356 modules)
+ ✓ Compiled (365 modules)
+ GET /api/dashboard 200 in 537ms
+ GET /api/dashboard 200 in 552ms
+ GET /api/auth/me 200 in 601ms
+ GET /api/auth/me 200 in 612ms
+ GET /admin/sistema 200 in 48ms
+ ✓ Compiled /api/system/users in 99ms (367 modules)
+ ✓ Compiled (386 modules)
+ GET /api/system/plans 200 in 550ms
+ GET /api/system/users 200 in 555ms
+ GET /api/auth/companies 200 in 557ms
+ GET /api/system/companies 200 in 559ms
+ GET /api/system/plans 200 in 36ms
+ GET /api/auth/companies 200 in 41ms
+ GET /api/system/companies 200 in 78ms
+ GET /api/system/users 200 in 104ms
+ ✓ Compiled in 401ms (694 modules)
+ GET /api/auth/me 200 in 80ms
+ GET /api/auth/me 200 in 115ms
+ ✓ Compiled in 564ms (694 modules)
+ ✓ Compiled in 413ms (708 modules)
+ GET / 200 in 105ms
+ GET /admin/sistema 200 in 108ms
+ ✓ Compiled in 222ms (694 modules)
+ GET /api/dashboard 200 in 82ms
+ GET /api/auth/me 200 in 102ms
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ ✓ Compiled in 460ms (642 modules)
+ GET /admin/sistema 200 in 218ms
+ ✓ Compiled /api/auth/companies in 100ms (356 modules)
+ ✓ Compiled (383 modules)
+ GET /api/system/plans 200 in 1792ms
+ GET /api/auth/companies 200 in 1782ms
+ ✓ Compiled in 639ms (691 modules)
+ GET /api/auth/me 200 in 1821ms
+ GET /api/system/users 200 in 1818ms
+ GET /api/system/companies 200 in 1823ms
+ GET /admin/sistema 200 in 227ms
+ GET /api/system/plans 200 in 106ms
+ GET /api/auth/me 200 in 109ms
+ GET /api/auth/companies 200 in 122ms
+ GET /api/system/companies 200 in 147ms
+ GET /api/system/users 200 in 148ms
+ GET / 200 in 70ms
+ GET /api/auth/me 200 in 146ms
+ ✓ Compiled /api/dashboard in 270ms (386 modules)
+ GET /api/auth/me 200 in 464ms
+ GET /api/dashboard 200 in 531ms
+ GET / 200 in 57ms
+ GET /api/dashboard 200 in 39ms
+ GET /api/auth/me 200 in 72ms
+ GET /api/auth/me 200 in 100ms
+ GET /admin/sistema 200 in 29ms
+ GET /api/system/plans 200 in 63ms
+ GET /api/system/companies 200 in 75ms
+ GET /api/auth/me 200 in 82ms
+ GET /api/auth/companies 200 in 84ms
+ GET /api/system/users 200 in 121ms
+ GET / 200 in 20ms
+ GET /api/dashboard 200 in 45ms
+ GET /api/auth/me 200 in 64ms
+ GET /api/auth/me 200 in 94ms
+ GET / 200 in 31ms
+ GET /api/dashboard 200 in 49ms
+ GET /api/auth/me 200 in 74ms
+ GET /api/auth/me 200 in 100ms
+ ✓ Compiled /configuracoes in 421ms (680 modules)
+ GET /configuracoes 200 in 526ms
+ ✓ Compiled /api/company-settings in 336ms (693 modules)
+ GET /api/company-settings 200 in 462ms
+ GET /api/company-settings 200 in 463ms
+ ✓ Compiled /promocoes in 208ms (700 modules)
+ GET /promocoes 200 in 285ms
+ ✓ Compiled /api/campaigns in 442ms (702 modules)
+ GET /api/campaigns 200 in 507ms
+ GET /api/campaigns 200 in 514ms
+ ✓ Compiled /agenda in 283ms (711 modules)
+ GET /agenda 200 in 330ms
+ ○ Compiling /api/pets ...
+ ✓ Compiled /api/pets in 532ms (719 modules)
+ GET /api/services 200 in 614ms
+ GET /api/appointments 200 in 616ms
+ GET /api/appointments 200 in 627ms
+ GET /api/services 200 in 627ms
+ GET /api/pets 200 in 629ms
+ GET /api/pets 200 in 620ms
+ ✓ Compiled in 622ms (655 modules)
+ ✓ Compiled /api/appointments in 99ms (378 modules)
+ ✓ Compiled (383 modules)
+ GET /api/appointments 200 in 614ms
+ GET /api/pets 200 in 616ms
+ GET /api/services 200 in 615ms
+ ✓ Compiled in 363ms (698 modules)
+ ✓ Compiled in 1ms (383 modules)
+ ✓ Compiled in 0ms (383 modules)
+ GET /api/services 200 in 422ms
+ GET /api/appointments 200 in 428ms
+ GET /api/pets 200 in 572ms
+ ✓ Compiled in 414ms (698 modules)
+ GET /api/pets 200 in 94ms
+ GET /api/appointments 200 in 108ms
+ GET /api/services 200 in 115ms
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ GET /agenda 200 in 210ms
+ ✓ Compiled /api/pets in 447ms (362 modules)
+ ✓ Compiled (387 modules)
+ GET /api/services 200 in 1588ms
+ GET /api/pets 200 in 1589ms
+ GET /api/appointments 200 in 1589ms
+ GET / 200 in 46ms
+ GET /api/auth/me 200 in 106ms
+ GET /api/auth/me 200 in 116ms
+ ✓ Compiled /api/dashboard in 160ms (389 modules)
+ GET /api/auth/me 200 in 2061ms
+ GET /api/dashboard 200 in 376ms
+ GET /api/dashboard 200 in 380ms
+ GET / 200 in 29ms
+ GET /api/dashboard 200 in 42ms
+ GET /api/dashboard 200 in 55ms
+ GET /api/auth/me 200 in 76ms
+ GET /api/auth/me 200 in 89ms
+ ✓ Compiled in 398ms (655 modules)
+ ✓ Compiled /api/auth/me in 151ms (362 modules)
+ GET /api/auth/me 200 in 646ms
+ GET /api/auth/me 200 in 749ms
+ ✓ Compiled in 223ms (677 modules)
+ GET /api/auth/me 200 in 107ms
+ ✓ Compiled /api/dashboard in 281ms (371 modules)
+ GET /api/dashboard 200 in 551ms
+ GET /api/dashboard 200 in 624ms
+ GET /api/auth/me 200 in 604ms
+ ✓ Compiled in 687ms (700 modules)
+ GET / 200 in 112ms
+ GET / 200 in 114ms
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ GET / 200 in 108ms
+ GET /api/auth/me 200 in 779ms
+ GET /api/auth/me 200 in 781ms
+ GET /api/dashboard 200 in 1144ms
+ GET / 200 in 10ms
+ ✓ Compiled /configuracoes in 351ms (376 modules)
+ GET /configuracoes 200 in 405ms
+ GET / 200 in 25ms
+ GET /configuracoes 200 in 23ms
+ ✓ Compiled /api/company-settings in 331ms (389 modules)
+ GET /api/company-settings 200 in 417ms
+ GET /api/company-settings 200 in 417ms
+ GET /agenda 200 in 34ms
+ ✓ Compiled /api/appointments in 171ms (392 modules)
+ ✓ Compiled (397 modules)
+ GET /api/pets 200 in 425ms
+ GET /api/pets 200 in 434ms
+ GET /api/services 200 in 428ms
+ GET /api/services 200 in 439ms
+ GET /api/appointments 200 in 432ms
+ GET /api/appointments 200 in 433ms
+ GET / 200 in 22ms
+ GET /api/dashboard 200 in 48ms
+ GET /api/dashboard 200 in 63ms
+ GET /api/auth/me 200 in 89ms
+ GET /api/auth/me 200 in 109ms
+ GET / 200 in 9ms
+ GET /agenda 200 in 10ms
+ GET /api/pets 200 in 27ms
+ GET /api/pets 200 in 27ms
+ GET /api/services 200 in 28ms
+ GET /api/appointments 200 in 31ms
+ GET /api/services 200 in 32ms
+ GET /api/appointments 200 in 38ms
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ ✓ Compiled /estoque in 484ms (667 modules)
+ GET /estoque 200 in 724ms
+ ✓ Compiled /api/products in 321ms (705 modules)
+ GET /api/products?status=active 200 in 1341ms
+ GET /api/products?status=active 200 in 1799ms
+ ○ Compiling /relatorios ...
+ ✓ Compiled /relatorios in 563ms (705 modules)
+ GET /relatorios 200 in 627ms
+ ✓ Compiled /promocoes in 158ms (392 modules)
+ GET /promocoes 200 in 285ms
+ GET / 200 in 34ms
+ GET /promocoes 200 in 27ms
+ ✓ Compiled /api/campaigns in 178ms (394 modules)
+ GET /api/campaigns 200 in 255ms
+ GET /api/campaigns 200 in 257ms
+ GET /configuracoes 200 in 26ms
+ ✓ Compiled /api/company-settings in 246ms (398 modules)
+ GET /api/company-settings 200 in 384ms
+ GET /api/company-settings 200 in 388ms
+ ✓ Compiled in 1200ms (662 modules)
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }

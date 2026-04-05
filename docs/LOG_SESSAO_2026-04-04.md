@@ -51,3 +51,19 @@
 1. Atualizar `README` com os novos fluxos (slug por empresa, onboarding de serviços, logotipo).
 2. Revisar experiência mobile do Admin para upload/preview de logotipo.
 3. (Opcional) Exibir logotipo também no login por empresa, mantendo estilo monocromático.
+
+## Travas de continuidade (anti-regressão)
+- Header:
+  - título deve usar **nome da empresa atual** (não texto fixo "PetShop SaaS");
+  - logotipo da empresa deve ficar à esquerda do nome;
+  - subtítulo fixo: `Agenda, estoque, promoções e avisos` (sem "por SMS").
+- Navegação admin:
+  - em rotas `/admin/*`, mostrar `Voltar ao painel inicial` ao lado de `Sair` no header;
+  - não mostrar os botões de navegação principal no topo dentro do `/admin/*`.
+- Hub do administrador (página inicial):
+  - manter botões grandes no card;
+  - evitar redundância: não repetir a empresa atual na lista de empresas;
+  - fluxo alvo: `Administração do Sistema`, `Sistema - <empresa atual>`, e demais empresas.
+- Agenda:
+  - formulário completo de agendamento não deve abrir automaticamente;
+  - campos só aparecem quando o contexto estiver pronto (sem seleção inicial pendente e sem formulário de serviço aberto).

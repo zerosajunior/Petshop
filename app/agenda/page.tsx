@@ -186,13 +186,6 @@ export default function AgendaPage() {
   }, [refresh]);
 
   useEffect(() => {
-    if (services.length === 0) {
-      setIsDefaultServicePickerOpen(true);
-      setIsSchedulingOpen(true);
-    }
-  }, [services.length]);
-
-  useEffect(() => {
     if (!startTime || !serviceId) {
       return;
     }
@@ -445,6 +438,8 @@ export default function AgendaPage() {
 
   const canSchedule = pets.length > 0 && services.length > 0;
   const needsInitialServiceSetup = services.length === 0;
+  const canShowAppointmentFields =
+    !needsInitialServiceSetup && !isDefaultServicePickerOpen && !isServiceFormOpen;
   const activeServiceNames = new Set(services.map((service) => normalizeText(service.name)));
   const defaultServicesView = DEFAULT_PETSHOP_SERVICES.map((item) => ({
     ...item,
@@ -623,6 +618,8 @@ export default function AgendaPage() {
               }
               setMessage("");
               setError("");
+              setIsDefaultServicePickerOpen(false);
+              setIsServiceFormOpen(false);
               setIsSchedulingOpen(true);
             }}
             type="button"
@@ -690,6 +687,8 @@ export default function AgendaPage() {
                 </div>
               ) : null}
 
+              {canShowAppointmentFields ? (
+                <>
               <div className="formField">
                 <label htmlFor="petId">Pet</label>
                 <select id="petId" onChange={(e) => setPetId(e.target.value)} required value={petId}>
@@ -856,29 +855,40 @@ export default function AgendaPage() {
                   ))}
                 </select>
               </div>
+                </>
+              ) : null}
             </div>
 
-            {serviceId ? (
+            {canShowAppointmentFields && serviceId ? (
               <small className="subtle" style={{ display: "block", marginTop: "0.15rem" }}>
                 Fim calculado automaticamente conforme duração do serviço.
               </small>
             ) : null}
 
-            <div className="formField" style={{ marginTop: "0.8rem" }}>
-              <label htmlFor="notes">Observações</label>
-              <textarea id="notes" onChange={(e) => setNotes(e.target.value)} value={notes} />
-            </div>
+            {canShowAppointmentFields ? (
+              <>
+                <div className="formField" style={{ marginTop: "0.8rem" }}>
+                  <label htmlFor="notes">Observações</label>
+                  <textarea id="notes" onChange={(e) => setNotes(e.target.value)} value={notes} />
+                </div>
 
-            <div className="formActions">
-              <button className="btnPrimary" disabled={!canSchedule || isSavingAppointment} type="submit">
-                {isSavingAppointment ? "Salvando..." : "Salvar agendamento"}
-              </button>
-              <button className="btnSecondary" onClick={resetAppointmentFormAndClose} type="button">
-                Cancelar
-              </button>
-              {message ? <small>{message}</small> : null}
-              {error ? <small style={{ color: "#b42318" }}>{error}</small> : null}
-            </div>
+                <div className="formActions">
+                  <button className="btnPrimary" disabled={!canSchedule || isSavingAppointment} type="submit">
+                    {isSavingAppointment ? "Salvando..." : "Salvar agendamento"}
+                  </button>
+                  <button className="btnSecondary" onClick={resetAppointmentFormAndClose} type="button">
+                    Cancelar
+                  </button>
+                  {message ? <small>{message}</small> : null}
+                  {error ? <small style={{ color: "#b42318" }}>{error}</small> : null}
+                </div>
+              </>
+            ) : (
+              <div className="formActions">
+                {message ? <small>{message}</small> : null}
+                {error ? <small style={{ color: "#b42318" }}>{error}</small> : null}
+              </div>
+            )}
           </form>
         ) : null}
       </article>
