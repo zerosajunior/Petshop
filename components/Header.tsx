@@ -96,7 +96,7 @@ export function Header() {
     return null;
   }
 
-  const isAdminArea = isSystemAdmin && (pathname === "/" || pathname.startsWith("/admin/"));
+  const isAdminArea = isSystemAdmin && pathname.startsWith("/admin/");
   const visibleLinks = links.filter((link) => !(isSystemAdmin && link.href === "/configuracoes"));
 
   return (
@@ -110,7 +110,7 @@ export function Header() {
         <h1>{companyName}</h1>
       </div>
       <div>
-        <p className="subtle">Agenda, estoque, promoções e avisos por SMS</p>
+        <p className="subtle">Agenda, estoque, promoções e avisos</p>
       </div>
       <nav className="nav" aria-label="ações rápidas">
         {!isSystemAdmin && showCompanySwitcher ? (
@@ -126,6 +126,11 @@ export function Header() {
               </Link>
             ))}
           </div>
+        ) : null}
+        {isAdminArea ? (
+          <Link href="/" className="ghostButton">
+            Voltar ao painel inicial
+          </Link>
         ) : null}
         <LogoutButton />
       </nav>

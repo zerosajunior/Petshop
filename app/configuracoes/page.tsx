@@ -105,46 +105,51 @@ export default function ConfiguracoesPage() {
     <section style={{ display: "grid", gap: 16 }}>
       <article className="panel">
         <h2>Configurações da empresa</h2>
+        <p className="subtle">Ajuste preferências gerais, comunicação e identidade visual textual.</p>
         <form onSubmit={onSubmit} className="formGrid">
-          <label className="formField">
-            Timezone
+          <div className="formField">
+            <label htmlFor="settings-timezone">Timezone</label>
             <input
+              id="settings-timezone"
               value={form.timezone ?? ""}
               onChange={(event) => setForm((prev) => ({ ...prev, timezone: event.target.value }))}
             />
-          </label>
+          </div>
 
-          <label className="formField formFieldFull">
-            Horários de trabalho
+          <div className="formField formFieldFull">
+            <label htmlFor="settings-working-hours">Horários de trabalho</label>
             <textarea
+              id="settings-working-hours"
               value={form.workingHours ?? ""}
               onChange={(event) =>
                 setForm((prev) => ({ ...prev, workingHours: event.target.value }))
               }
             />
-          </label>
+          </div>
 
-          <label className="formField formFieldFull">
-            Branding
+          <div className="formField formFieldFull">
+            <label htmlFor="settings-branding">Branding</label>
             <textarea
+              id="settings-branding"
               value={form.branding ?? ""}
               onChange={(event) => setForm((prev) => ({ ...prev, branding: event.target.value }))}
             />
-          </label>
+          </div>
 
-          <label className="formField formFieldFull">
-            Notificações
+          <div className="formField formFieldFull">
+            <label htmlFor="settings-notifications">Notificações</label>
             <textarea
+              id="settings-notifications"
               value={form.notifications ?? ""}
               onChange={(event) =>
                 setForm((prev) => ({ ...prev, notifications: event.target.value }))
               }
             />
-          </label>
+          </div>
 
           <div className="formActions">
             <button className="btnPrimary" type="submit">
-              Salvar
+              Salvar configurações
             </button>
             {message ? <small className="subtle">{message}</small> : null}
             {error ? <small style={{ color: "#b42318" }}>{error}</small> : null}
@@ -154,36 +159,40 @@ export default function ConfiguracoesPage() {
 
       <article className="panel">
         <h2>Segurança da conta</h2>
+        <p className="subtle">Atualize a senha com confirmação para manter o acesso seguro.</p>
         <form onSubmit={onChangePassword} className="formGrid">
-          <label className="formField">
-            Senha atual
+          <div className="formField">
+            <label htmlFor="settings-current-password">Senha atual</label>
             <input
+              id="settings-current-password"
               type="password"
               value={currentPassword}
               autoComplete="current-password"
               onChange={(event) => setCurrentPassword(event.target.value)}
             />
-          </label>
+          </div>
 
-          <label className="formField">
-            Nova senha
+          <div className="formField">
+            <label htmlFor="settings-new-password">Nova senha</label>
             <input
+              id="settings-new-password"
               type="password"
               value={newPassword}
               autoComplete="new-password"
               onChange={(event) => setNewPassword(event.target.value)}
             />
-          </label>
+          </div>
 
-          <label className="formField formFieldFull">
-            Confirmar nova senha
+          <div className="formField formFieldFull">
+            <label htmlFor="settings-confirm-password">Confirmar nova senha</label>
             <input
+              id="settings-confirm-password"
               type="password"
               value={confirmPassword}
               autoComplete="new-password"
               onChange={(event) => setConfirmPassword(event.target.value)}
             />
-          </label>
+          </div>
 
           <div className="formActions">
             <button className="btnPrimary" type="submit" disabled={changingPassword}>
