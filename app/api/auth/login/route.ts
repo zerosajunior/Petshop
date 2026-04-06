@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { fail } from "@/lib/http";
 import { AUTH_COOKIE_NAME, createSessionToken, sessionMaxAgeSeconds } from "@/lib/auth-session";
 import { verifyPassword } from "@/lib/password";
+import { consumeRateLimit, getRequestIp } from "@/lib/rate-limit";
 import type { MembershipRole } from "@prisma/client";
 
 const loginSchema = z.object({
@@ -33,11 +34,37 @@ async function resolveDefaultCompany() {
 }
 
 export async function POST(request: NextRequest) {
+  const ip = getRequestIp(request.headers);
+  const ipWindow = consumeRateLimit({
+    key: `auth:login:ip:${ip}`,
+    max: 30,
+    windowMs: 10 * 60 * 1000
+  });
+  if (!ipWindow.allowed) {
+    return NextResponse.json(
+      { error: `Muitas tentativas de login. Tente novamente em ${ipWindow.retryAfterSeconds}s.` },
+      { status: 429, headers: { "Retry-After": String(ipWindow.retryAfterSeconds) } }
+    );
+  }
+
   const body = await request.json().catch(() => null);
   const parsed = loginSchema.safeParse(body);
 
   if (!parsed.success) {
     return fail("Credenciais inválidas.", 400);
+  }
+
+  const usernameKey = parsed.data.username.trim().toLowerCase();
+  const accountWindow = consumeRateLimit({
+    key: `auth:login:user:${usernameKey}:ip:${ip}`,
+    max: 8,
+    windowMs: 10 * 60 * 1000
+  });
+  if (!accountWindow.allowed) {
+    return NextResponse.json(
+      { error: `Conta temporariamente bloqueada por tentativas inválidas. Aguarde ${accountWindow.retryAfterSeconds}s.` },
+      { status: 429, headers: { "Retry-After": String(accountWindow.retryAfterSeconds) } }
+    );
   }
 
   const dbUser = await prisma.user.findFirst({

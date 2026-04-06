@@ -7,6 +7,7 @@ import { sendMessage } from "@/lib/sms";
 import { registerAudit } from "@/lib/audit";
 import { CONSENT_CODE_TTL_MINUTES, generateConsentCode, hashConsentCode } from "@/lib/consent";
 import { getActiveCompanyId } from "@/lib/company-context";
+import { consumeRateLimit, getRequestIp } from "@/lib/rate-limit";
 
 const requestSchema = z.object({
   customerId: z.string().min(1),
@@ -14,6 +15,16 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  const ip = getRequestIp(request.headers);
+  const ipWindow = consumeRateLimit({
+    key: `privacy:consent:request:ip:${ip}`,
+    max: 40,
+    windowMs: 10 * 60 * 1000
+  });
+  if (!ipWindow.allowed) {
+    return fail(`Muitas solicitações de consentimento. Tente novamente em ${ipWindow.retryAfterSeconds}s.`, 429);
+  }
+
   const companyId = await getActiveCompanyId().catch(() => null);
   if (!companyId) {
     return fail("Empresa ativa não configurada.", 503);
@@ -24,6 +35,18 @@ export async function POST(request: NextRequest) {
 
   if (!parsed.success) {
     return fail("Dados inválidos para solicitação de consentimento.");
+  }
+
+  const customerWindow = consumeRateLimit({
+    key: `privacy:consent:request:company:${companyId}:customer:${parsed.data.customerId}`,
+    max: 5,
+    windowMs: 60 * 60 * 1000
+  });
+  if (!customerWindow.allowed) {
+    return fail(
+      `Limite de solicitações para este cliente atingido. Aguarde ${customerWindow.retryAfterSeconds}s.`,
+      429
+    );
   }
 
   const channel = parsed.data.channel ?? MessageChannel.WHATSAPP;

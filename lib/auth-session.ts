@@ -49,6 +49,13 @@ async function sign(data: string, secret: string) {
   return base64UrlEncode(new Uint8Array(signature));
 }
 
+async function verifySignature(data: string, signature: string, secret: string) {
+  const key = await importKey(secret);
+  const encoder = new TextEncoder();
+  const signatureBytes = base64UrlDecode(signature);
+  return crypto.subtle.verify("HMAC", key, signatureBytes, encoder.encode(data));
+}
+
 function readSecret() {
   const secret = process.env.AUTH_SESSION_SECRET?.trim();
   if (!secret) {
@@ -83,8 +90,8 @@ export async function verifySessionToken(token: string): Promise<SessionPayload 
     return null;
   }
 
-  const expected = await sign(body, secret);
-  if (expected !== sig) {
+  const validSignature = await verifySignature(body, sig, secret).catch(() => false);
+  if (!validSignature) {
     return null;
   }
 

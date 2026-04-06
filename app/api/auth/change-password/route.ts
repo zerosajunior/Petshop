@@ -5,6 +5,7 @@ import { fail, ok } from "@/lib/http";
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth-session";
 import { hashPassword, verifyPassword } from "@/lib/password";
 import { registerAudit } from "@/lib/audit";
+import { consumeRateLimit, getRequestIp } from "@/lib/rate-limit";
 
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1),
@@ -12,6 +13,16 @@ const changePasswordSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  const ip = getRequestIp(request.headers);
+  const ipWindow = consumeRateLimit({
+    key: `auth:change-password:ip:${ip}`,
+    max: 20,
+    windowMs: 10 * 60 * 1000
+  });
+  if (!ipWindow.allowed) {
+    return fail(`Muitas tentativas. Tente novamente em ${ipWindow.retryAfterSeconds}s.`, 429);
+  }
+
   const token = request.cookies.get(AUTH_COOKIE_NAME)?.value;
   if (!token) {
     return fail("Não autenticado.", 401);
@@ -20,6 +31,15 @@ export async function POST(request: NextRequest) {
   const session = await verifySessionToken(token);
   if (!session) {
     return fail("Sessão inválida ou expirada.", 401);
+  }
+
+  const userWindow = consumeRateLimit({
+    key: `auth:change-password:user:${session.username.toLowerCase()}:ip:${ip}`,
+    max: 6,
+    windowMs: 10 * 60 * 1000
+  });
+  if (!userWindow.allowed) {
+    return fail(`Muitas tentativas para este usuário. Aguarde ${userWindow.retryAfterSeconds}s.`, 429);
   }
 
   const body = await request.json().catch(() => null);

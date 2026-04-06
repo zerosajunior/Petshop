@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-session";
 
 function clearSessionCookie(response: NextResponse) {
@@ -19,8 +19,9 @@ export async function POST() {
   return response;
 }
 
-export async function GET(request: NextRequest) {
-  const redirect = NextResponse.redirect(new URL("/login", request.url));
-  clearSessionCookie(redirect);
-  return redirect;
+export async function GET() {
+  return NextResponse.json(
+    { error: "Método não permitido. Use POST para encerrar a sessão." },
+    { status: 405 }
+  );
 }
