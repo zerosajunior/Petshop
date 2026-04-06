@@ -81,12 +81,58 @@ function normalizePathForPermission(pathname: string) {
   return `/${remainingSegments.join("/")}`;
 }
 
+function hasSuspiciousCrossSiteMutation(request: NextRequest) {
+  if (!request.nextUrl.pathname.startsWith("/api/")) {
+    return false;
+  }
+
+  if (request.method === "GET" || request.method === "HEAD" || request.method === "OPTIONS") {
+    return false;
+  }
+
+  const origin = request.headers.get("origin")?.trim();
+  const referer = request.headers.get("referer")?.trim();
+
+  // When neither header exists we keep compatibility with non-browser clients.
+  if (!origin && !referer) {
+    return false;
+  }
+
+  const host = request.nextUrl.host;
+
+  if (origin) {
+    try {
+      if (new URL(origin).host !== host) {
+        return true;
+      }
+    } catch {
+      return true;
+    }
+  }
+
+  if (referer) {
+    try {
+      if (new URL(referer).host !== host) {
+        return true;
+      }
+    } catch {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const normalizedPathname = normalizePathForPermission(pathname);
   const isApi = pathname.startsWith("/api");
   const isLoginPage = normalizedPathname === "/login";
   const isAuthApi = pathname.startsWith("/api/auth/");
+
+  if (hasSuspiciousCrossSiteMutation(request)) {
+    return NextResponse.json({ error: "Origem da requisição não permitida." }, { status: 403 });
+  }
 
   if (isLoginPage || isAuthApi) {
     return NextResponse.next();
