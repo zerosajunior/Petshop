@@ -82,6 +82,10 @@ function normalizePathForPermission(pathname: string) {
 }
 
 function hasSuspiciousCrossSiteMutation(request: NextRequest) {
+  if (process.env.NODE_ENV !== "production") {
+    return false;
+  }
+
   if (!request.nextUrl.pathname.startsWith("/api/")) {
     return false;
   }
