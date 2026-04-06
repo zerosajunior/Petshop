@@ -14,7 +14,7 @@ const cooldownMs = 20000;
 const waitSeconds = 90;
 
 const chunkErrorPattern =
-  /Cannot find module '\.\/\d+\.js'|MODULE_NOT_FOUND.+\.next\/server\/webpack-runtime\.js|Failed to get source map:|\.next\/static\/chunks\/webpack\.js.+ENOENT|originalFactory is undefined|can't access property "call"|__webpack_modules__\[moduleId\] is not a function|TypeError: __webpack_modules__\[moduleId\]/;
+  /Cannot find module '\.\/\d+\.js'|MODULE_NOT_FOUND.+\.next\/server\/webpack-runtime\.js|Cannot find module '.*\.next\/server\/app\/.*\/route\.js'|Failed to get source map:|\.next\/static\/chunks\/webpack\.js.+ENOENT|ENOENT: no such file or directory, stat '.*\.next\/cache\/webpack\/server-development\/.*\.pack\.gz'|originalFactory is undefined|can't access property "call"|__webpack_modules__\[moduleId\] is not a function|TypeError: __webpack_modules__\[moduleId\]/;
 
 let lastCheckedLine = 0;
 let lastHealAt = 0;
@@ -188,4 +188,3 @@ main().catch((error) => {
   appendLog(`auto-heal failed: ${error instanceof Error ? error.stack ?? error.message : String(error)}`);
   process.exit(1);
 });
-
