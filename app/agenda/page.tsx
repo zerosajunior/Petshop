@@ -645,37 +645,9 @@ export default function AgendaPage() {
           <Link className="btnSecondary actionBtnSameHeight agendaPanelBtn" href="/cadastro">
             Cadastro
           </Link>
-          <button
-            className="btnSecondary actionBtnSameHeight agendaPanelBtn"
-            onClick={() => {
-              setServiceMessage("");
-              setServiceError("");
-              setIsServiceFormOpen(false);
-              setIsSchedulingOpen(true);
-              setIsDefaultServicePickerOpen((prev) => !prev);
-            }}
-            type="button"
-          >
-            {isDefaultServicePickerOpen ? "Fechar seleção" : "Selecionar novo serviço"}
-          </button>
-          <button
-            className="btnSecondary actionBtnSameHeight agendaPanelBtn"
-            onClick={() => {
-              if (isServiceFormOpen) {
-                resetServiceFormAndClose();
-                return;
-              }
-              setServiceMessage("");
-              setServiceError("");
-              setIsDefaultServicePickerOpen(false);
-              setIsSchedulingOpen(true);
-              setIsServiceFormOpen(true);
-            }}
-            disabled={needsInitialServiceSetup}
-            type="button"
-          >
-            {isServiceFormOpen ? "Fechar serviço" : "Novo serviço personalizado"}
-          </button>
+          <Link className="btnSecondary actionBtnSameHeight agendaPanelBtn" href="/servicos">
+            Serviço
+          </Link>
           <button
             className="btnSecondary actionBtnSameHeight agendaPanelBtn"
             onClick={() => {
