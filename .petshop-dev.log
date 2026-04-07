@@ -37599,3 +37599,1666 @@ prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
 prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
 prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
 prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ GET /login?next=%2Fagenda 200 in 355ms
+ ○ Compiling /api/auth/me ...
+ ✓ Compiled /api/auth/me in 668ms (362 modules)
+ GET /api/auth/me 401 in 1046ms
+ ⨯ Error: Cannot find module './638.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/api/auth/me/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/swc/options.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/swc/index.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/router-server.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/login/page.js:1:9303)
+    at Object.<anonymous> (.next/server/app/login/page.js:1:9349) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/login'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /api/auth/login in 1942ms (915 modules)
+ ✓ Compiled in 1ms (422 modules)
+2026-04-07T02:53:02.120Z auto-heal: chunk error detected, restarting next dev with clean build
+ ⨯ Error: Cannot find module './638.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/api/auth/login/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/swc/options.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/swc/index.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/router-server.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/admin/sistema/page.js:1:34255)
+    at Object.<anonymous> (.next/server/app/admin/sistema/page.js:1:34299) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /admin/sistema 500 in 400ms
+ GET /login?next=%2Fprivacidade 500 in 3325ms
+2026-04-07T02:53:02.345Z auto-heal: server recovered
+ ✓ Compiled /[companySlug]/[[...rest]] in 200ms (932 modules)
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /admin/sistema 500 in 825ms
+ POST /api/auth/login 200 in 1855ms
+ ⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use 127.0.0.1:3000
+    at <unknown> (Error: listen EADDRINUSE: address already in use 127.0.0.1:3000) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3000
+}
+[?25h
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/agenda'
+}
+ GET /agenda 500 in 596ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 481ms
+ GET /admin/sistema 500 in 428ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 498ms
+ GET /admin/sistema 500 in 277ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/login'
+}
+ GET /login?next=%2Ffavicon.ico 500 in 439ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 455ms
+ GET /admin/sistema 500 in 253ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/agenda'
+}
+ GET /agenda 500 in 525ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 488ms
+ GET /admin/sistema 500 in 38ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 441ms
+ GET /admin/sistema 500 in 384ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 627ms
+ GET /admin/sistema 500 in 569ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 486ms
+ GET /admin/sistema 500 in 350ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 541ms
+ GET /admin/sistema 500 in 512ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 519ms
+ GET /admin/sistema 500 in 346ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 538ms
+ GET /admin/sistema 500 in 525ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 484ms
+ GET /admin/sistema 500 in 439ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 551ms
+ GET /admin/sistema 500 in 535ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 512ms
+ GET /admin/sistema 500 in 512ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 435ms
+ GET /admin/sistema 500 in 410ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 440ms
+ GET /admin/sistema 500 in 409ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 443ms
+ GET /admin/sistema 500 in 413ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 427ms
+ GET /admin/sistema 500 in 399ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 430ms
+ GET /admin/sistema 500 in 392ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 441ms
+ GET /admin/sistema 500 in 435ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 451ms
+ GET /admin/sistema 500 in 444ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 469ms
+ GET /admin/sistema 500 in 426ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 510ms
+ GET /admin/sistema 500 in 488ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 525ms
+ GET /admin/sistema 500 in 377ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 491ms
+ GET /admin/sistema 500 in 474ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 515ms
+ GET /admin/sistema 500 in 500ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 487ms
+ GET /admin/sistema 500 in 450ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 440ms
+ GET /admin/sistema 500 in 434ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 435ms
+ GET /admin/sistema 500 in 434ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 456ms
+ GET /admin/sistema 500 in 450ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 438ms
+ GET /admin/sistema 500 in 400ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 442ms
+ GET /admin/sistema 500 in 402ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 445ms
+ GET /admin/sistema 500 in 407ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 458ms
+ GET /admin/sistema 500 in 422ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 430ms
+ GET /admin/sistema 500 in 412ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 487ms
+ GET /admin/sistema 500 in 462ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 488ms
+ GET /admin/sistema 500 in 458ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 507ms
+ GET /admin/sistema 500 in 472ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 474ms
+ GET /admin/sistema 500 in 454ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 436ms
+ GET /admin/sistema 500 in 401ms
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ ⨯ Error: Cannot find module './vendor-chunks/next.js'
+Require stack:
+- /Users/josejunior/Projetos/Petshop/.next/server/webpack-runtime.js
+- /Users/josejunior/Projetos/Petshop/.next/server/app/[companySlug]/[[...rest]]/route.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/require.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/load-components.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/build/utils.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/josejunior/Projetos/Petshop/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/admin/sistema'
+}
+ GET /agenda 500 in 439ms
+ GET /admin/sistema 500 in 396ms
+[Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/3.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/3.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/3.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/3.pack.gz'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/3.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/3.pack.gz'
+}
+[Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/4.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/4.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/4.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/4.pack.gz'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/4.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/4.pack.gz'
+}
+[Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/8.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/8.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/8.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/8.pack.gz'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/8.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/8.pack.gz'
+}
+2026-04-07T02:54:02.564Z auto-heal: chunk error detected, restarting next dev with clean build
+2026-04-07T02:54:02.766Z auto-heal: server recovered
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/3.pack.gz'
+[Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/6.pack.gz_'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/6.pack.gz_'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/6.pack.gz_'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/6.pack.gz_'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/6.pack.gz_'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/6.pack.gz_'
+}
+[Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/9.pack.gz_'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/9.pack.gz_'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/9.pack.gz_'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/9.pack.gz_'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/9.pack.gz_'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/9.pack.gz_'
+}
+[Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/1.pack.gz_'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/1.pack.gz_'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/1.pack.gz_'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/1.pack.gz_'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/1.pack.gz_'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/1.pack.gz_'
+}
+[Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/10.pack.gz_'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/10.pack.gz_'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/10.pack.gz_'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/10.pack.gz_'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/10.pack.gz_'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/10.pack.gz_'
+}
+[Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/11.pack.gz_'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/11.pack.gz_'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/11.pack.gz_'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/11.pack.gz_'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, open '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/11.pack.gz_'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/server-development/11.pack.gz_'
+}
+[Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/client-development/7.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/client-development/7.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/client-development/7.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/client-development/7.pack.gz'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/client-development/7.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/client-development/7.pack.gz'
+}
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, stat '/Users/josejunior/Projetos/Petshop/.next/cache/webpack/client-development/7.pack.gz'
+ ✓ Compiled /_not-found in 249ms (936 modules)
+ GET /agenda 404 in 407ms
+ GET /admin/sistema 404 in 361ms
+ ⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use 127.0.0.1:3000
+    at <unknown> (Error: listen EADDRINUSE: address already in use 127.0.0.1:3000) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3000
+}
+[?25h
+ GET /agenda 404 in 29ms
+ GET /admin/sistema 404 in 24ms
+ GET /agenda 404 in 20ms
+ GET /admin/sistema 404 in 66ms
+ GET /agenda 404 in 18ms
+ GET /admin/sistema 404 in 25ms
+ GET /agenda 404 in 18ms
+ GET /admin/sistema 404 in 18ms
+ GET /agenda 404 in 15ms
+ GET /admin/sistema 404 in 24ms
+ GET /agenda 404 in 14ms
+ GET /admin/sistema 404 in 15ms
+ GET /agenda 404 in 19ms
+ GET /admin/sistema 404 in 15ms
+ GET /agenda 404 in 15ms
+ GET /admin/sistema 404 in 15ms
+ GET /agenda 404 in 13ms
+ GET /admin/sistema 404 in 12ms
+ GET /agenda 404 in 17ms
+ GET /admin/sistema 404 in 13ms
+ GET /agenda 404 in 15ms
+ GET /admin/sistema 404 in 14ms
+ GET /agenda 404 in 15ms
+ GET /admin/sistema 404 in 15ms
+ GET /agenda 404 in 15ms
+ GET /admin/sistema 404 in 14ms
+ GET /agenda 404 in 15ms
+ GET /admin/sistema 404 in 15ms
+ GET /agenda 404 in 18ms
+ GET /admin/sistema 404 in 15ms
+ GET /agenda 404 in 46ms
+ GET /agenda 404 in 17ms
+ GET /admin/sistema 404 in 15ms
+ GET /agenda 404 in 15ms
+ GET /admin/sistema 404 in 13ms
+ GET /agenda 404 in 13ms
+ GET /admin/sistema 404 in 17ms
+ GET /agenda 404 in 14ms
+ GET /admin/sistema 404 in 15ms
+ GET /agenda 404 in 12ms
+ GET /admin/sistema 404 in 14ms
+ GET /agenda 404 in 13ms
+ GET /admin/sistema 404 in 19ms
+ GET /agenda 404 in 14ms
+ GET /admin/sistema 404 in 13ms
+ GET /agenda 404 in 13ms
+ GET /admin/sistema 404 in 13ms
+ GET /agenda 404 in 16ms
+ GET /admin/sistema 404 in 13ms
+ GET /agenda 404 in 13ms
+ GET /admin/sistema 404 in 14ms
+ GET /agenda 404 in 13ms
+ GET /admin/sistema 404 in 14ms
+ GET /agenda 404 in 15ms
+ GET /admin/sistema 404 in 16ms
+ GET /agenda 404 in 12ms
+ GET /admin/sistema 404 in 22ms
+ GET /agenda 404 in 14ms
+ GET /admin/sistema 404 in 13ms
+ GET /agenda 404 in 13ms
+ GET /admin/sistema 404 in 17ms
+ GET /agenda 404 in 19ms
+ GET /admin/sistema 404 in 13ms
+ GET /agenda 404 in 18ms
+ GET /admin/sistema 404 in 24ms
