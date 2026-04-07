@@ -10,7 +10,9 @@ import { CompanySwitcher } from "@/components/CompanySwitcher";
 type NavLink = {
   href:
     | "/"
+    | "/cadastro"
     | "/agenda"
+    | "/servicos"
     | "/estoque"
     | "/movimentacoes-estoque"
     | "/promocoes"
@@ -22,7 +24,9 @@ type NavLink = {
 
 const links: NavLink[] = [
   { href: "/", label: "Painel inicial" },
+  { href: "/cadastro", label: "Cadastro" },
   { href: "/agenda", label: "Agendamentos" },
+  { href: "/servicos", label: "Serviços" },
   { href: "/estoque", label: "Produtos" },
   { href: "/movimentacoes-estoque", label: "Estoque" },
   { href: "/relatorios", label: "Relatórios" },

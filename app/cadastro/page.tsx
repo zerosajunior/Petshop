@@ -341,6 +341,9 @@ export default function CadastroPage() {
           <Link className="btnPrimary appActionMain" href="/agenda">
             Ir para agendamento
           </Link>
+          <Link className="btnSecondary appActionAux" href="/servicos">
+            Ir para serviços
+          </Link>
           <Link className="btnSecondary appActionBack" href="/">
             Voltar ao painel
           </Link>
