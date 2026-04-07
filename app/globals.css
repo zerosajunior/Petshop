@@ -98,14 +98,16 @@ main {
 
 .navMainGroup {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.55rem;
   flex: 1 1 auto;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .navMainGroup a {
-  flex: 1 1 0;
+  flex: 0 0 calc((100% - 2.2rem) / 5);
+  min-width: 0;
 }
 
 .companySwitcher {
@@ -207,10 +209,12 @@ main {
     gap: 0.7rem;
     justify-content: flex-start;
     min-width: max-content;
+    flex-wrap: nowrap;
   }
 
   .navMainGroup a {
     flex: 0 0 auto;
+    min-width: max-content;
   }
 
   .nav a {
