@@ -6,7 +6,8 @@
     "node": ">=20 <23"
   },
   "scripts": {
-    "dev": "node scripts/start-petshop.mjs",
+    "dev": "node scripts/dev-raw.mjs",
+    "dev:managed": "node scripts/start-petshop.mjs",
     "dev:raw": "node scripts/dev-raw.mjs",
     "build": "prisma generate && next build",
     "start": "next start",
