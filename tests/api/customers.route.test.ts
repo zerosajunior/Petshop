@@ -34,7 +34,7 @@ describe("POST /api/customers", () => {
     const request = new Request("http://localhost/api/customers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: "Jose", phone: "11999998888" })
+      body: JSON.stringify({ name: "Jose", phone: "11999998888", zipCode: "01001000" })
     });
 
     const response = await POST(request as never);
@@ -50,13 +50,14 @@ describe("POST /api/customers", () => {
       id: "cus-1",
       companyId: "company-1",
       name: "Jose",
-      phone: "11999998888"
+      phone: "11999998888",
+      zipCode: "01001000"
     });
 
     const request = new Request("http://localhost/api/customers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: "Jose", phone: "11999998888" })
+      body: JSON.stringify({ name: "Jose", phone: "11999998888", zipCode: "01001000" })
     });
 
     const response = await POST(request as never);

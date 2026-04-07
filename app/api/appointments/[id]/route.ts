@@ -11,8 +11,9 @@ const updateAppointmentStatusSchema = z.object({
 });
 
 const allowedTransitions: Record<AppointmentStatus, AppointmentStatus[]> = {
-  SCHEDULED: [AppointmentStatus.CONFIRMED, AppointmentStatus.COMPLETED, AppointmentStatus.CANCELED],
-  CONFIRMED: [AppointmentStatus.COMPLETED, AppointmentStatus.CANCELED],
+  SCHEDULED: [AppointmentStatus.CONFIRMED, AppointmentStatus.IN_PROGRESS, AppointmentStatus.CANCELED],
+  CONFIRMED: [AppointmentStatus.IN_PROGRESS, AppointmentStatus.CANCELED],
+  IN_PROGRESS: [AppointmentStatus.COMPLETED, AppointmentStatus.CANCELED],
   COMPLETED: [],
   CANCELED: []
 };
@@ -54,11 +55,31 @@ export async function PATCH(
     return fail("Transição de status não permitida para este agendamento.", 409);
   }
 
+  const updateData: {
+    status: AppointmentStatus;
+    startedAt?: Date;
+    finishedAt?: Date;
+  } = {
+    status: parsed.data.status
+  };
+
+  if (parsed.data.status === AppointmentStatus.IN_PROGRESS) {
+    updateData.startedAt = new Date();
+    updateData.finishedAt = undefined;
+  }
+  if (parsed.data.status === AppointmentStatus.COMPLETED) {
+    updateData.finishedAt = new Date();
+    if (current.status !== AppointmentStatus.IN_PROGRESS) {
+      updateData.startedAt = new Date();
+    }
+  }
+  if (parsed.data.status === AppointmentStatus.CANCELED) {
+    updateData.finishedAt = new Date();
+  }
+
   await prisma.appointment.updateMany({
     where: { id: appointmentId, companyId },
-    data: {
-      status: parsed.data.status
-    }
+    data: updateData
   });
 
   const updated = await prisma.appointment.findFirst({

@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { fail, ok } from "@/lib/http";
-import { PetType } from "@prisma/client";
+import { PetSize, PetType } from "@prisma/client";
 import { z } from "zod";
 import { CompanyContextError, getActiveCompanyId } from "@/lib/company-context";
 import { registerAudit } from "@/lib/audit";
@@ -11,6 +11,8 @@ const petSchema = z.object({
   name: z.string().min(2),
   type: z.nativeEnum(PetType),
   breed: z.string().optional(),
+  size: z.nativeEnum(PetSize).optional(),
+  isDeceased: z.boolean().optional(),
   notes: z.string().optional()
 });
 
@@ -60,6 +62,8 @@ export async function POST(request: NextRequest) {
   const pet = await prisma.pet.create({
     data: {
       ...parsed.data,
+      isDeceased: parsed.data.isDeceased ?? false,
+      deceasedAt: parsed.data.isDeceased ? new Date() : null,
       companyId
     }
   });

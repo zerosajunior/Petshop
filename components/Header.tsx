@@ -26,7 +26,7 @@ const links: NavLink[] = [
   { href: "/estoque", label: "Produtos" },
   { href: "/movimentacoes-estoque", label: "Estoque" },
   { href: "/relatorios", label: "Relatórios" },
-  { href: "/promocoes", label: "Campanhas" },
+  { href: "/promocoes", label: "Campanhas/Pacotes" },
   { href: "/configuracoes", label: "Configurações" },
   { href: "/privacidade", label: "Privacidade" }
 ];
@@ -110,7 +110,7 @@ export function Header() {
         <h1>{companyName}</h1>
       </div>
       <div>
-        <p className="subtle">Agenda, estoque, promoções e avisos</p>
+        <p className="subtle">Agenda, estoque, campanhas/pacotes e avisos</p>
       </div>
       <nav className="nav" aria-label="ações rápidas">
         {!isSystemAdmin && showCompanySwitcher ? (

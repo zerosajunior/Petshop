@@ -94,6 +94,7 @@ async function main() {
           companyId,
           name: `Cliente Demo ${String(i + 1).padStart(2, "0")}`,
           phone: `+55119888${String(1000 + i)}`,
+          zipCode: `01311${String(100 + i).slice(-3)}`,
           email: `demo${i + 1}@petshop.local`,
           preferredChannel: i % 2 === 0 ? MessageChannel.WHATSAPP : MessageChannel.SMS,
           marketingConsent: i % 3 !== 0,
