@@ -73,8 +73,8 @@ export default function CadastroPage() {
   const [consentMessage, setConsentMessage] = useState("");
   const [consentError, setConsentError] = useState("");
 
-  const [isRegistrationOpen, setIsRegistrationOpen] = useState(true);
-  const [isConsentOpen, setIsConsentOpen] = useState(true);
+  const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+  const [isConsentOpen, setIsConsentOpen] = useState(false);
   const [lastCreatedCustomerId, setLastCreatedCustomerId] = useState("");
 
   const refreshCustomers = useCallback(async function refreshCustomerList() {
@@ -84,13 +84,7 @@ export default function CadastroPage() {
 
     setCustomers(nextCustomers);
 
-    if (!newPetCustomerId && nextCustomers.length > 0) {
-      setNewPetCustomerId(nextCustomers[0].id);
-    }
-    if (!consentCustomerId && nextCustomers.length > 0) {
-      setConsentCustomerId(nextCustomers[0].id);
-    }
-  }, [consentCustomerId, newPetCustomerId]);
+  }, []);
 
   useEffect(() => {
     refreshCustomers().catch(() => undefined);
@@ -224,6 +218,10 @@ export default function CadastroPage() {
     event.preventDefault();
     setMessage("");
     setError("");
+    if (!newPetCustomerId) {
+      setError("Selecione o cliente para vincular o pet.");
+      return;
+    }
 
     const response = await fetch("/api/pets", {
       method: "POST",
@@ -252,6 +250,10 @@ export default function CadastroPage() {
   async function onRequestConsent() {
     setConsentMessage("");
     setConsentError("");
+    if (!consentCustomerId) {
+      setConsentError("Selecione o cliente para enviar o código.");
+      return;
+    }
 
     const response = await fetch("/api/privacy/marketing-consent/request", {
       method: "POST",
@@ -281,6 +283,10 @@ export default function CadastroPage() {
     event.preventDefault();
     setConsentMessage("");
     setConsentError("");
+    if (!consentCustomerId) {
+      setConsentError("Selecione o cliente antes de confirmar o consentimento.");
+      return;
+    }
 
     const response = await fetch("/api/privacy/marketing-consent/confirm", {
       method: "POST",

@@ -926,6 +926,38 @@ main {
   box-shadow: 0 6px 14px rgba(181, 71, 71, 0.2);
 }
 
+.serviceEditorState {
+  margin-bottom: 0.7rem;
+  border: 1px dashed #c8d5e6;
+  border-radius: 10px;
+  background: #f5f9ff;
+  padding: 0.45rem 0.65rem;
+}
+
+.serviceEditorState.isEditing {
+  border-color: #2a8369;
+  background: #eefaf5;
+}
+
+.serviceListItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.serviceItemMeta {
+  min-width: 260px;
+  flex: 1;
+}
+
+.serviceItemActions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
 .adminInlineActions {
   display: flex;
   gap: 0.6rem;

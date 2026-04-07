@@ -138,7 +138,7 @@ export default function AgendaPage() {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [notes, setNotes] = useState("");
-  const [viewMode, setViewMode] = useState<"daily" | "weekly" | "monthly">("daily");
+  const [viewMode, setViewMode] = useState<"daily" | "weekly" | "monthly">("monthly");
   const [referenceDate, setReferenceDate] = useState(() => startOfDay(new Date()));
   const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -968,6 +968,9 @@ export default function AgendaPage() {
 
       <article className="panel agendaCalendarPanel">
         <h3>Próximos agendamentos</h3>
+        <p className="subtle" style={{ marginTop: 0 }}>
+          Calendário mensal exibido por padrão. Você pode alternar para diário ou semanal.
+        </p>
         <div className="pageActions agendaCalendarToolbar">
           <div className="agendaPeriodNav">
             <strong className="agendaPeriodInlineLabel">{periodLabel}</strong>
