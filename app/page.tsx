@@ -213,7 +213,7 @@ export default function HomePage() {
           href: "/relatorios/operacional"
         },
         { id: "stock", icon: "⚠️", label: "Estoque baixo", value: "-", note: "Abaixo do mínimo", href: "/estoque" },
-        { id: "campaigns", icon: "🎯", label: "Campanhas ativas", value: "-", note: "Ativas agora", href: "/promocoes" }
+        { id: "campaigns", icon: "🎯", label: "Campanhas/Pacotes ativos", value: "-", note: "Ativos agora", href: "/promocoes" }
       ];
     }
 
@@ -245,7 +245,7 @@ export default function HomePage() {
       {
         id: "campaigns",
         icon: "🎯",
-        label: "Campanhas ativas",
+        label: "Campanhas/Pacotes ativos",
         value: String(dashboard.activeCampaigns),
         note: "Ativas agora",
         href: "/promocoes"
@@ -283,7 +283,7 @@ export default function HomePage() {
         {
           id: "campaigns",
           icon: "📣",
-          title: "Campanhas",
+          title: "Campanhas/Pacotes",
           value: "-",
           note: "carregando",
           href: "/promocoes"
@@ -319,7 +319,7 @@ export default function HomePage() {
       {
         id: "campaigns",
         icon: "📣",
-        title: "Campanhas",
+        title: "Campanhas/Pacotes",
         value: String(dashboard.totalCampaigns),
         note: `${dashboard.activeCampaigns} ativas`,
         href: "/promocoes"

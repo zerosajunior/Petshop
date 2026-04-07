@@ -5,21 +5,40 @@ import type { ApiResponse } from "@/types/api";
 import Link from "next/link";
 import { DEFAULT_PETSHOP_SERVICES } from "@/lib/default-services";
 
-type Pet = { id: string; name: string; customer: { name: string } };
-type Service = { id: string; name: string; durationMin: number };
-type CreatedService = { id: string; name: string; durationMin: number };
-type AppointmentStatus = "SCHEDULED" | "CONFIRMED" | "COMPLETED" | "CANCELED";
+type Pet = {
+  id: string;
+  name: string;
+  isDeceased?: boolean;
+  customer: { id: string; name: string; phone?: string; zipCode?: string; street?: string; city?: string };
+};
+type Service = { id: string; name: string; durationMin: number; priceCents: number };
+type CreatedService = { id: string; name: string; durationMin: number; priceCents: number };
+type AppointmentStatus = "SCHEDULED" | "CONFIRMED" | "IN_PROGRESS" | "COMPLETED" | "CANCELED";
 type Appointment = {
   id: string;
   startsAt: string;
+  endsAt: string;
   status: AppointmentStatus;
+  startedAt?: string | null;
+  finishedAt?: string | null;
+  chargedPriceCents?: number | null;
   pet: { name: string; customer: { name: string } };
   service: { name: string };
+};
+type CustomerListItem = {
+  id: string;
+  name: string;
+  phone: string;
+  zipCode: string;
+  street?: string | null;
+  city?: string | null;
+  pets: Array<{ id: string; name: string; isDeceased?: boolean | null }>;
 };
 
 const statusLabelMap: Record<AppointmentStatus, string> = {
   SCHEDULED: "Agendado",
   CONFIRMED: "Confirmado",
+  IN_PROGRESS: "Em atendimento",
   COMPLETED: "Concluído",
   CANCELED: "Cancelado"
 };
@@ -32,16 +51,6 @@ function toLocalDateInputValue(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(
     date.getDate()
   ).padStart(2, "0")}`;
-}
-
-function dateLabel(value: string) {
-  const date = new Date(`${value}T00:00:00`);
-  return date.toLocaleDateString("pt-BR", {
-    weekday: "short",
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric"
-  });
 }
 
 function addMinutesToTime(time: string, minutesToAdd: number) {
@@ -106,8 +115,16 @@ function normalizeText(value: string) {
     .replace(/\s+/g, " ");
 }
 
+function formatBRL(cents: number) {
+  return (cents / 100).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
+}
+
 export default function AgendaPage() {
   const [pets, setPets] = useState<Pet[]>([]);
+  const [customers, setCustomers] = useState<CustomerListItem[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
 
@@ -125,7 +142,9 @@ export default function AgendaPage() {
   const [referenceDate, setReferenceDate] = useState(() => startOfDay(new Date()));
   const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [isSearchPanelOpen, setIsSearchPanelOpen] = useState(false);
   const [updatingAppointmentId, setUpdatingAppointmentId] = useState("");
+  const [nowTick, setNowTick] = useState(() => Date.now());
   const [isSchedulingOpen, setIsSchedulingOpen] = useState(false);
   const [isServiceFormOpen, setIsServiceFormOpen] = useState(false);
   const [isDefaultServicePickerOpen, setIsDefaultServicePickerOpen] = useState(false);
@@ -135,6 +154,7 @@ export default function AgendaPage() {
   const [servicePriceBRL, setServicePriceBRL] = useState(100);
   const [serviceMessage, setServiceMessage] = useState("");
   const [serviceError, setServiceError] = useState("");
+  const [chargedPriceBRL, setChargedPriceBRL] = useState(0);
   const [isSavingService, setIsSavingService] = useState(false);
   const [isSavingDefaultServices, setIsSavingDefaultServices] = useState(false);
   const [selectedDefaultServices, setSelectedDefaultServices] = useState<string[]>([]);
@@ -149,6 +169,7 @@ export default function AgendaPage() {
     setEndTime("");
     setAutoSelectedServiceId("");
     setNotes("");
+    setChargedPriceBRL(0);
     setMessage("");
     setError("");
     resetServiceFormAndClose();
@@ -166,17 +187,20 @@ export default function AgendaPage() {
   }
 
   const refresh = useCallback(async function refreshData() {
-    const [petsRes, servicesRes, appointmentsRes] = await Promise.all([
+    const [petsRes, customersRes, servicesRes, appointmentsRes] = await Promise.all([
       fetch("/api/pets", { cache: "no-store" }),
+      fetch("/api/customers", { cache: "no-store" }),
       fetch("/api/services", { cache: "no-store" }),
       fetch("/api/appointments", { cache: "no-store" })
     ]);
 
     const petsPayload: ApiResponse<Pet[]> = await petsRes.json();
+    const customersPayload: ApiResponse<CustomerListItem[]> = await customersRes.json();
     const servicesPayload: ApiResponse<Service[]> = await servicesRes.json();
     const appointmentsPayload: ApiResponse<Appointment[]> = await appointmentsRes.json();
 
     setPets(petsPayload.data ?? []);
+    setCustomers(customersPayload.data ?? []);
     setServices(servicesPayload.data ?? []);
     setAppointments(appointmentsPayload.data ?? []);
   }, []);
@@ -184,6 +208,11 @@ export default function AgendaPage() {
   useEffect(() => {
     refresh().catch(() => undefined);
   }, [refresh]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNowTick(Date.now()), 60000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     if (!startTime || !serviceId) {
@@ -201,6 +230,17 @@ export default function AgendaPage() {
     }
     setEndTime(calculatedEnd);
   }, [serviceId, services, startTime]);
+
+  useEffect(() => {
+    if (!serviceId) {
+      return;
+    }
+    const selectedService = services.find((service) => service.id === serviceId);
+    if (!selectedService) {
+      return;
+    }
+    setChargedPriceBRL(selectedService.priceCents / 100);
+  }, [serviceId, services]);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -226,6 +266,11 @@ export default function AgendaPage() {
 
     const startsAt = `${appointmentDate}T${startTime}`;
     const endsAt = `${appointmentDate}T${endTime}`;
+    const chargedPriceCents = Math.round(chargedPriceBRL * 100);
+    if (!Number.isFinite(chargedPriceCents) || chargedPriceCents < 0) {
+      setError("Informe um valor válido para o serviço.");
+      return;
+    }
     setIsSavingAppointment(true);
     try {
       const response = await fetch("/api/appointments", {
@@ -236,6 +281,7 @@ export default function AgendaPage() {
           serviceId,
           startsAt: toIso(startsAt),
           endsAt: toIso(endsAt),
+          chargedPriceCents,
           notes
         })
       });
@@ -250,6 +296,7 @@ export default function AgendaPage() {
       setNotes("");
       setStartTime("");
       setEndTime("");
+      setChargedPriceBRL(0);
       setAutoSelectedServiceId("");
       await refresh();
     } catch {
@@ -411,16 +458,27 @@ export default function AgendaPage() {
     }
   }
 
-  function canConfirm(appointment: Appointment) {
-    return appointment.status === "SCHEDULED";
+  function canStartService(appointment: Appointment) {
+    return appointment.status === "SCHEDULED" || appointment.status === "CONFIRMED";
   }
 
-  function canComplete(appointment: Appointment) {
-    return appointment.status === "SCHEDULED" || appointment.status === "CONFIRMED";
+  function canFinishService(appointment: Appointment) {
+    return appointment.status === "IN_PROGRESS";
   }
 
   function canCancel(appointment: Appointment) {
-    return appointment.status === "SCHEDULED" || appointment.status === "CONFIRMED";
+    return (
+      appointment.status === "SCHEDULED" ||
+      appointment.status === "CONFIRMED" ||
+      appointment.status === "IN_PROGRESS"
+    );
+  }
+
+  function isAppointmentLate(appointment: Appointment) {
+    if (appointment.status === "COMPLETED" || appointment.status === "CANCELED") {
+      return false;
+    }
+    return new Date(appointment.endsAt).getTime() < nowTick;
   }
 
   const timeOptions = Array.from({ length: 181 }, (_, index) => {
@@ -430,13 +488,8 @@ export default function AgendaPage() {
     return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
   });
   const endTimeOptions = endTime && !timeOptions.includes(endTime) ? [...timeOptions, endTime] : timeOptions;
-  const dateOptions = Array.from({ length: 61 }, (_, index) => {
-    const date = new Date();
-    date.setDate(date.getDate() + index);
-    return toLocalDateInputValue(date);
-  });
-
-  const canSchedule = pets.length > 0 && services.length > 0;
+  const activePets = pets.filter((pet) => !pet.isDeceased);
+  const canSchedule = activePets.length > 0 && services.length > 0;
   const needsInitialServiceSetup = services.length === 0;
   const canShowAppointmentFields =
     !needsInitialServiceSetup && !isDefaultServicePickerOpen && !isServiceFormOpen;
@@ -466,6 +519,16 @@ export default function AgendaPage() {
       appointment.pet.name.toLowerCase().includes(term) ||
       appointment.pet.customer.name.toLowerCase().includes(term)
     );
+  });
+  const searchedCustomers = customers.filter((customer) => {
+    if (!searchTerm.trim()) {
+      return true;
+    }
+    const term = searchTerm.toLowerCase();
+    if (customer.name.toLowerCase().includes(term) || customer.phone.toLowerCase().includes(term)) {
+      return true;
+    }
+    return customer.pets.some((pet) => pet.name.toLowerCase().includes(term));
   });
 
   const appointmentsByDay = appointmentsFiltered.reduce<Record<string, Appointment[]>>(
@@ -549,14 +612,17 @@ export default function AgendaPage() {
           <input
             className="agendaSearchInput"
             onChange={(event) => setSearchInput(event.target.value)}
-            placeholder="Pesquisar por pet ou dono"
+            placeholder="Pesquisar por pet ou cliente"
             value={searchInput}
           />
           <button
             aria-label="Pesquisar"
             className="btnSecondary actionBtnSameHeight agendaPanelBtn iconSearchBtn tooltipTrigger"
             data-tooltip="Pesquisar"
-            onClick={() => setSearchTerm(searchInput.trim())}
+            onClick={() => {
+              setSearchTerm(searchInput.trim());
+              setIsSearchPanelOpen(true);
+            }}
             title="Pesquisar"
             type="button"
           >
@@ -569,6 +635,7 @@ export default function AgendaPage() {
             onClick={() => {
               setSearchInput("");
               setSearchTerm("");
+              setIsSearchPanelOpen(false);
             }}
             title="Limpar"
             type="button"
@@ -630,6 +697,35 @@ export default function AgendaPage() {
             Voltar ao painel
           </Link>
         </div>
+
+        {isSearchPanelOpen ? (
+          <div className="panel" style={{ marginTop: "0.8rem", background: "#fff7ed" }}>
+            <div className="pageActions" style={{ marginBottom: "0.5rem" }}>
+              <strong>Resultado da busca</strong>
+              <button className="btnSecondary" onClick={() => setIsSearchPanelOpen(false)} type="button">
+                Fechar resultado
+              </button>
+            </div>
+            {searchedCustomers.length === 0 ? (
+              <small className="subtle">Nenhum cliente/pet encontrado para este termo.</small>
+            ) : (
+              <ul className="listSimple">
+                {searchedCustomers.slice(0, 12).map((customer) => (
+                  <li key={customer.id}>
+                    <strong>{customer.name}</strong> - {customer.phone} - CEP {customer.zipCode}
+                    {customer.street ? ` - ${customer.street}` : ""}
+                    {customer.city ? ` - ${customer.city}` : ""}
+                    {customer.pets.length > 0
+                      ? ` - Pets: ${customer.pets
+                          .map((pet) => `${pet.name}${pet.isDeceased ? " (falecido)" : ""}`)
+                          .join(", ")}`
+                      : " - Sem pets"}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ) : null}
 
         {isSchedulingOpen ? (
           <form onSubmit={onSubmit}>
@@ -693,9 +789,9 @@ export default function AgendaPage() {
                 <label htmlFor="petId">Pet</label>
                 <select id="petId" onChange={(e) => setPetId(e.target.value)} required value={petId}>
                   <option value="">Selecione</option>
-                  {pets.map((pet) => (
+                  {activePets.map((pet) => (
                     <option key={pet.id} value={pet.id}>
-                      {pet.name} ({pet.customer.name})
+                      {pet.customer.name} - {pet.name}
                     </option>
                   ))}
                 </select>
@@ -732,6 +828,17 @@ export default function AgendaPage() {
                 {autoSelectedServiceId && autoSelectedServiceId === serviceId ? (
                   <small style={{ color: "#1f6b55" }}>Serviço novo selecionado automaticamente.</small>
                 ) : null}
+              </div>
+              <div className="formField">
+                <label htmlFor="chargedPriceBRL">Valor do serviço (R$)</label>
+                <input
+                  id="chargedPriceBRL"
+                  min={0}
+                  onChange={(event) => setChargedPriceBRL(Number(event.target.value))}
+                  step="0.01"
+                  type="number"
+                  value={chargedPriceBRL}
+                />
               </div>
 
               {isServiceFormOpen ? (
@@ -807,19 +914,13 @@ export default function AgendaPage() {
 
               <div className="formField">
                 <label htmlFor="appointmentDate">Data</label>
-                <select
+                <input
                   id="appointmentDate"
                   onChange={(e) => setAppointmentDate(e.target.value)}
                   required
+                  type="date"
                   value={appointmentDate}
-                >
-                  <option value="">Selecione a data</option>
-                  {dateOptions.map((date) => (
-                    <option key={date} value={date}>
-                      {dateLabel(date)}
-                    </option>
-                  ))}
-                </select>
+                />
               </div>
 
               <div className="formField">
@@ -944,6 +1045,9 @@ export default function AgendaPage() {
             <span className="agendaStatusDot agendaStatusCONFIRMED" /> Confirmado
           </span>
           <span className="agendaLegendItem">
+            <span className="agendaStatusDot agendaStatusIN_PROGRESS" /> Em atendimento
+          </span>
+          <span className="agendaLegendItem">
             <span className="agendaStatusDot agendaStatusCOMPLETED" /> Concluído
           </span>
           <span className="agendaLegendItem">
@@ -951,10 +1055,10 @@ export default function AgendaPage() {
           </span>
           <span className="agendaLegendDivider">|</span>
           <span className="agendaLegendItem">
-            <span className="agendaQuickActionDot agendaQuickActionConfirm" /> Ação confirmar
+            <span className="agendaQuickActionDot agendaQuickActionConfirm" /> Ação iniciar
           </span>
           <span className="agendaLegendItem">
-            <span className="agendaQuickActionDot agendaQuickActionComplete" /> Ação concluir
+            <span className="agendaQuickActionDot agendaQuickActionComplete" /> Ação encerrar
           </span>
           <span className="agendaLegendItem">
             <span className="agendaQuickActionDot agendaQuickActionCancel" /> Ação cancelar
@@ -998,7 +1102,12 @@ export default function AgendaPage() {
                       {items.map((appointment) => {
                         const startsAt = new Date(appointment.startsAt);
                         return (
-                          <div className="agendaBusinessHourRow" key={appointment.id}>
+                          <div
+                            className={`agendaBusinessHourRow ${
+                              isAppointmentLate(appointment) ? "agendaLateAppointment" : ""
+                            }`}
+                            key={appointment.id}
+                          >
                             <div className="agendaBusinessHourMain">
                               <span className="agendaBusinessHourLabel">
                                 {startsAt.toLocaleTimeString("pt-BR", {
@@ -1006,7 +1115,9 @@ export default function AgendaPage() {
                                   minute: "2-digit"
                                 })}
                               </span>
-                              <span className="agendaBusinessHourPet">{appointment.pet.name}</span>
+                              <span className="agendaBusinessHourPet">
+                                {appointment.pet.customer.name} - {appointment.pet.name}
+                              </span>
                             </div>
                             <div
                               className={`agendaQuickActions ${
@@ -1024,34 +1135,34 @@ export default function AgendaPage() {
                               >
                                 {useCompactCalendarActions ? "" : statusLabelMap[appointment.status]}
                               </span>
-                              {canConfirm(appointment) ? (
+                              {canStartService(appointment) ? (
                                 <button
-                                  aria-label="Confirmar agendamento"
+                                  aria-label="Iniciar serviço"
                                   className={`agendaQuickActionBtn agendaQuickActionConfirm ${
                                     useCompactCalendarActions ? "agendaQuickActionDot tooltipTrigger" : ""
                                   }`}
-                                  data-tooltip="Confirmar"
+                                  data-tooltip="Iniciar"
                                   disabled={updatingAppointmentId === appointment.id}
-                                  onClick={() => updateAppointmentStatus(appointment.id, "CONFIRMED")}
-                                  title="Confirmar"
+                                  onClick={() => updateAppointmentStatus(appointment.id, "IN_PROGRESS")}
+                                  title="Iniciar"
                                   type="button"
                                 >
-                                  {useCompactCalendarActions ? "" : "Confirmar"}
+                                  {useCompactCalendarActions ? "" : "Iniciar serviço"}
                                 </button>
                               ) : null}
-                              {canComplete(appointment) ? (
+                              {canFinishService(appointment) ? (
                                 <button
-                                  aria-label="Concluir agendamento"
+                                  aria-label="Encerrar serviço"
                                   className={`agendaQuickActionBtn agendaQuickActionComplete ${
                                     useCompactCalendarActions ? "agendaQuickActionDot tooltipTrigger" : ""
                                   }`}
-                                  data-tooltip="Concluir"
+                                  data-tooltip="Encerrar"
                                   disabled={updatingAppointmentId === appointment.id}
                                   onClick={() => updateAppointmentStatus(appointment.id, "COMPLETED")}
-                                  title="Concluir"
+                                  title="Encerrar"
                                   type="button"
                                 >
-                                  {useCompactCalendarActions ? "" : "Concluir"}
+                                  {useCompactCalendarActions ? "" : "Encerrar"}
                                 </button>
                               ) : null}
                               {canCancel(appointment) ? (
@@ -1079,15 +1190,24 @@ export default function AgendaPage() {
                       {items.map((appointment) => {
                         const startsAt = new Date(appointment.startsAt);
                         return (
-                          <div className="agendaCalendarChip" key={appointment.id}>
+                          <div
+                            className={`agendaCalendarChip ${
+                              isAppointmentLate(appointment) ? "agendaLateAppointment" : ""
+                            }`}
+                            key={appointment.id}
+                          >
                             <div className="agendaCalendarChipMain">
                               <span className="agendaCalendarChipText">
                                 {startsAt.toLocaleTimeString("pt-BR", {
                                   hour: "2-digit",
                                   minute: "2-digit"
                                 })}{" "}
-                                · {appointment.pet.name} · {appointment.service.name}
+                                · {appointment.pet.customer.name} · {appointment.pet.name} · {appointment.service.name} ·{" "}
+                                {formatBRL(appointment.chargedPriceCents ?? 0)}
                               </span>
+                              {isAppointmentLate(appointment) ? (
+                                <small style={{ color: "#b42318", display: "block" }}>Atrasado</small>
+                              ) : null}
                             </div>
                             <div
                               className={`agendaQuickActions ${
@@ -1105,34 +1225,34 @@ export default function AgendaPage() {
                               >
                                 {useCompactCalendarActions ? "" : statusLabelMap[appointment.status]}
                               </span>
-                              {canConfirm(appointment) ? (
+                              {canStartService(appointment) ? (
                                 <button
-                                  aria-label="Confirmar agendamento"
+                                  aria-label="Iniciar serviço"
                                   className={`agendaQuickActionBtn agendaQuickActionConfirm ${
                                     useCompactCalendarActions ? "agendaQuickActionDot tooltipTrigger" : ""
                                   }`}
-                                  data-tooltip="Confirmar"
+                                  data-tooltip="Iniciar"
                                   disabled={updatingAppointmentId === appointment.id}
-                                  onClick={() => updateAppointmentStatus(appointment.id, "CONFIRMED")}
-                                  title="Confirmar"
+                                  onClick={() => updateAppointmentStatus(appointment.id, "IN_PROGRESS")}
+                                  title="Iniciar"
                                   type="button"
                                 >
-                                  {useCompactCalendarActions ? "" : "Confirmar"}
+                                  {useCompactCalendarActions ? "" : "Iniciar serviço"}
                                 </button>
                               ) : null}
-                              {canComplete(appointment) ? (
+                              {canFinishService(appointment) ? (
                                 <button
-                                  aria-label="Concluir agendamento"
+                                  aria-label="Encerrar serviço"
                                   className={`agendaQuickActionBtn agendaQuickActionComplete ${
                                     useCompactCalendarActions ? "agendaQuickActionDot tooltipTrigger" : ""
                                   }`}
-                                  data-tooltip="Concluir"
+                                  data-tooltip="Encerrar"
                                   disabled={updatingAppointmentId === appointment.id}
                                   onClick={() => updateAppointmentStatus(appointment.id, "COMPLETED")}
-                                  title="Concluir"
+                                  title="Encerrar"
                                   type="button"
                                 >
-                                  {useCompactCalendarActions ? "" : "Concluir"}
+                                  {useCompactCalendarActions ? "" : "Encerrar"}
                                 </button>
                               ) : null}
                               {canCancel(appointment) ? (

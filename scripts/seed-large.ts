@@ -194,6 +194,7 @@ async function main() {
         companyId,
         name: `${fullName} ${i}`,
         phone,
+        zipCode: `0400${String(1000 + (i % 9000)).padStart(4, "0")}`.slice(0, 8),
         email,
         preferredChannel,
         notes: "[seed-load]",

@@ -9,7 +9,7 @@ type ReportsData = {
   realizedRevenueMonthCents: number;
   averageTicketMonthCents: number;
   stockValueCents: number;
-  topServicesMonth: Array<{ serviceName: string; completed: number }>;
+  topServicesMonth: Array<{ serviceName: string; completed: number; revenueCents: number }>;
 };
 
 function formatBRL(cents: number) {
@@ -81,7 +81,7 @@ export default function RelatoriosFinanceiroPage() {
         <ul className="listSimple">
           {(data?.topServicesMonth ?? []).map((item) => (
             <li key={item.serviceName}>
-              {item.serviceName} - {item.completed} concluídos
+              {item.serviceName} - {item.completed} concluídos - {formatBRL(item.revenueCents)}
             </li>
           ))}
           {data && data.topServicesMonth.length === 0 ? (

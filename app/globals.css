@@ -1217,6 +1217,11 @@ main {
   color: #1f6b55;
 }
 
+.agendaStatusIN_PROGRESS {
+  background: #fff4e5;
+  color: #9a5b00;
+}
+
 .agendaStatusCOMPLETED {
   background: #eef6ff;
   color: #2b4f77;
@@ -1283,6 +1288,11 @@ main {
 .agendaQuickActionBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.agendaLateAppointment {
+  border-color: #e56f6f;
+  background: #fff1f1;
 }
 
 @media (max-width: 900px) {

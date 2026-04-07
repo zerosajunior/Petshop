@@ -71,8 +71,8 @@ export default function PromocoesPage() {
 
   return (
     <section>
-      <h2>Nova campanha</h2>
-      <p className="subtle">Cadastre promoções segmentadas por tipo de pet.</p>
+      <h2>Nova campanha/pacote</h2>
+      <p className="subtle">Cadastre campanhas e pacotes segmentados por tipo de pet.</p>
 
       <article className="panel">
         <div className="pageActions appActionBar">
@@ -155,7 +155,7 @@ export default function PromocoesPage() {
 
           <div className="formActions">
             <button className="btnPrimary" type="submit">
-              Salvar campanha
+              Salvar campanha/pacote
             </button>
             {message ? <small>{message}</small> : null}
             {error ? <small style={{ color: "#b42318" }}>{error}</small> : null}
@@ -164,7 +164,7 @@ export default function PromocoesPage() {
       </article>
 
       <article className="panel">
-        <h3>Campanhas cadastradas</h3>
+        <h3>Campanhas/pacotes cadastrados</h3>
         <ul className="listSimple">
           {campaigns.slice(0, 10).map((campaign) => (
             <li key={campaign.id}>

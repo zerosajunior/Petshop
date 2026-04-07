@@ -105,18 +105,21 @@ async function main() {
     {
       name: "Ana Costa",
       phone: "+5511999999999",
+      zipCode: "01001000",
       email: "ana@example.com",
       preferredChannel: MessageChannel.WHATSAPP
     },
     {
       name: "Bruno Lima",
       phone: "+5511988887777",
+      zipCode: "01311000",
       email: "bruno@example.com",
       preferredChannel: MessageChannel.SMS
     },
     {
       name: "Carla Souza",
       phone: "+5511977776666",
+      zipCode: "20040002",
       email: "carla@example.com",
       preferredChannel: MessageChannel.WHATSAPP
     }

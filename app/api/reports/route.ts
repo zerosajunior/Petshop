@@ -34,6 +34,7 @@ export async function GET() {
         status: { not: AppointmentStatus.CANCELED }
       },
       select: {
+        chargedPriceCents: true,
         service: {
           select: {
             priceCents: true
@@ -48,6 +49,7 @@ export async function GET() {
         status: AppointmentStatus.COMPLETED
       },
       select: {
+        chargedPriceCents: true,
         service: {
           select: {
             name: true,
@@ -81,12 +83,12 @@ export async function GET() {
   ]);
 
   const projectedRevenueTodayCents = appointmentsToday.reduce(
-    (total, appointment) => total + appointment.service.priceCents,
+    (total, appointment) => total + (appointment.chargedPriceCents ?? appointment.service.priceCents),
     0
   );
 
   const realizedRevenueMonthCents = completedMonth.reduce(
-    (total, appointment) => total + appointment.service.priceCents,
+    (total, appointment) => total + (appointment.chargedPriceCents ?? appointment.service.priceCents),
     0
   );
 
@@ -99,16 +101,25 @@ export async function GET() {
     0
   );
 
-  const serviceCountMap = new Map<string, number>();
+  const serviceCountMap = new Map<string, { completed: number; revenueCents: number }>();
 
   for (const appointment of completedMonth) {
     const serviceName = appointment.service.name;
-    serviceCountMap.set(serviceName, (serviceCountMap.get(serviceName) ?? 0) + 1);
+    const current = serviceCountMap.get(serviceName) ?? { completed: 0, revenueCents: 0 };
+    const price = appointment.chargedPriceCents ?? appointment.service.priceCents;
+    serviceCountMap.set(serviceName, {
+      completed: current.completed + 1,
+      revenueCents: current.revenueCents + price
+    });
   }
 
   const topServicesMonth = Array.from(serviceCountMap.entries())
-    .map(([serviceName, completed]) => ({ serviceName, completed }))
-    .sort((a, b) => b.completed - a.completed)
+    .map(([serviceName, summary]) => ({
+      serviceName,
+      completed: summary.completed,
+      revenueCents: summary.revenueCents
+    }))
+    .sort((a, b) => b.revenueCents - a.revenueCents)
     .slice(0, 5);
 
   return ok({

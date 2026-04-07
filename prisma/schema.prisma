@@ -14,9 +14,16 @@ enum PetType {
   OTHER
 }
 
+enum PetSize {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
 enum AppointmentStatus {
   SCHEDULED
   CONFIRMED
+  IN_PROGRESS
   COMPLETED
   CANCELED
 }
@@ -172,6 +179,13 @@ model Customer {
   companyId String
   name      String
   phone     String
+  zipCode   String   @default("00000000")
+  street    String?
+  number    String?
+  neighborhood String?
+  city      String?
+  state     String?
+  addressComplement String?
   email     String?
   notes     String?
   marketingConsent         Boolean         @default(false)
@@ -194,6 +208,9 @@ model Pet {
   name        String
   type        PetType
   breed       String?
+  size        PetSize?
+  isDeceased  Boolean       @default(false)
+  deceasedAt  DateTime?
   birthDate   DateTime?
   weightKg    Float?
   notes       String?
@@ -233,6 +250,9 @@ model Appointment {
   startsAt      DateTime
   endsAt        DateTime
   status        AppointmentStatus @default(SCHEDULED)
+  startedAt     DateTime?
+  finishedAt    DateTime?
+  chargedPriceCents Int?
   notes         String?
   reminderSent  Boolean           @default(false)
   reminder24hSentAt DateTime?

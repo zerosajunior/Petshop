@@ -12,6 +12,7 @@ const appointmentSchema = z.object({
   serviceId: z.string().min(1),
   startsAt: z.string().datetime(),
   endsAt: z.string().datetime(),
+  chargedPriceCents: z.number().int().nonnegative().optional(),
   status: z.nativeEnum(AppointmentStatus).optional(),
   notes: z.string().optional()
 });
@@ -64,16 +65,19 @@ export async function POST(request: NextRequest) {
   const [pet, service] = await Promise.all([
     prisma.pet.findFirst({
       where: { id: parsed.data.petId, companyId },
-      select: { id: true }
+      select: { id: true, isDeceased: true }
     }),
     prisma.service.findFirst({
       where: { id: parsed.data.serviceId, companyId },
-      select: { id: true }
+      select: { id: true, priceCents: true }
     })
   ]);
 
   if (!pet) {
     return fail("Pet não encontrado para a empresa ativa.", 404);
+  }
+  if (pet.isDeceased) {
+    return fail("Este pet está marcado como falecido e não pode ser agendado.", 409);
   }
 
   if (!service) {
@@ -117,7 +121,8 @@ export async function POST(request: NextRequest) {
       ...parsed.data,
       companyId,
       startsAt,
-      endsAt
+      endsAt,
+      chargedPriceCents: parsed.data.chargedPriceCents ?? service.priceCents
     }
   });
 
