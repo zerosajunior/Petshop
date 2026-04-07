@@ -129,6 +129,16 @@ function hasSuspiciousCrossSiteMutation(request: NextRequest) {
 
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+  // Never gate internal/static assets behind auth.
+  if (
+    pathname.startsWith("/_next/") ||
+    pathname === "/favicon.ico" ||
+    pathname === "/robots.txt" ||
+    pathname === "/sitemap.xml"
+  ) {
+    return NextResponse.next();
+  }
+
   const normalizedPathname = normalizePathForPermission(pathname);
   const isApi = pathname.startsWith("/api");
   const isLoginPage = normalizedPathname === "/login";

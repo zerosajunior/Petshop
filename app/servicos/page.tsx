@@ -54,6 +54,8 @@ export default function ServicosPage() {
     setDurationMin(60);
     setPriceBRL(100);
     setEditingServiceId("");
+    setMessage("");
+    setError("");
   }
 
   function startEdit(service: Service) {
@@ -145,12 +147,25 @@ export default function ServicosPage() {
 
       <article className="panel">
         <div className="pageActions appActionBar">
-          <Link className="btnSecondary appActionBack" href="/">
-            Voltar ao painel
-          </Link>
+          <button className="btnSecondary appActionAux" onClick={resetForm} type="button">
+            Novo serviço
+          </button>
           <Link className="btnPrimary appActionMain" href="/agenda">
             Ir para agendamento
           </Link>
+          <Link className="btnSecondary appActionBack" href="/">
+            Voltar ao painel
+          </Link>
+        </div>
+
+        <div className={`serviceEditorState ${editingService ? "isEditing" : ""}`}>
+          {editingService ? (
+            <small>
+              Editando: <strong>{editingService.name}</strong>
+            </small>
+          ) : (
+            <small>Modo cadastro: preencha os campos e salve um novo serviço.</small>
+          )}
         </div>
 
         <form onSubmit={onSubmit}>
@@ -204,15 +219,24 @@ export default function ServicosPage() {
 
       <article className="panel">
         <h3>Serviços cadastrados</h3>
+        <p className="subtle" style={{ marginTop: 0 }}>
+          Use <strong>Editar</strong> para carregar os dados no formulário acima. Excluir remove o serviço
+          definitivamente.
+        </p>
         <ul className="listSimple">
           {services.map((service) => (
-            <li key={service.id} style={{ display: "grid", gap: "0.4rem" }}>
-              <div>
+            <li className="serviceListItem" key={service.id}>
+              <div className="serviceItemMeta">
                 <strong>{service.name}</strong> - {service.durationMin} min - R$ {toBRL(service.priceCents)}
                 {service.description ? ` - ${service.description}` : ""}
               </div>
-              <div className="formActions" style={{ marginTop: 0 }}>
-                <button className="btnSecondary" onClick={() => startEdit(service)} type="button">
+              <div className="serviceItemActions">
+                <button
+                  className="btnSecondary"
+                  disabled={deletingServiceId === service.id}
+                  onClick={() => startEdit(service)}
+                  type="button"
+                >
                   Editar
                 </button>
                 <button
