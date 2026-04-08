@@ -1,4 +1,3 @@
-import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 
 export class CompanyContextError extends Error {
@@ -15,27 +14,9 @@ export async function getActiveCompanyId() {
     return fromSession;
   }
 
-  const desiredSlug = process.env.DEFAULT_COMPANY_SLUG?.trim();
-
-  const company = desiredSlug
-    ? await prisma.company.findFirst({
-        where: {
-          slug: desiredSlug,
-          status: "ACTIVE"
-        },
-        select: { id: true }
-      })
-    : await prisma.company.findFirst({
-        where: { status: "ACTIVE" },
-        orderBy: { createdAt: "asc" },
-        select: { id: true }
-      });
-
-  if (!company) {
-    throw new CompanyContextError(
-      "Nenhuma empresa ativa encontrada. Crie uma empresa e configure DEFAULT_COMPANY_SLUG."
-    );
-  }
-
-  return company.id;
+  // Segurança multi-tenant: não fazemos fallback silencioso para empresa padrão
+  // em rotas autenticadas. Se o contexto não vier da sessão, bloqueamos a operação.
+  throw new CompanyContextError(
+    "Contexto da empresa ausente na sessão. Faça login novamente e selecione a empresa ativa."
+  );
 }
