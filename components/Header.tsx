@@ -101,7 +101,10 @@ export function Header() {
   }
 
   const isAdminArea = isSystemAdmin && pathname.startsWith("/admin/");
-  const visibleLinks = links.filter((link) => !(isSystemAdmin && link.href === "/configuracoes"));
+  const homeHref: NavLink["href"] = isSystemAdmin ? "/agenda" : "/";
+  const linksWithResolvedHome = links.map((link) =>
+    link.href === "/" ? { ...link, href: homeHref } : link
+  );
 
   return (
     <header className="header">
@@ -124,7 +127,7 @@ export function Header() {
         ) : null}
         {!isAdminArea ? (
           <div className="navMainGroup">
-            {visibleLinks.map((link) => (
+            {linksWithResolvedHome.map((link) => (
               <Link key={link.href} href={link.href}>
                 {link.label}
               </Link>
