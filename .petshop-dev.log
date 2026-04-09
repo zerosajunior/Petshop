@@ -42513,3 +42513,67 @@ Error: listen EADDRINUSE: address already in use 127.0.0.1:3000
  GET / 404 in 5ms
  GET / 404 in 6ms
 [?25h
+ ⨯ Failed to start server
+Error: listen EPERM: operation not permitted 127.0.0.1:3000
+    at <unknown> (Error: listen EPERM: operation not permitted 127.0.0.1:3000) {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3000
+}
+[?25h
+ ⨯ Failed to start server
+Error: listen EPERM: operation not permitted 127.0.0.1:3000
+    at <unknown> (Error: listen EPERM: operation not permitted 127.0.0.1:3000) {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3000
+}
+[?25h
+2026-04-08T23:30:51.915Z first boot attempt failed, retrying clean start
+ ⨯ Failed to start server
+Error: listen EPERM: operation not permitted 127.0.0.1:3000
+    at <unknown> (Error: listen EPERM: operation not permitted 127.0.0.1:3000) {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3000
+}
+[?25h
+2026-04-08T23:31:52.254Z first boot attempt failed, retrying clean start
+ ⨯ Failed to start server
+Error: listen EPERM: operation not permitted 127.0.0.1:3000
+    at <unknown> (Error: listen EPERM: operation not permitted 127.0.0.1:3000) {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3000
+}
+[?25h
+2026-04-08T23:32:39.791Z server did not start within 90s
+2026-04-08T23:33:38.499Z server did not start within 90s
+ ⨯ Failed to start server
+Error: listen EPERM: operation not permitted 127.0.0.1:3000
+    at <unknown> (Error: listen EPERM: operation not permitted 127.0.0.1:3000) {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3000
+}
+[?25h
+ ⨯ Failed to start server
+Error: listen EPERM: operation not permitted 127.0.0.1:3000
+    at <unknown> (Error: listen EPERM: operation not permitted 127.0.0.1:3000) {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3000
+}
+[?25h

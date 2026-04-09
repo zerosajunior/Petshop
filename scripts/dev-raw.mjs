@@ -3,6 +3,8 @@ import process from "node:process";
 import path from "node:path";
 
 const projectDir = process.cwd();
+const host = process.env.PETSHOP_DEV_HOST?.trim() || "0.0.0.0";
+const port = process.env.PORT?.trim() || "3000";
 const nextBin = path.join(
   projectDir,
   "node_modules",
@@ -14,7 +16,7 @@ const nextBin = path.join(
 
 const child = spawn(
   process.execPath,
-  [nextBin, "dev", "-H", "127.0.0.1", "-p", "3000"],
+  [nextBin, "dev", "-H", host, "-p", port],
   {
     cwd: projectDir,
     stdio: "inherit",
@@ -33,4 +35,3 @@ child.on("exit", (code, signal) => {
 
   process.exit(code ?? 0);
 });
-
