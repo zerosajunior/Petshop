@@ -90,6 +90,16 @@ export default function CadastroPage() {
     refreshCustomers().catch(() => undefined);
   }, [refreshCustomers]);
 
+  const customersAlphabetical = useMemo(
+    () =>
+      [...customers].sort((a, b) =>
+        a.name.localeCompare(b.name, "pt-BR", {
+          sensitivity: "base"
+        })
+      ),
+    [customers]
+  );
+
   const customerPreview = useMemo(
     () => ({
       name: customerName.trim() || "-",
@@ -509,7 +519,7 @@ export default function CadastroPage() {
                   value={newPetCustomerId}
                 >
                   <option value="">Selecione o cliente</option>
-                  {customers.map((customer) => (
+                  {customersAlphabetical.map((customer) => (
                     <option key={customer.id} value={customer.id}>
                       {customer.name}
                     </option>
@@ -572,19 +582,49 @@ export default function CadastroPage() {
 
       <article className="panel">
         <h3>Clientes e pets</h3>
-        <ul className="listSimple">
-          {customers.slice(0, 8).map((customer) => (
-            <li key={customer.id}>
-              <strong>{customer.name}</strong> - {customer.phone} - CEP {formatCep(customer.zipCode)}
-              {formatAddressLine(customer) ? ` - ${formatAddressLine(customer)}` : ""}
-              {customer.pets.length > 0
-                ? ` - Pets: ${customer.pets
-                    .map((pet) => `${pet.name}${pet.isDeceased ? " (falecido)" : ""}`)
-                    .join(", ")}`
-                : " - Sem pets"}
-            </li>
+        <p className="subtle" style={{ marginTop: "0.2rem" }}>
+          {customersAlphabetical.length} cadastro(s) exibido(s) em ordem alfabética.
+        </p>
+        <div className="cadastroCardsGrid">
+          {customersAlphabetical.map((customer) => (
+            <article className="cadastroCard" key={customer.id}>
+              <header className="cadastroCardHeader">
+                <h4>{customer.name}</h4>
+                <span className="cadastroCardMeta">{customer.phone}</span>
+              </header>
+              <p className="cadastroCardLine">
+                <strong>CEP:</strong> {formatCep(customer.zipCode)}
+              </p>
+              <p className="cadastroCardLine">
+                <strong>Endereço:</strong> {formatAddressLine(customer) || "Não informado"}
+              </p>
+              <div className="cadastroCardPets">
+                <strong>Pets:</strong>
+                {customer.pets.length > 0 ? (
+                  <div className="cadastroPetPills">
+                    {[...customer.pets]
+                      .sort((a, b) =>
+                        a.name.localeCompare(b.name, "pt-BR", {
+                          sensitivity: "base"
+                        })
+                      )
+                      .map((pet) => (
+                        <span className="cadastroPetPill" key={pet.id}>
+                          {pet.name}
+                          {pet.isDeceased ? " (falecido)" : ""}
+                        </span>
+                      ))}
+                  </div>
+                ) : (
+                  <span className="subtle"> Sem pets</span>
+                )}
+              </div>
+            </article>
           ))}
-        </ul>
+        </div>
+        {customersAlphabetical.length === 0 ? (
+          <small className="subtle">Nenhum cadastro encontrado.</small>
+        ) : null}
       </article>
 
       <article className="panel">
@@ -622,7 +662,7 @@ export default function CadastroPage() {
                   value={consentCustomerId}
                 >
                   <option value="">Selecione o cliente</option>
-                  {customers.map((customer) => (
+                  {customersAlphabetical.map((customer) => (
                     <option key={customer.id} value={customer.id}>
                       {customer.name}
                     </option>

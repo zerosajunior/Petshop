@@ -1412,6 +1412,69 @@ main {
   padding-left: 1rem;
 }
 
+.cadastroCardsGrid {
+  margin-top: 0.8rem;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.cadastroCard {
+  border: 1px solid #cddae8;
+  border-radius: 14px;
+  background: #fcfdff;
+  padding: 0.75rem 0.8rem;
+  display: grid;
+  gap: 0.45rem;
+  box-shadow: 0 6px 14px rgba(80, 106, 134, 0.08);
+}
+
+.cadastroCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.cadastroCardHeader h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.cadastroCardMeta {
+  font-size: 0.85rem;
+  color: #4f6074;
+}
+
+.cadastroCardLine {
+  margin: 0;
+  color: #334257;
+  font-size: 0.92rem;
+}
+
+.cadastroCardPets {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.92rem;
+  color: #334257;
+}
+
+.cadastroPetPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.cadastroPetPill {
+  border: 1px solid #c8d6e6;
+  background: #eef4fb;
+  color: #32445a;
+  border-radius: 999px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.82rem;
+  line-height: 1.2;
+}
+
 .productCardsGrid {
   margin-top: 0.8rem;
   display: grid;
