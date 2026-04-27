@@ -1,12 +1,44 @@
+# Dependências
 node_modules
+
+# Build do Next.js
 .next
 .next.broken.*
 .next.heal.*
+
+# Variáveis de ambiente (NUNCA commitar)
 .env
 .env.local
-coverage
-.DS_Store
+.env.*.local
+.env.save
+.env.backup
+
+# Banco de dados local
 prisma/dev.db
+prisma/dev.db-journal
+
+# Logs e arquivos de runtime (gerados automaticamente)
+*.log
+*.pid
 .petshop-dev.pid
+.petshop-dev-*.pid
+.petshop-dev-*.log
 .petshop-heal.pid
 .petshop-stop.pid
+.petshop-start.pid
+.petshop-start.log
+
+# Cache de build TypeScript
+tsconfig.tsbuildinfo
+
+# Backups (usar storage externo)
+backups/
+
+# macOS
+.DS_Store
+
+# Coverage de testes
+coverage
+
+# Editor
+.vscode/settings.json
